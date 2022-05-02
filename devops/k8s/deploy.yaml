@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cp3-web-v1
+  namespace: cp3-dev
+  labels:
+    app: cp3-web
+    version: v1
+    auth: cp3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cp3-web
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: cp3-web
+        version: v1
+        auth: cp3
+    spec:
+      serviceAccountName: cp3-api
+      containers:
+      - name: cp3-web
+        image: docker-registry.umusic.com/cp3/cp3-web:v0.0.1
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 500m
+            memory: 500Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
+      imagePullSecrets:
+      - name: regcred

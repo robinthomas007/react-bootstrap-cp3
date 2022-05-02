@@ -1,0 +1,48 @@
+$theme-colors: (
+  "primary": #01579B,
+  "secondary": #F57F17,
+  "header-theme":#212121,
+  "white":#ffffff,
+  "light":#F5F5F5,
+);
+$border-radius:  2px;
+
+.dark-theme {
+  background-color: #000000;
+  color: #ffffff;
+  $body-color: #fff;
+  .MuiCheckbox-root{
+    color: #ddd
+  }
+  .MuiButtonBase-root, .MuiPaginationItem-ellipsis {
+    color: #fff;
+  }
+  .modal-content {
+    background: #212121;
+  }
+  .btn.btn-light {
+    background-color: #333333;
+    color: #fff;
+    border-color: #333333;
+  }
+  .form-control{
+    background-color: #333333 !important;
+    border-color: #333333;
+    color: #fff !important;
+  }
+}
+
+.light-theme {
+  background-color: #ffffff;
+  color: #000000;
+  $body-color: #111;
+  .close-icon, .txt-fld-search-icon {
+    color: #000;
+  }
+}
+
+.Mui-selected {
+  background-color:#F57F17 !important;
+}
+
+@import "~bootstrap/scss/bootstrap";

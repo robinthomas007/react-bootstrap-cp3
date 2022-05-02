@@ -1,0 +1,74 @@
+.loader-icon {
+  position: absolute;
+  top: 50%;
+}
+
+.close-icon {
+  position: absolute;
+  top: 8px;
+  right: 80px;
+  z-index: 999;
+  cursor: pointer;
+}
+
+.txt-fld-search-main {
+  padding-left: 40px !important
+}
+
+.modal-cls-btn {
+  background-color: #000;
+  color: #fff;
+  border-radius: 100px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.form-label-width {
+  min-width: 28%;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.txt-fld-search-icon {
+  position: absolute;
+  top: 9px;
+  left: 66px;
+  z-index: 999;
+}
+
+.fltr-bdg-cls-icon {
+  font-size: 14px !important;
+  background: #fff;
+  color: #F57F17;
+  border-radius: 50px;
+  margin-left: 10px;
+}
+
+.selected-filter-wrapper {
+  margin: 20px auto;
+}
+
+.selected-filter-wrapper .rounded-pill {
+  margin: 2px 6px 10px 0px;
+  font-size: 14px;
+}
+
+.selected-filter-wrapper label {
+  margin-right: 10px;
+}
+
+.notes-name-date {
+  min-width: 200px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.notes-modal .list-group.list-group-flush {
+  height: 200px;
+  overflow: auto;
+}
+
+.notes-modal .list-group-item {
+  display: flex;
+  justify-content: flex-start;
+}
