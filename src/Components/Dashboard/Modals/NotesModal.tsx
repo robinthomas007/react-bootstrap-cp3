@@ -8,10 +8,10 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import axios from 'axios';
+import moment from 'moment';
 
 type filterProps = {
   show: boolean;
-  handleSubmit: any;
   handleClose: any;
   labelFacets: Array<any>;
   selectedNotes: any
@@ -54,7 +54,7 @@ export default function NotesrModal(props: filterProps) {
   const getNotes = () => {
     return notesData.map((note: any, index: number) => {
       return <ListGroup.Item key={index}>
-        <span className="notes-name-date">{note.userName}  - {note.createdOn}</span> <span> {note.notes}</span>
+        <span className="notes-name-date">{note.userName}  - {moment(note.createdOn).format('DD/MM/YYYY')}</span> <span> {note.notes}</span>
       </ListGroup.Item>
     })
   }

@@ -29,6 +29,7 @@ export default function Header() {
     try {
       const token = getCookie('cp3_auth');
       user = jwt_decode(token);
+      console.log("Logged in success --", user)
     } catch (err) {
       console.log("Error getting Token", err)
     }

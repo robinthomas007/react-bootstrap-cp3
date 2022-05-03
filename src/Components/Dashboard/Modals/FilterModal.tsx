@@ -6,11 +6,12 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
+import SelectField from './../../Common/select'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
-  label: number,
-  policy: number,
+  labelIds: Array<object>,
+  policy: Array<object>,
   leakFrom: string,
   leakTo: string,
   releaseFrom: string,
@@ -26,20 +27,14 @@ type filterProps = {
   setSelectedFilters: any
 }
 
-const options = [
-  { name: "One", id: 1 },
-  { name: "Two", id: 2 },
-  { name: "Three", id: 3 },
-  { name: "four", id: 4 }
-];
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, label, policy, leakFrom, leakTo, releaseFrom, releaseTo } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo } = props.selectedFilters
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
       searchWithins: searchWithins || ["ALL"],
-      label: label || '',
-      policy: policy || '',
+      labelIds: labelIds || null,
+      policy: policy || null,
       leakFrom: leakFrom || null,
       leakTo: leakTo || null,
       releaseFrom: releaseFrom || null,
@@ -51,11 +46,22 @@ export default function FilterModal(props: filterProps) {
     if (e.target.type === 'checkbox') {
       let arr = searchFilter.searchWithins
       if (e.target.checked) {
+        if (e.target.id === 'ALL') {
+          arr = []
+        } else {
+          let index = arr.indexOf('ALL');
+          if (index !== -1) {
+            arr.splice(index, 1);
+          }
+        }
         arr.push(e.target.id)
       } else {
         arr = arr.filter(function (item: string) {
           return item !== e.target.id
         })
+        if (arr.length === 0) {
+          arr.push('ALL')
+        }
       }
       setSearchFilter({ ...searchFilter, searchWithins: arr });
     } else {
@@ -68,6 +74,10 @@ export default function FilterModal(props: filterProps) {
     event.preventDefault()
     const filterdItems = Object.entries(searchFilter).reduce((a: any, [k, v]) => (v ? (a[k] = v, a) : a), {})
     props.handleSubmit(filterdItems)
+  }
+
+  const handleSelectChange = (data: any, name: string) => {
+    setSearchFilter({ ...searchFilter, [name]: data.length > 0 ? data : null });
   }
 
   return (
@@ -90,7 +100,7 @@ export default function FilterModal(props: filterProps) {
                 <label>Search Within </label>
               </Col>
               <Col md={2}>
-                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('ALL')} label="All" id="ALL" onChange={handleChange} />
+                <Form.Check type='checkbox' disabled={searchFilter.searchWithins.includes('ALL')} checked={searchFilter.searchWithins.includes('ALL')} label="All" id="ALL" onChange={handleChange} />
               </Col>
               <Col md={2}>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('title')} label="Title" id="title" onChange={handleChange} />
@@ -107,27 +117,9 @@ export default function FilterModal(props: filterProps) {
             </Row>
             <Row className="pb-20">
               <Col md={6}>
-                <Form.Group controlId="label" className="d-flex align-items-center">
+                <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Label</Form.Label>
-                  <Form.Select value={searchFilter.label} onChange={handleChange}>
-                    {props.labelFacets.map((o) => {
-                      const { name, id } = o;
-                      return <option value={id} key={id}>{name}</option>;
-                    })}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row className="pb-20">
-              <Col md={6}>
-                <Form.Group controlId="policy" className="d-flex align-items-center">
-                  <Form.Label className="form-label-width">Policy</Form.Label>
-                  <Form.Select value={searchFilter.policy} onChange={handleChange}>
-                    {options.map((o) => {
-                      const { name, id } = o;
-                      return <option value={id} key={id}>{name}</option>;
-                    })}
-                  </Form.Select>
+                  <SelectField value={labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>

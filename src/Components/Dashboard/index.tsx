@@ -42,7 +42,7 @@ const Dashboard = () => {
         'SearchCriteria.sortColumn': sortColumn,
         'SearchCriteria.sortOrder': sortOrder,
         'SearchCriteria.filter.searchWithins': filter.searchWithins ? filter.searchWithins.toString() : [],
-        'SearchCriteria.filter.labelIds': filter.labelIds ? filter.labelIds.toString() : [],
+        'SearchCriteria.filter.labelIds': filter.labelIds ? getIds(filter.labelIds) : [],
         'SearchCriteria.filter.releaseFrom': filter.releaseFrom,
         'SearchCriteria.filter.releaseTo': filter.releaseTo,
         'SearchCriteria.filter.leakFrom': filter.leakFrom,
@@ -54,16 +54,12 @@ const Dashboard = () => {
       dispatch({ type: 'FETCH_FAILURE', payload: err.Message })
       console.log("error feching data", err)
     })
-    // Post Request
-    // axios.post(`https://api.dev.cp3.umgapps.com/api/TrackSearch`, { searchCriteria: state.searchCriteria }, {
-    // })
-    //   .then(res => {
-    //     dispatch({ type: 'FETCH_SUCCESS', payload: res.data })
-    //   }).catch((err) => {
-    //     dispatch({ type: 'FETCH_FAILURE', payload: err.Message })
-    //     console.log("error feching data", err)
-    //   })
   }, [state.searchCriteria])
+
+  const getIds = (data: any) => {
+    let res = data.map((item: any) => (item.id));
+    return res.toString()
+  }
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'CHANGE_LIMIT', payload: event.target.value })
@@ -105,10 +101,6 @@ const Dashboard = () => {
     setOpenNotes(false)
   }
 
-  const handleNotesModalSubmit = (notes: object) => {
-    // call api
-  }
-
   const handleFlterModalSubmit = (filterValues: object) => {
     setSelectedFilters(filterValues)
     dispatch({ type: 'SET_FILTER', payload: { filter: filterValues } })
@@ -118,7 +110,6 @@ const Dashboard = () => {
   const selectedFilterKeys = Object.keys(selectedFilters);
 
   const clearFilter = (name: string) => {
-    console.log("coming here")
     let filterValues = selectedFilters
     delete filterValues[name];
     setSelectedFilters(filterValues)
@@ -126,27 +117,37 @@ const Dashboard = () => {
   }
 
   const renderSelectedFilters = () => {
+    const labelObj: any = {
+      releaseFrom: 'Release From',
+      releaseTo: 'Release To',
+      leakFrom: 'Leak From',
+      leakTo: 'Leak To'
+    }
     return selectedFilterKeys.map((item, index) => {
-      if (item === 'label') {
-        const selectedLabel = state.labelFacets.filter((label: any,) => {
-          return label.id === selectedFilters[item]
-        })
-        return <Badge pill bg="secondary" key={index}>
-          {item} : {selectedLabel[0] && selectedLabel[0].name}
-          <ClearIcon className='fltr-bdg-cls-icon' onClick={() => clearFilter(item)} />
-        </Badge>
+      let content = null
+      if (['releaseFrom', 'releaseTo', 'leakFrom', 'leakTo'].includes(item)) {
+        content = <span> {labelObj[item]} : {selectedFilters[item]} </span>
+      }
+      if (item === 'labelIds') {
+        const selectedLabel = selectedFilters[item].map((label: any) => (label.name));
+        if (selectedLabel.length > 0)
+          content = <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
       }
       if (item === 'policy') {
-        return <Badge pill bg="secondary" key={index}>
-          {item} : Policy
-          <ClearIcon className='fltr-bdg-cls-icon' onClick={() => clearFilter(item)} />
-        </Badge>
+        const selectedPolicy = selectedFilters[item].map((policy: any) => (policy.name));
+        if (selectedPolicy.length > 0)
+          content = <span> Policy : {selectedPolicy && selectedPolicy.toString()} </span>
+      }
+      if (item === 'searchWithins') {
+        if (selectedFilters[item].length > 0)
+          content = <span> Search with in : {selectedFilters[item].toString()} </span>
+      }
+      if (!content) {
+        return null
       }
       return (
         <Badge pill bg="secondary" key={index}>
-          {item} : {
-            Array.isArray(selectedFilters[item]) ? selectedFilters[item].toString() : selectedFilters[item]
-          }
+          {content}
           <ClearIcon className='fltr-bdg-cls-icon' onClick={() => clearFilter(item)} />
         </Badge>
       )
@@ -168,7 +169,6 @@ const Dashboard = () => {
         labelFacets={state.labelFacets}
         show={openNotes}
         handleClose={handleNotesModalClose}
-        handleSubmit={handleNotesModalSubmit}
         selectedNotes={selectedNotes}
       // setSelectedFilters={setSelectedFilters}
       />}

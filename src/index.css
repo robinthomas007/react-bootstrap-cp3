@@ -37,3 +37,7 @@ code {
 .MuiSvgIcon-root {
   cursor: pointer;
 }
+
+.f-width {
+  width: 100%;
+}

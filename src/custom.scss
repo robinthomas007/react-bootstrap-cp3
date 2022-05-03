@@ -41,8 +41,11 @@ $border-radius:  2px;
   }
 }
 
-.Mui-selected {
+.MuiPaginationItem-root.Mui-selected {
   background-color:#F57F17 !important;
+}
+.Mui-checked {
+  color:#F57F17 !important;
 }
 
 @import "~bootstrap/scss/bootstrap";
