@@ -31,7 +31,6 @@ function App() {
           <Router />
         </ColorModeProvider>
       </AuthProvider>
-      <h1>ENV is {process.env.REACT_APP_ENV}</h1>
     </div>
   );
 }
