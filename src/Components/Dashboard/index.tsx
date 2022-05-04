@@ -1,156 +1,195 @@
-import React from 'react'
-import Button from '../Common/button'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import { InputGroup, FormControl } from 'react-bootstrap'
-import SettingsIcon from '@mui/icons-material/Settings';
-import axios from 'axios';
-import { reducer, initialState } from './searchReducer'
-import ProjectSearchDataGrid from './ProjectSearchDataGrid'
+import React from "react";
+import Button from "../Common/button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { InputGroup, FormControl } from "react-bootstrap";
+import SettingsIcon from "@mui/icons-material/Settings";
+import axios from "axios";
+import { reducer, initialState } from "./searchReducer";
+import ProjectSearchDataGrid from "./ProjectSearchDataGrid";
 // import AddCircleIcon from '@mui/icons-material/AddCircle';
 // import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import Pagination from '@mui/material/Pagination';
-import ClearIcon from '@mui/icons-material/Clear';
-import Form from 'react-bootstrap/Form'
-import FilterModal from './Modals/FilterModal'
-import NotesModal from './Modals/NotesModal'
-import SearchIcon from '@mui/icons-material/Search';
-import Loader from './../Common/loader'
-import Badge from 'react-bootstrap/Badge'
-import './dashboard.css'
+import Pagination from "@mui/material/Pagination";
+import ClearIcon from "@mui/icons-material/Clear";
+import Form from "react-bootstrap/Form";
+import FilterModal from "./Modals/FilterModal";
+import NotesModal from "./Modals/NotesModal";
+import SearchIcon from "@mui/icons-material/Search";
+import Loader from "./../Common/loader";
+import Badge from "react-bootstrap/Badge";
+import "./dashboard.css";
+import { BASE_URL } from "../../App";
 
 type notesPropTypes = {
-  trackId?: number
-}
+  trackId?: number;
+};
 
 const Dashboard = () => {
-  const [state, dispatch] = React.useReducer(reducer, initialState)
-  const [search, setSearch] = React.useState('');
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [search, setSearch] = React.useState("");
   const [openFilter, setOpenFilter] = React.useState(false);
   const [openNotes, setOpenNotes] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState<any>({});
-  const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({})
+  const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
 
   React.useEffect(() => {
-    const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter } = state.searchCriteria
-    axios.get('https://api.dev.cp3.umgapps.com/api/TrackSearch', {
-      params: {
-        'SearchCriteria.searchTerm': searchTerm,
-        'SearchCriteria.itemsPerPage': itemsPerPage,
-        'SearchCriteria.pageNumber': pageNumber,
-        'SearchCriteria.sortColumn': sortColumn,
-        'SearchCriteria.sortOrder': sortOrder,
-        'SearchCriteria.filter.searchWithins': filter.searchWithins ? filter.searchWithins.toString() : [],
-        'SearchCriteria.filter.labelIds': filter.labelIds ? getIds(filter.labelIds) : [],
-        'SearchCriteria.filter.releaseFrom': filter.releaseFrom,
-        'SearchCriteria.filter.releaseTo': filter.releaseTo,
-        'SearchCriteria.filter.leakFrom': filter.leakFrom,
-        'SearchCriteria.filter.leakTo': filter.leakTo,
-      },
-    }).then(res => {
-      dispatch({ type: 'FETCH_SUCCESS', payload: res.data })
-    }).catch((err) => {
-      dispatch({ type: 'FETCH_FAILURE', payload: err.Message })
-      console.log("error feching data", err)
-    })
-  }, [state.searchCriteria])
+    const {
+      searchTerm,
+      itemsPerPage,
+      pageNumber,
+      sortColumn,
+      sortOrder,
+      filter,
+    } = state.searchCriteria;
+    axios
+      .get(BASE_URL + "TrackSearch", {
+        params: {
+          "SearchCriteria.searchTerm": searchTerm,
+          "SearchCriteria.itemsPerPage": itemsPerPage,
+          "SearchCriteria.pageNumber": pageNumber,
+          "SearchCriteria.sortColumn": sortColumn,
+          "SearchCriteria.sortOrder": sortOrder,
+          "SearchCriteria.filter.searchWithins": filter.searchWithins
+            ? filter.searchWithins.toString()
+            : [],
+          "SearchCriteria.filter.labelIds": filter.labelIds
+            ? getIds(filter.labelIds)
+            : [],
+          "SearchCriteria.filter.releaseFrom": filter.releaseFrom,
+          "SearchCriteria.filter.releaseTo": filter.releaseTo,
+          "SearchCriteria.filter.leakFrom": filter.leakFrom,
+          "SearchCriteria.filter.leakTo": filter.leakTo,
+        },
+      })
+      .then((res) => {
+        dispatch({ type: "FETCH_SUCCESS", payload: res.data });
+      })
+      .catch((err) => {
+        dispatch({ type: "FETCH_FAILURE", payload: err.Message });
+        console.log("error feching data", err);
+      });
+  }, [state.searchCriteria]);
 
   const getIds = (data: any) => {
-    let res = data.map((item: any) => (item.id));
-    return res.toString()
-  }
+    let res = data.map((item: any) => item.id);
+    return res.toString();
+  };
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'CHANGE_LIMIT', payload: event.target.value })
-  }
+    dispatch({ type: "CHANGE_LIMIT", payload: event.target.value });
+  };
   const onSortModelChange = (data: any[]) => {
-    dispatch({ type: 'SORT_CHANGE', payload: data })
-  }
+    dispatch({ type: "SORT_CHANGE", payload: data });
+  };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, pageNumber: number) => {
-    dispatch({ type: 'PAGE_CHANGE', payload: { pageNumber: pageNumber } })
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    pageNumber: number
+  ) => {
+    dispatch({ type: "PAGE_CHANGE", payload: { pageNumber: pageNumber } });
   };
 
   const setSearchTerm = (searchTerm: string) => {
-    dispatch({ type: 'SET_SEARCH', payload: { searchTerm: searchTerm } })
-  }
+    dispatch({ type: "SET_SEARCH", payload: { searchTerm: searchTerm } });
+  };
 
   const clearSearch = () => {
-    setSearch('')
-    setSearchTerm('')
-  }
+    setSearch("");
+    setSearchTerm("");
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
   const openFilterModal = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOpenFilter(true)
-  }
+    setOpenFilter(true);
+  };
 
   const openNotesModal = (row: object) => {
-    setOpenNotes(true)
-    setSelectedNotes(row)
-  }
+    setOpenNotes(true);
+    setSelectedNotes(row);
+  };
 
   const handleFilterModalClose = () => {
-    setOpenFilter(false)
-  }
+    setOpenFilter(false);
+  };
   const handleNotesModalClose = () => {
-    setOpenNotes(false)
-  }
+    setOpenNotes(false);
+  };
 
   const handleFlterModalSubmit = (filterValues: object) => {
-    setSelectedFilters(filterValues)
-    dispatch({ type: 'SET_FILTER', payload: { filter: filterValues } })
-    setOpenFilter(false)
-  }
+    setSelectedFilters(filterValues);
+    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
+    setOpenFilter(false);
+  };
 
   const selectedFilterKeys = Object.keys(selectedFilters);
 
   const clearFilter = (name: string) => {
-    let filterValues = selectedFilters
+    let filterValues = selectedFilters;
     delete filterValues[name];
-    setSelectedFilters(filterValues)
-    dispatch({ type: 'SET_FILTER', payload: { filter: filterValues } })
-  }
+    setSelectedFilters(filterValues);
+    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
+  };
 
   const renderSelectedFilters = () => {
     const labelObj: any = {
-      releaseFrom: 'Release From',
-      releaseTo: 'Release To',
-      leakFrom: 'Leak From',
-      leakTo: 'Leak To'
-    }
+      releaseFrom: "Release From",
+      releaseTo: "Release To",
+      leakFrom: "Leak From",
+      leakTo: "Leak To",
+    };
     return selectedFilterKeys.map((item, index) => {
-      let content = null
-      if (['releaseFrom', 'releaseTo', 'leakFrom', 'leakTo'].includes(item)) {
-        content = <span> {labelObj[item]} : {selectedFilters[item]} </span>
+      let content = null;
+      if (["releaseFrom", "releaseTo", "leakFrom", "leakTo"].includes(item)) {
+        content = (
+          <span>
+            {" "}
+            {labelObj[item]} : {selectedFilters[item]}{" "}
+          </span>
+        );
       }
-      if (item === 'labelIds') {
-        const selectedLabel = selectedFilters[item].map((label: any) => (label.name));
+      if (item === "labelIds") {
+        const selectedLabel = selectedFilters[item].map(
+          (label: any) => label.name
+        );
         if (selectedLabel.length > 0)
-          content = <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
+          content = (
+            <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
+          );
       }
-      if (item === 'policy') {
-        const selectedPolicy = selectedFilters[item].map((policy: any) => (policy.name));
+      if (item === "policy") {
+        const selectedPolicy = selectedFilters[item].map(
+          (policy: any) => policy.name
+        );
         if (selectedPolicy.length > 0)
-          content = <span> Policy : {selectedPolicy && selectedPolicy.toString()} </span>
+          content = (
+            <span>
+              {" "}
+              Policy : {selectedPolicy && selectedPolicy.toString()}{" "}
+            </span>
+          );
       }
-      if (item === 'searchWithins') {
+      if (item === "searchWithins") {
         if (selectedFilters[item].length > 0)
-          content = <span> Search with in : {selectedFilters[item].toString()} </span>
+          content = (
+            <span> Search with in : {selectedFilters[item].toString()} </span>
+          );
       }
       if (!content) {
-        return null
+        return null;
       }
       return (
         <Badge pill bg="secondary" key={index}>
           {content}
-          <ClearIcon className='fltr-bdg-cls-icon' onClick={() => clearFilter(item)} />
+          <ClearIcon
+            className="fltr-bdg-cls-icon"
+            onClick={() => clearFilter(item)}
+          />
         </Badge>
-      )
+      );
     });
   };
 
@@ -165,41 +204,69 @@ const Dashboard = () => {
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
       />
-      {openNotes && <NotesModal
-        labelFacets={state.labelFacets}
-        show={openNotes}
-        handleClose={handleNotesModalClose}
-        selectedNotes={selectedNotes}
-      // setSelectedFilters={setSelectedFilters}
-      />}
+      {openNotes && (
+        <NotesModal
+          labelFacets={state.labelFacets}
+          show={openNotes}
+          handleClose={handleNotesModalClose}
+          selectedNotes={selectedNotes}
+          // setSelectedFilters={setSelectedFilters}
+        />
+      )}
 
-      <Row className='bg-header-theme text-white justify-content-md-center min-row-ht-100'>
+      <Row className="bg-header-theme text-white justify-content-md-center min-row-ht-100">
         <Col md={4}>
           <InputGroup>
-            <Button handleClick={openFilterModal} variant="light" label={<SettingsIcon />} className='mr-btn no-border-rd' />
+            <Button
+              handleClick={openFilterModal}
+              variant="light"
+              label={<SettingsIcon />}
+              className="mr-btn no-border-rd"
+            />
             <SearchIcon className="txt-fld-search-icon" />
-            <FormControl value={search} aria-label="search value" onChange={handleChange} className="txt-fld-search-main" />
-            {search && <ClearIcon className='close-icon' onClick={clearSearch} />}
-            <Button handleClick={() => setSearchTerm(search)} variant="secondary" label="search" className="text-white" />
+            <FormControl
+              value={search}
+              aria-label="search value"
+              onChange={handleChange}
+              className="txt-fld-search-main"
+            />
+            {search && (
+              <ClearIcon className="close-icon" onClick={clearSearch} />
+            )}
+            <Button
+              handleClick={() => setSearchTerm(search)}
+              variant="secondary"
+              label="search"
+              className="text-white"
+            />
           </InputGroup>
-          {selectedFilterKeys.length > 0 &&
+          {selectedFilterKeys.length > 0 && (
             <div className="selected-filter-wrapper">
               <label>Selected Filters: </label>
               {renderSelectedFilters()}
             </div>
-          }
+          )}
         </Col>
       </Row>
       <Row className="pt-20 pb-20 justify-content-md-center">
         <Col md={11}>
           <Row>
-            <Col md={4} className="d-flex justify-content-start align-items-center">
+            <Col
+              md={4}
+              className="d-flex justify-content-start align-items-center"
+            >
               <span>Viewing </span> &nbsp;
-              <Form.Control as="select" size="sm" style={{ width: '40px' }} onChange={handleLimitChange}>
+              <Form.Control
+                as="select"
+                size="sm"
+                style={{ width: "40px" }}
+                onChange={handleLimitChange}
+              >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
-              </Form.Control>&nbsp;
+              </Form.Control>
+              &nbsp;
               <span> of {state.totalItems} Results</span>
             </Col>
             <Col md={4} className="d-flex justify-content-center">
@@ -217,10 +284,10 @@ const Dashboard = () => {
             <Col md={1}>
               <Button handleClick={() => { }} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
             </Col> */}
-          </Row >
+          </Row>
         </Col>
-      </Row >
-      <Row className='justify-content-md-center'>
+      </Row>
+      <Row className="justify-content-md-center">
         <ProjectSearchDataGrid
           loading={state.loading}
           tracks={state.tracks}
@@ -233,9 +300,8 @@ const Dashboard = () => {
           openNotesModal={openNotesModal}
         />
       </Row>
-    </Container >
-  )
-}
+    </Container>
+  );
+};
 
-
-export default Dashboard
+export default Dashboard;
