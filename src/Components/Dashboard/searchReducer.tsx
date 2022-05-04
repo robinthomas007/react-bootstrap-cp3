@@ -49,7 +49,7 @@ export const reducer = (state: searchState, action: searchActions) => {
         tracks: action.payload.tracks,
         totalPages: Number(action.payload.totalPages),
         totalItems: Number(action.payload.totalItems),
-        labelFacets: action.payload.labelFacets
+        labelFacets: state.labelFacets.length === 0 ? action.payload.labelFacets : state.labelFacets
       }
     case 'FETCH_FAILURE':
       return {

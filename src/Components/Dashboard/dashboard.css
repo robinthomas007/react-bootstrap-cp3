@@ -60,6 +60,7 @@
 .notes-name-date {
   min-width: 200px;
   display: inline-block;
+  margin-right: 20px;
 }
 
 .notes-modal .list-group.list-group-flush {

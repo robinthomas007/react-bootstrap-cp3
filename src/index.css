@@ -65,3 +65,7 @@ code {
 .form-control:focus, .form-control:active, .form-control:hover {
   box-shadow: none !important;
 }
+
+.nav-link {
+  color: #fff !important;
+}

@@ -10,6 +10,7 @@ import { useColor } from '../../Context/ColorModeContext';
 import jwt_decode from 'jwt-decode';
 import getCookie from './../Common/cookie';
 import { useAuth } from './../../Context/authContext'
+import Nav from 'react-bootstrap/Nav'
 
 export default function Header() {
 
@@ -44,13 +45,25 @@ export default function Header() {
         <Col md={8}>
           <img src={logo} alt="Logo" />
         </Col>
-        <Col md={1} className="pt-20">
-          <span onClick={colorModeContext.toggleColorMode}>
-            {colorModeContext.colorMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}
-          </span>
+        <Col md={4}>
+          <Nav className="justify-content-end pt-20">
+            <Nav.Item>
+              <Nav.Link>
+                <span onClick={colorModeContext.toggleColorMode}>
+                  {colorModeContext.colorMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link>
+                <AccountCircleIcon /> &nbsp; <span>Welcome, {auth.user.name}</span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link>Logout</Nav.Link>
+            </Nav.Item>
+          </Nav>
         </Col>
-        <Col md={2} className="pt-20"> <AccountCircleIcon /> &nbsp; <span>Welcome, {auth.user.name}</span></Col>
-        <Col md={1} className="pt-20"><span>Logout</span></Col>
       </Row>
     </Container>
 
