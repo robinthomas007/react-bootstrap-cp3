@@ -14,7 +14,7 @@ switch (process.env.REACT_APP_ENV) {
     url = "https://api.qa.cp3.umgapps.com/api/";
     break;
   case "uat":
-    url = "https://api.stage.cp3.umgapps.com/api/";
+    url = "https://api.uat.cp3.umgapps.com/api/";
     break;
   case "prod":
     url = "https://api.cp3.umgapps.com/api/";
