@@ -9,11 +9,12 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import { useColor } from '../../Context/ColorModeContext';
 import jwt_decode from 'jwt-decode';
 import getCookie from './../Common/cookie';
+import { useAuth } from './../../Context/authContext'
 
 export default function Header() {
 
   const colorModeContext = useColor()
-  let user = 'Robin Thomas'
+  const auth = useAuth();
   useEffect(() => {
     if (colorModeContext.colorMode === 'light') {
       document.body.classList.add('light-theme');
@@ -28,7 +29,9 @@ export default function Header() {
   useEffect(() => {
     try {
       const token = getCookie('cp3_auth');
-      user = jwt_decode(token);
+      let user: any = jwt_decode(token);
+      localStorage.setItem('user', user);
+      auth.login(user)
       console.log("Logged in success --", user)
     } catch (err) {
       console.log("Error getting Token", err)
@@ -46,7 +49,7 @@ export default function Header() {
             {colorModeContext.colorMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}
           </span>
         </Col>
-        <Col md={2} className="pt-20"> <AccountCircleIcon /> &nbsp; <span>Welcome, {user}</span></Col>
+        <Col md={2} className="pt-20"> <AccountCircleIcon /> &nbsp; <span>Welcome, {auth.user.name}</span></Col>
         <Col md={1} className="pt-20"><span>Logout</span></Col>
       </Row>
     </Container>

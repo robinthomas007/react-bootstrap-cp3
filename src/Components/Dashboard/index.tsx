@@ -8,8 +8,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import axios from 'axios';
 import { reducer, initialState } from './searchReducer'
 import ProjectSearchDataGrid from './ProjectSearchDataGrid'
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+// import AddCircleIcon from '@mui/icons-material/AddCircle';
+// import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Pagination from '@mui/material/Pagination';
 import ClearIcon from '@mui/icons-material/Clear';
 import Form from 'react-bootstrap/Form'
@@ -193,16 +193,16 @@ const Dashboard = () => {
       <Row className="pt-20 pb-20 justify-content-md-center">
         <Col md={11}>
           <Row>
-            <Col md={2} className="d-flex justify-content-around align-items-center">
-              <span>Viewing</span>
-              <Form.Control as="select" size="sm" style={{ width: '20%' }} onChange={handleLimitChange}>
+            <Col md={4} className="d-flex justify-content-start align-items-center">
+              <span>Viewing </span> &nbsp;
+              <Form.Control as="select" size="sm" style={{ width: '40px' }} onChange={handleLimitChange}>
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
-              </Form.Control>
-              <span>of {state.totalItems} Results</span>
+              </Form.Control>&nbsp;
+              <span> of {state.totalItems} Results</span>
             </Col>
-            <Col md={8} className="d-flex justify-content-center">
+            <Col md={4} className="d-flex justify-content-center">
               <Pagination
                 count={state.totalPages ? Number(state.totalPages) : 0}
                 shape="rounded"
@@ -211,12 +211,12 @@ const Dashboard = () => {
                 onChange={handlePageChange}
               />
             </Col>
-            <Col md={1}>
+            {/* <Col md={1}>
               <Button handleClick={() => { }} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />
             </Col>
             <Col md={1}>
               <Button handleClick={() => { }} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
-            </Col>
+            </Col> */}
           </Row >
         </Col>
       </Row >

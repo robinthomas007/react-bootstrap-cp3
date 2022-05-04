@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import axios from 'axios';
 import moment from 'moment';
+import { useAuth } from './../../../Context/authContext'
 
 type filterProps = {
   show: boolean;
@@ -22,6 +23,9 @@ export default function NotesrModal(props: filterProps) {
 
   const [notes, setNotes] = React.useState<any>();
   const [notesData, setNotesData] = React.useState<any>([]);
+  const auth = useAuth();
+
+
   const handleChange = (e: React.ChangeEvent<any>) => {
     setNotes(e.target.value);
   }
@@ -42,7 +46,7 @@ export default function NotesrModal(props: filterProps) {
     axios.put('https://api.dev.cp3.umgapps.com/api/Track/UpdateNotes', {
       trackId: props.selectedNotes.trackId,
       comments: notes,
-      userName: "Kankhara Pratik"
+      userName: auth.user.name || 'Guest'
 
     }).then((res: any) => {
       setNotesData([...notesData, res.data])
@@ -69,7 +73,7 @@ export default function NotesrModal(props: filterProps) {
       className="notes-modal"
     >
       <Modal.Header>
-        <Modal.Title>Notes for Some Track Title 1</Modal.Title>
+        <Modal.Title>Notes for {props.selectedNotes.title}</Modal.Title>
         <CloseIcon fontSize="inherit" className="modal-cls-btn" onClick={props.handleClose} />
       </Modal.Header>
       <Modal.Body>
@@ -94,7 +98,7 @@ export default function NotesrModal(props: filterProps) {
       </Modal.Body>
       <Modal.Footer>
         <Button label='Submit' handleClick={handleSubmit} className="text-white" variant="secondary" />
-        <Button label='Close' handleClick={props.handleClose} variant="primary" />
+        <Button label='Close' handleClick={props.handleClose} variant="light" />
       </Modal.Footer>
     </Modal >
   )

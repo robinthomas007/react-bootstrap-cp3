@@ -16,7 +16,18 @@ const SelectField = (props: selectProps) => (
     isMulti={props.isMulti}
     name={props.name}
     defaultValue={props.value}
-    onChange={(data) => props.handleChange(data, props.name)} />
+    onChange={(data) => props.handleChange(data, props.name)}
+  // theme={(theme) => ({
+  //   ...theme,
+  //   borderRadius: 0,
+  //   colors: {
+  //     ...theme.colors,
+  //     text: 'orangered',
+  //     primary25: 'hotpink',
+  //     primary: 'black',
+  //   },
+  // })}
+  />
 )
 
 export default SelectField

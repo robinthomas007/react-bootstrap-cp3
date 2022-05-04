@@ -87,6 +87,7 @@ export default function FilterModal(props: filterProps) {
       backdrop="static"
       keyboard={false}
       size="lg"
+      className="filter-modal-wrapper"
     >
       <Modal.Header>
         <Modal.Title>Search Filters</Modal.Title>
@@ -156,7 +157,7 @@ export default function FilterModal(props: filterProps) {
       </Modal.Body>
       <Modal.Footer>
         <Button label='Apply' handleClick={handleSubmit} className="text-white" variant="secondary" />
-        <Button label='Cancel' handleClick={props.handleClose} variant="primary" />
+        <Button label='Cancel' handleClick={props.handleClose} variant="light" />
       </Modal.Footer>
     </Modal >
   )
