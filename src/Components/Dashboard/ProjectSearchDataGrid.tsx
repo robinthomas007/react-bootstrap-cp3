@@ -1,10 +1,16 @@
 import React from 'react'
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, getGridStringOperators } from '@mui/x-data-grid';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Col from 'react-bootstrap/Col'
 import { useColor } from '../../Context/ColorModeContext';
+import { Filter } from '@mui/icons-material';
+
+
+const filterOperators = getGridStringOperators().filter((operator) =>
+  ['contains'].includes(operator.value),
+);
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -16,6 +22,7 @@ type searchProps = {
   pageNumber: number;
   onSortModelChange: any;
   openNotesModal: any
+  dispatch: any
 }
 
 type editNotesPropTypes = {
@@ -31,6 +38,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'left',
       align: 'left',
+      filterOperators
     },
     {
       field: 'artist',
@@ -38,6 +46,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'left',
       align: 'left',
+      filterOperators
     },
     {
       field: 'isrc',
@@ -45,6 +54,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'left',
       align: 'left',
+      filterOperators
     },
     {
       field: 'label',
@@ -53,6 +63,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'left',
       align: 'left',
+      filterOperators,
+      filterable: false,
     },
     {
       field: 'releaseDate',
@@ -61,6 +73,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'left',
       align: 'left',
+      filterOperators,
+      filterable: false,
     },
     {
       field: 'leakDate',
@@ -69,6 +83,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'left',
       align: 'left',
+      filterOperators,
+      filterable: false,
     },
     {
       field: 'comments',
@@ -77,6 +93,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
+      filterable: false,
       renderCell: (params) => (
         <QuestionAnswerIcon onClick={(() => NotesModal(params))} />
       ),
@@ -110,8 +127,21 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const colorModeContext = useColor()
 
   const onSortModelChange = (data: any[]) => {
-    props.onSortModelChange({ sortColumn: data[0].field, sortOrder: data[0].sort })
+    if (data.length > 0)
+      props.onSortModelChange({ sortColumn: data[0].field, sortOrder: data[0].sort })
+    else
+      props.onSortModelChange({ sortColumn: 'releaseDate', sortOrder: 'desc' })
   }
+  const onFilterModelChange = (data: any) => {
+    data = data.items
+    if (data && data.length > 0 && data[0].hasOwnProperty('value')) {
+      let item = data[0]
+      if (['title', 'artist', 'isrc'].includes(item.columnField)) {
+        props.dispatch({ type: "SET_SEARCH", payload: { searchTerm: item.value, filter: { searchWithins: [item.columnField] } } });
+      }
+    }
+  }
+
   return (
     <Col md={11}>
       <div style={{ height: props.height, width: '100%' }}>
@@ -127,6 +157,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           disableSelectionOnClick
           onPageSizeChange={(newPageSize) => console.log(newPageSize)}
           hideFooter={true}
+          filterMode="server"
+          onFilterModelChange={onFilterModelChange}
           className={`${colorModeContext.colorMode === 'light' ? '' : 'text-white'}`}
         />
       </div>

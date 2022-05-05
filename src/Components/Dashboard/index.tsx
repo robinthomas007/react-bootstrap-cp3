@@ -34,32 +34,21 @@ const Dashboard = () => {
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
 
   React.useEffect(() => {
-    const {
-      searchTerm,
-      itemsPerPage,
-      pageNumber,
-      sortColumn,
-      sortOrder,
-      filter,
-    } = state.searchCriteria;
+    const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter, } = state.searchCriteria;
     axios
       .get(BASE_URL + "TrackSearch", {
         params: {
-          "SearchCriteria.searchTerm": searchTerm,
-          "SearchCriteria.itemsPerPage": itemsPerPage,
-          "SearchCriteria.pageNumber": pageNumber,
-          "SearchCriteria.sortColumn": sortColumn,
-          "SearchCriteria.sortOrder": sortOrder,
-          "SearchCriteria.filter.searchWithins": filter.searchWithins
-            ? filter.searchWithins.toString()
-            : [],
-          "SearchCriteria.filter.labelIds": filter.labelIds
-            ? getIds(filter.labelIds)
-            : [],
-          "SearchCriteria.filter.releaseFrom": filter.releaseFrom,
-          "SearchCriteria.filter.releaseTo": filter.releaseTo,
-          "SearchCriteria.filter.leakFrom": filter.leakFrom,
-          "SearchCriteria.filter.leakTo": filter.leakTo,
+          "searchTerm": searchTerm,
+          "itemsPerPage": itemsPerPage,
+          "pageNumber": pageNumber,
+          "sortColumn": sortColumn,
+          "sortOrder": sortOrder,
+          "searchWithins": filter.searchWithins ? filter.searchWithins.toString() : '',
+          "labelIds": filter.labelIds ? getIds(filter.labelIds) : '',
+          "releaseFrom": filter.releaseFrom,
+          "releaseTo": filter.releaseTo,
+          "leakFrom": filter.leakFrom,
+          "leakTo": filter.leakTo,
         },
       })
       .then((res) => {
@@ -71,11 +60,6 @@ const Dashboard = () => {
       });
   }, [state.searchCriteria]);
 
-  const getIds = (data: any) => {
-    let res = data.map((item: any) => item.id);
-    return res.toString();
-  };
-
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "CHANGE_LIMIT", payload: event.target.value });
   };
@@ -83,15 +67,30 @@ const Dashboard = () => {
     dispatch({ type: "SORT_CHANGE", payload: data });
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    pageNumber: number
-  ) => {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, pageNumber: number) => {
     dispatch({ type: "PAGE_CHANGE", payload: { pageNumber: pageNumber } });
   };
 
   const setSearchTerm = (searchTerm: string) => {
-    dispatch({ type: "SET_SEARCH", payload: { searchTerm: searchTerm } });
+    dispatch({ type: "SET_SEARCH", payload: { searchTerm: searchTerm, filter: { searchWithins: ['ALL'] } } });
+  };
+
+  const handleFlterModalSubmit = (filterValues: object) => {
+    setSelectedFilters(filterValues);
+    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
+    setOpenFilter(false);
+  };
+
+  const clearFilter = (name: string) => {
+    let filterValues = selectedFilters;
+    delete filterValues[name];
+    setSelectedFilters(filterValues);
+    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
+  };
+
+  const getIds = (data: any) => {
+    let res = data.map((item: any) => item.id);
+    return res.toString();
   };
 
   const clearSearch = () => {
@@ -119,20 +118,7 @@ const Dashboard = () => {
     setOpenNotes(false);
   };
 
-  const handleFlterModalSubmit = (filterValues: object) => {
-    setSelectedFilters(filterValues);
-    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
-    setOpenFilter(false);
-  };
-
   const selectedFilterKeys = Object.keys(selectedFilters);
-
-  const clearFilter = (name: string) => {
-    let filterValues = selectedFilters;
-    delete filterValues[name];
-    setSelectedFilters(filterValues);
-    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
-  };
 
   const renderSelectedFilters = () => {
     const labelObj: any = {
@@ -210,7 +196,7 @@ const Dashboard = () => {
           show={openNotes}
           handleClose={handleNotesModalClose}
           selectedNotes={selectedNotes}
-          // setSelectedFilters={setSelectedFilters}
+        // setSelectedFilters={setSelectedFilters}
         />
       )}
 
@@ -298,6 +284,7 @@ const Dashboard = () => {
           pageNumber={state.pageNumber}
           onSortModelChange={onSortModelChange}
           openNotesModal={openNotesModal}
+          dispatch={dispatch}
         />
       </Row>
     </Container>

@@ -80,7 +80,7 @@ export const reducer = (state: searchState, action: searchActions) => {
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm },
+        searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm, filter: action.payload.filter },
       }
     case 'SET_FILTER':
       return {
