@@ -11,12 +11,7 @@ $border-radius:  2px;
   background-color: #000000;
   color: #ffffff;
   $body-color: #fff;
-  .MuiCheckbox-root{
-    color: #ddd
-  }
-  .MuiButtonBase-root, .MuiPaginationItem-ellipsis {
-    color: #fff;
-  }
+  
   .modal-content {
     background: #212121;
   }
@@ -30,9 +25,18 @@ $border-radius:  2px;
     border-color: #333333;
     color: #fff !important;
   }
-  #react-select-9-listbox {
+  //MUI DATA GRID THEME CHANGES FOR DARK BACKGROUND
+  .MuiDataGrid-menuList, .MuiDataGrid-filterForm {
+    background: #333333;
+  }
+  .MuiInput-root, .MuiInputLabel-root {
+    color: #ffffff;
+  }
+  .MuiCheckbox-root{
+    color: #ddd
+  }
+  .MuiButtonBase-root, .MuiPaginationItem-ellipsis {
     color: #fff;
-    background: #000 !important;
   }
 }
 
