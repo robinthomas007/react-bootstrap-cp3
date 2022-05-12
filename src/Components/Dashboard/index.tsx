@@ -201,7 +201,7 @@ const Dashboard = () => {
       )}
 
       <Row className="bg-header-theme text-white justify-content-md-center min-row-ht-100">
-        <Col md={4}>
+        <Col md={4} className="d-flex align-item-center align-items-center ">
           <InputGroup>
             <Button
               handleClick={openFilterModal}

@@ -11,6 +11,9 @@ import jwt_decode from 'jwt-decode';
 import getCookie from './../Common/cookie';
 import { useAuth } from './../../Context/authContext'
 import Nav from 'react-bootstrap/Nav'
+import { NavLink } from 'react-router-dom';
+import SearchIcon from "@mui/icons-material/Search";
+import ApprovalIcon from '@mui/icons-material/Approval';
 
 export default function Header() {
 
@@ -41,12 +44,24 @@ export default function Header() {
 
   return (
     <Container fluid>
-      <Row className='bg-header-theme text-white'>
-        <Col md={8}>
-          <img src={logo} alt="Logo" />
+      <Row className='bg-header-theme text-white cp3-header'>
+        <Col md={6}>
+          <img className="cp3-logo" src={logo} alt="Logo" />
         </Col>
-        <Col md={4}>
-          <Nav className="justify-content-end pt-20">
+        <Col md={6}>
+          <Nav className="justify-content-around">
+            <Nav.Item className="nav-item-link">
+              <NavLink to='/'>
+                <SearchIcon /> Search
+                <div className="line"></div>
+              </NavLink>
+            </Nav.Item>
+            <Nav.Item className="nav-item-link">
+              <NavLink to='/policy'>
+                <ApprovalIcon /> Policy
+                <div className="line"></div>
+              </NavLink>
+            </Nav.Item>
             <Nav.Item>
               <Nav.Link>
                 <span onClick={colorModeContext.toggleColorMode}>
@@ -65,7 +80,7 @@ export default function Header() {
           </Nav>
         </Col>
       </Row>
-    </Container>
+    </Container >
 
   )
 }

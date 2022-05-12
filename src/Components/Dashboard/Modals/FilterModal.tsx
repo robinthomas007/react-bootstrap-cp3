@@ -7,7 +7,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
-import { useColor } from './../../../Context/ColorModeContext';
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -42,7 +41,6 @@ export default function FilterModal(props: filterProps) {
       releaseTo: releaseTo || null
     }
   );
-  const colorModeContext = useColor()
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     if (e.target.type === 'checkbox') {
@@ -122,7 +120,7 @@ export default function FilterModal(props: filterProps) {
               <Col md={6}>
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Label</Form.Label>
-                  <SelectField theme={colorModeContext.colorMode} value={labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
+                  <SelectField value={labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>

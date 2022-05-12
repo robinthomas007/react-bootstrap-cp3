@@ -33,10 +33,6 @@ code {
   padding-bottom: 20px;
 }
 
-.d-flex {
-  display: flex;
-}
-
 .MuiSvgIcon-root {
   cursor: pointer;
 }
@@ -63,4 +59,78 @@ code {
 
 .nav-link {
   color: #fff !important;
+}
+
+.cp3-header {
+  height: 62px;
+}
+
+.cp3-logo {
+  height: 62px;
+  transform: scale(1.5);
+}
+
+.cp3-header .nav {
+  height: 62px;
+  align-items: center;
+}
+
+.cp3-header .nav-item {
+  min-width: 120px;
+  text-align: center;
+  position: relative;
+}
+
+.cp3-header .nav-item-link a:hover .line {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #FBC02D;
+  top: 40px;
+  left: 10px;
+}
+
+.cp3-header .nav-item a.active .line {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #FBC02D;
+  top: 40px;
+  left: 10px;
+}
+
+.cp3-header .nav-item a {
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.mr-btn {
+  margin-right: 10px;
+}
+
+.no-border-rd {
+  border-radius: 0px;
+}
+
+.auto-complete-comp {
+  position: relative;
+}
+
+.auto-complete-comp .MuiSvgIcon-root {
+  position: absolute;
+  z-index: 99;
+  top: 7px;
+  left: 10px;
+  color: #636363;
+}
+
+
+.auto-complete-comp input {
+  padding-left: 35px;
+  border-radius: 4px;
+}
+
+.mr-20 {
+  margin-right: 20px;
 }

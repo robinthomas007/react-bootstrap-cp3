@@ -1,5 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
+import { useColor } from './../../Context/ColorModeContext';
 
 type selectProps = {
   options: any,
@@ -7,7 +8,6 @@ type selectProps = {
   handleChange?: any,
   name: string
   value: Array<object>
-  theme: string
 }
 
 const LightStyles = {
@@ -39,17 +39,20 @@ const DarkStyles = {
   }),
 };
 
-const SelectField = (props: selectProps) => (
-  <Select className="f-width cp3-react-select" getOptionLabel={(option: any) => option.name}
+const SelectField = (props: selectProps) => {
+
+  const colorModeContext = useColor()
+
+  return <Select className="f-width cp3-react-select" getOptionLabel={(option: any) => option.name}
     getOptionValue={(option: any) => option.id}
     options={props.options}
     isMulti={props.isMulti}
     name={props.name}
     defaultValue={props.value}
     onChange={(data) => props.handleChange(data, props.name)}
-    styles={props.theme === 'light' ? LightStyles : DarkStyles}
+    styles={colorModeContext.colorMode === 'light' ? LightStyles : DarkStyles}
   />
-)
+}
 
 
 export default SelectField

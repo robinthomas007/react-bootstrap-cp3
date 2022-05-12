@@ -1,0 +1,40 @@
+.policy-wrapper {
+    padding: 10px 61px;
+}
+
+.pt-70 {
+    padding-top: 70px;
+}
+
+.policy-wrapper .sub-title {
+    color: #999999;
+    margin-bottom: 10px;
+}
+
+.policy-wrapper .heading {
+    margin: 0;
+}
+
+.light-theme .create-policy-wrapper {
+    background-color: #F5F5F5;
+}
+
+.create-policy-wrapper {
+    padding: 10px 40px;
+}
+
+.create-policy-wrapper .form-control {
+    background-color: #fff !important;
+}
+
+.create-policy-wrapper .cp3-react-select .css-cqoyn1-control {
+    background-color: #FFF;
+}
+
+.create-policy-wrapper .form-check {
+    margin-right: 10px;
+}
+
+.policy-items {
+    padding: 15px 40px 0px;
+}
