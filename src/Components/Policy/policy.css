@@ -38,3 +38,22 @@
 .policy-items {
     padding: 15px 40px 0px;
 }
+
+.create-policy-wrapper.exceptions {
+    background: #fff;
+}
+
+.create-policy-wrapper .exception-field {
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.exception-summary {
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.create-policy-wrapper.exception-summary {
+    margin: 25px auto;
+}
