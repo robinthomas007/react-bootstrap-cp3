@@ -1,5 +1,5 @@
 import React from 'react'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
 import { useColor } from './../../Context/ColorModeContext';
 
 type selectProps = {
@@ -9,6 +9,21 @@ type selectProps = {
   name: string
   value: Array<object>
 }
+
+const Option = (props: any) => {
+  return (
+    <div>
+      <components.Option {...props}>
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => null}
+        />{" "}
+        <label>{props.label}</label>
+      </components.Option>
+    </div>
+  );
+};
 
 const LightStyles = {
   control: (base: any, state: any) => ({
@@ -48,6 +63,11 @@ const SelectField = (props: selectProps) => {
     options={props.options}
     isMulti={props.isMulti}
     name={props.name}
+    closeMenuOnSelect={false}
+    components={{
+      Option
+    }}
+    value={props.value}
     defaultValue={props.value}
     onChange={(data) => props.handleChange(data, props.name)}
     styles={colorModeContext.colorMode === 'light' ? LightStyles : DarkStyles}

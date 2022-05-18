@@ -53,13 +53,11 @@ export default function Header() {
             <Nav.Item className="nav-item-link">
               <NavLink to='/'>
                 <SearchIcon /> Search
-                <div className="line"></div>
               </NavLink>
             </Nav.Item>
             <Nav.Item className="nav-item-link">
               <NavLink to='/policy'>
                 <ApprovalIcon /> Policy
-                <div className="line"></div>
               </NavLink>
             </Nav.Item>
             <Nav.Item>
