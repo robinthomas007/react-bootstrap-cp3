@@ -319,7 +319,7 @@ export default function Policy() {
       <Row>
         <Col md={10}>
           <Button
-            handleClick={() => {}}
+            handleClick={() => { }}
             variant="secondary"
             startIcon={<AddCircleIcon />}
             label="Create Exception"
@@ -334,7 +334,7 @@ export default function Policy() {
             handleClick={handleSubmit}
           />
           <Button
-            handleClick={() => {}}
+            handleClick={() => { }}
             variant="light"
             label="Cancel"
             className=""

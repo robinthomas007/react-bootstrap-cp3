@@ -1,5 +1,5 @@
 import React from "react";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { useColor } from "./../../Context/ColorModeContext";
 
 type selectProps = {
@@ -8,6 +8,21 @@ type selectProps = {
   handleChange?: any;
   name: string;
   value: Array<object>;
+};
+
+const Option = (props: any) => {
+  return (
+    <div>
+      <components.Option {...props}>
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => null}
+        />{" "}
+        <label>{props.label}</label>
+      </components.Option>
+    </div>
+  );
 };
 
 const LightStyles = {

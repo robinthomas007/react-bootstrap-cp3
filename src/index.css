@@ -81,22 +81,8 @@ code {
   position: relative;
 }
 
-.cp3-header .nav-item-link a:hover .line {
-  position: absolute;
-  width: 100%;
-  height: 4px;
-  background: #FBC02D;
-  top: 40px;
-  left: 10px;
-}
-
-.cp3-header .nav-item a.active .line {
-  position: absolute;
-  width: 100%;
-  height: 4px;
-  background: #FBC02D;
-  top: 40px;
-  left: 10px;
+.cp3-header .nav-item a.active {
+  color: #FBC02D !important;
 }
 
 .cp3-header .nav-item a {

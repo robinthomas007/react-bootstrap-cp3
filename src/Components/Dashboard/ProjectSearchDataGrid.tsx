@@ -65,6 +65,16 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       filterable: false,
     },
     {
+      field: "blockPolicyName",
+      headerName: "Policy",
+      sortable: true,
+      flex: 1,
+      headerAlign: "left",
+      align: "left",
+      filterOperators,
+      filterable: false,
+    },
+    {
       field: "releaseDate",
       headerName: "Release Date",
       sortable: true,
