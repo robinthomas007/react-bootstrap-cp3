@@ -8,6 +8,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loader from "./../Common/loader";
 import "./policy.css";
 import { BASE_URL } from "../../App";
+import getCookie from "../Common/cookie";
 
 export default function Policy() {
   const [options, setOptions] = useState([]);
@@ -40,9 +41,17 @@ export default function Policy() {
   const handleSubmit = () => {
     setLoading(true);
     axios
-      .post(BASE_URL + "BlockPolicy/AddBlockPolicy", {
-        ...policy,
-      })
+      .post(
+        BASE_URL + "BlockPolicy/AddBlockPolicy",
+        {
+          ...policy,
+        },
+        {
+          headers: {
+            cp3_auth: getCookie("cp3_auth"),
+          },
+        }
+      )
       .then(() => alert("Policy Saved"))
       .catch((err) => {
         console.log("error feching data", err);

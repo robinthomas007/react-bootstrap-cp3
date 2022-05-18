@@ -20,6 +20,7 @@ import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
+import getCookie from "../Common/cookie";
 
 type notesPropTypes = {
   trackId?: number;
@@ -34,21 +35,33 @@ const Dashboard = () => {
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
 
   React.useEffect(() => {
-    const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter, } = state.searchCriteria;
+    const {
+      searchTerm,
+      itemsPerPage,
+      pageNumber,
+      sortColumn,
+      sortOrder,
+      filter,
+    } = state.searchCriteria;
     axios
       .get(BASE_URL + "TrackSearch", {
         params: {
-          "searchTerm": searchTerm,
-          "itemsPerPage": itemsPerPage,
-          "pageNumber": pageNumber,
-          "sortColumn": sortColumn,
-          "sortOrder": sortOrder,
-          "searchWithins": filter.searchWithins ? filter.searchWithins.toString() : '',
-          "labelIds": filter.labelIds ? getIds(filter.labelIds) : '',
-          "releaseFrom": filter.releaseFrom,
-          "releaseTo": filter.releaseTo,
-          "leakFrom": filter.leakFrom,
-          "leakTo": filter.leakTo,
+          searchTerm: searchTerm,
+          itemsPerPage: itemsPerPage,
+          pageNumber: pageNumber,
+          sortColumn: sortColumn,
+          sortOrder: sortOrder,
+          searchWithins: filter.searchWithins
+            ? filter.searchWithins.toString()
+            : "",
+          labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
+          releaseFrom: filter.releaseFrom,
+          releaseTo: filter.releaseTo,
+          leakFrom: filter.leakFrom,
+          leakTo: filter.leakTo,
+        },
+        headers: {
+          cp3_auth: getCookie("cp3_auth"),
         },
       })
       .then((res) => {
@@ -67,12 +80,18 @@ const Dashboard = () => {
     dispatch({ type: "SORT_CHANGE", payload: data });
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, pageNumber: number) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    pageNumber: number
+  ) => {
     dispatch({ type: "PAGE_CHANGE", payload: { pageNumber: pageNumber } });
   };
 
   const setSearchTerm = (searchTerm: string) => {
-    dispatch({ type: "SET_SEARCH", payload: { searchTerm: searchTerm, filter: { searchWithins: ['ALL'] } } });
+    dispatch({
+      type: "SET_SEARCH",
+      payload: { searchTerm: searchTerm, filter: { searchWithins: ["ALL"] } },
+    });
   };
 
   const handleFlterModalSubmit = (filterValues: object) => {
@@ -196,7 +215,7 @@ const Dashboard = () => {
           show={openNotes}
           handleClose={handleNotesModalClose}
           selectedNotes={selectedNotes}
-        // setSelectedFilters={setSelectedFilters}
+          // setSelectedFilters={setSelectedFilters}
         />
       )}
 
