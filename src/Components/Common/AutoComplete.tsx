@@ -1,6 +1,6 @@
-import React from 'react'
-import { Typeahead } from 'react-bootstrap-typeahead';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import React from "react";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import SearchIcon from "@mui/icons-material/Search";
 
 const config = {
@@ -10,23 +10,22 @@ const config = {
   highlightOnlyResult: true,
   minLength: 3,
   open: undefined,
-}
+};
 
 type AutoCompleteProps = {
-  onInputChange: any,
-  options: Array<object>,
-  onChange: any
-}
+  onInputChange: any;
+  options: Array<object>;
+  onChange: any;
+};
 
 const AutoComplete = (props: AutoCompleteProps) => (
   <div className="auto-complete-comp">
     <SearchIcon />
-    < Typeahead
+    <Typeahead
       {...config}
       clearButton
       id="auto-complete"
-      labelKey="name"
-      onInputChange={(text) => { props.onInputChange(text) }}
+      labelKey="policyName"
       onChange={(s) => props.onChange(s)}
       options={props.options}
       placeholder="Start your search here"
@@ -34,4 +33,4 @@ const AutoComplete = (props: AutoCompleteProps) => (
   </div>
 );
 
-export default AutoComplete
+export default AutoComplete;
