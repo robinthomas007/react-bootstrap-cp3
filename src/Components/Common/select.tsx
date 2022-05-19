@@ -1,6 +1,6 @@
-import React from "react";
-import Select, { components } from "react-select";
-import { useColor } from "./../../Context/ColorModeContext";
+import React from 'react'
+import Select, { components } from 'react-select'
+import { useColor } from './../../Context/ColorModeContext';
 
 type selectProps = {
   options: any;
@@ -10,20 +10,21 @@ type selectProps = {
   value: Array<object>;
 };
 
-// const Option = (props: any) => {
-//   return (
-//     <div>
-//       <components.Option {...props}>
-//         <input
-//           type="checkbox"
-//           checked={props.isSelected}
-//           onChange={() => null}
-//         />{" "}
-//         <label>{props.label}</label>
-//       </components.Option>
-//     </div>
-//   );
-// };
+const Option = (props: any) => {
+  return (
+    <div>
+      <components.Option {...props}>
+        <input
+          type="checkbox"
+          className="custom-check-box"
+          checked={props.isSelected}
+          onChange={() => null}
+        />{" "}
+        <label>{props.label}</label>
+      </components.Option>
+    </div>
+  );
+};
 
 const LightStyles = {
   control: (base: any, state: any) => ({
@@ -31,6 +32,11 @@ const LightStyles = {
     boxShadow: "none",
     border: "none",
     backgroundColor: "#F5F5F5",
+  }),
+  option: (base: any, state: any) => ({
+    ...base,
+    background: state.isFocused ? "#f5f5f5" : '#F5F5F5',
+    color: state.isFocused ? "#333333" : undefined,
   }),
 };
 
@@ -57,13 +63,21 @@ const DarkStyles = {
 const SelectField = (props: selectProps) => {
   const colorModeContext = useColor();
 
-  return (
-    <Select
-      {...props}
-      className="f-width cp3-react-select"
-      styles={colorModeContext.colorMode === "light" ? LightStyles : DarkStyles}
-    />
-  );
-};
+  return <Select className="f-width cp3-react-select" getOptionLabel={(option: any) => option.name}
+    getOptionValue={(option: any) => option.id}
+    options={props.options}
+    isMulti={props.isMulti}
+    name={props.name}
+    closeMenuOnSelect={false}
+    components={{
+      Option
+    }}
+    value={props.value}
+    defaultValue={props.value}
+    onChange={(data) => props.handleChange(data, props.name)}
+    styles={colorModeContext.colorMode === 'light' ? LightStyles : DarkStyles}
+  />
+}
+
 
 export default SelectField;

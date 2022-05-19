@@ -10,25 +10,41 @@ import "./policy.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import jwt_decode from "jwt-decode";
+import youtube from './../../Static/Images/youtube.png'
+import facebook from './../../Static/Images/facebook.png'
+import soundCloud from './../../Static/Images/soundCloud.png'
+import instagram from './../../Static/Images/instagram.png'
+
+const platformOptions = [
+  { id: 'ALL', name: 'ALL' },
+  { id: "youtube", name: <div className="select-platform-images"><img alt="youtube" src={youtube} /></div> },
+  { id: 'soundCloud', name: <div className="select-platform-images"><img alt="soundCloud" src={soundCloud} /></div> },
+  { id: 'facebook', name: <div className="select-platform-images"><img alt="facebook" src={facebook} /></div> },
+  { id: 'instagram', name: <div className="select-platform-images"><img alt="instagram" src={instagram} /></div> }
+];
+
+const DURATIONS_LIST = [
+  { id: ">30 sec", name: ">30 sec" },
+  { id: ">1:00", name: ">1:00" },
+  { id: ">1:30", name: ">1:30" },
+  { id: ">2:00", name: ">2:00" },
+  { id: ">2:30", name: ">2:30" },
+]
 
 export default function Policy() {
   const [options, setOptions] = useState([]);
-  const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+  // const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [loading, setLoading] = useState(false);
   const defaultPolicy = {
-    blockPolicyName: "",
-    platform: "",
+    policyName: "",
+    platforms: [],
     action: "",
     duration: "",
     date: "",
+    exceptions: []
   };
   const [policy, setPolicy] = useState(defaultPolicy);
-  const platformOptions = [
-    { label: "Instagram", value: "instagram" },
-    { label: "Facebook", value: "facebook" },
-    { label: "Youtube", value: "youtube" },
-    { label: "Twitter", value: "twitter" },
-  ];
+
   useEffect(() => {
     axios
       .get(BASE_URL + "BlockPolicy/GetBlockPolicy", {
@@ -37,6 +53,7 @@ export default function Policy() {
         },
       })
       .then((res) => {
+        console.log(res.data, "Asasd")
         setOptions(res.data);
       })
       .catch((err) => {
@@ -56,24 +73,20 @@ export default function Policy() {
 
   const onChange = (optionArray) => {
     const [option] = optionArray;
-    console.log("option", option);
     if (option) {
+      const platformsList = option.platforms.split(",");
       setPolicy({
         ...option,
-        blockPolicyName: option.policyName,
+        policyName: option.policyName,
+        platforms: platformOptions.filter((platform) =>
+          platformsList.includes(platform.id)
+        ),
+        duration: DURATIONS_LIST.filter((duration) =>
+          option.duration.includes(duration.id)
+        )
       });
-      const platforms = option.platforms.split(",");
-      console.log("platforms", platforms);
-      if (platforms.length > 0) {
-        setSelectedPlatforms(
-          platformOptions.filter((platform) =>
-            platforms.includes(platform.value)
-          )
-        );
-      }
     } else {
       setPolicy(defaultPolicy);
-      setSelectedPlatforms([]);
     }
   };
 
@@ -86,7 +99,8 @@ export default function Policy() {
     };
     const data = {
       ...policy,
-      platform: selectedPlatforms.map((platform) => platform.value).join(","),
+      platform: policy.platforms ? policy.platforms.map((platform) => platform.id).join(",") : '',
+      duration: policy.duration ? policy.duration.id : '',
       username: getUsername(),
     };
     if (policy.blockPolicyId) {
@@ -107,6 +121,7 @@ export default function Policy() {
         .finally(() => setLoading(false));
     }
   };
+
 
   return (
     <div className="policy-wrapper">
@@ -129,11 +144,11 @@ export default function Policy() {
                   <Form.Label>Policy Name</Form.Label>
                   <Form.Control
                     type="text"
-                    value={policy.blockPolicyName}
+                    value={policy.policyName}
                     name="policyName"
                     placeholder="Policy Name"
                     onChange={(e) =>
-                      setPolicy({ ...policy, blockPolicyName: e.target.value })
+                      setPolicy({ ...policy, policyName: e.target.value })
                     }
                   />
                 </Form.Group>
@@ -143,10 +158,12 @@ export default function Policy() {
                   <Form.Label>Platforms</Form.Label>
                   <SelectField
                     options={platformOptions}
-                    value={selectedPlatforms}
+                    value={policy.platforms}
                     isMulti={true}
                     name="platform"
-                    onChange={setSelectedPlatforms}
+                    handleChange={(data) =>
+                      setPolicy({ ...policy, platforms: data })
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -173,17 +190,11 @@ export default function Policy() {
                 <Form.Group controlId="duration">
                   <Form.Label>Duration</Form.Label>
                   <SelectField
-                    options={[
-                      { label: ">30 sec", value: ">30 sec" },
-                      { label: ">1:00", value: ">1:00" },
-                      { label: ">1:30", value: ">1:30" },
-                      { label: ">2:00", value: ">2:00" },
-                      { label: ">2:30", value: ">2:30" },
-                    ]}
-                    value={{ label: policy.duration, value: policy.duration }}
+                    options={DURATIONS_LIST}
+                    value={policy.duration}
                     name="duration"
-                    onChange={(data) =>
-                      setPolicy({ ...policy, duration: data.value })
+                    handleChange={(data) =>
+                      setPolicy({ ...policy, duration: data })
                     }
                   />
                 </Form.Group>
