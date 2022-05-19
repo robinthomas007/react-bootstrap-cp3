@@ -27,6 +27,14 @@
     background-color: #fff !important;
 }
 
+.create-policy-wrapper.exceptions .form-control {
+    background-color: #F5F5F5 !important
+}
+
+.create-policy-wrapper.exceptions .cp3-react-select .css-cqoyn1-control {
+    background-color: #F5F5F5 !important;
+}
+
 .create-policy-wrapper .cp3-react-select .css-cqoyn1-control {
     background-color: #FFF;
 }
@@ -46,11 +54,11 @@
 .create-policy-wrapper .exception-field {
     padding: 8px;
     border-radius: 4px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .exception-summary {
-    padding: 8px;
+    padding: 10px 40px;
     border-radius: 4px;
 }
 
@@ -67,4 +75,23 @@
 .select-platform-images img {
     width: 100%;
     height: 100%;
+}
+
+.summary-headings {
+    padding: 0px 40px;
+}
+
+.exception-close {
+    position: absolute;
+    right: -25px;
+    top: 36px;
+}
+
+
+.form-check-input {
+    margin-right: 10px;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em !important;
+    height: 1.15em !important;
 }

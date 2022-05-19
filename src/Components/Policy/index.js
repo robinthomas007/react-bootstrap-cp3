@@ -14,6 +14,7 @@ import youtube from './../../Static/Images/youtube.png'
 import facebook from './../../Static/Images/facebook.png'
 import soundCloud from './../../Static/Images/soundCloud.png'
 import instagram from './../../Static/Images/instagram.png'
+import CloseIcon from '@mui/icons-material/Close';
 
 const platformOptions = [
   { id: 'ALL', name: 'ALL' },
@@ -24,26 +25,33 @@ const platformOptions = [
 ];
 
 const DURATIONS_LIST = [
-  { id: ">30 sec", name: ">30 sec" },
-  { id: ">1:00", name: ">1:00" },
-  { id: ">1:30", name: ">1:30" },
-  { id: ">2:00", name: ">2:00" },
-  { id: ">2:30", name: ">2:30" },
+  { id: "<30 sec", name: "Less than 30 seconds" },
+  { id: "<1:00", name: "Less than 60 seconds" },
+  { id: "<1:30", name: "Less than 1 min 30 seconds" },
+  { id: "<2:00", name: "Less than 2 mins" },
+  { id: "<2:30", name: "Less than 2 mins 30 seconds" },
 ]
 
 export default function Policy() {
   const [options, setOptions] = useState([]);
-  // const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [loading, setLoading] = useState(false);
   const defaultPolicy = {
     policyName: "",
-    platforms: [],
+    platform: [],
     action: "",
     duration: "",
     date: "",
     exceptions: []
   };
   const [policy, setPolicy] = useState(defaultPolicy);
+  const defaultException = {
+    platform: [],
+    action: "",
+    duration: "",
+    date: "",
+  }
+  const [policyException, setPolicyException] = useState([]);
+
 
   useEffect(() => {
     axios
@@ -53,7 +61,6 @@ export default function Policy() {
         },
       })
       .then((res) => {
-        console.log(res.data, "Asasd")
         setOptions(res.data);
       })
       .catch((err) => {
@@ -78,8 +85,8 @@ export default function Policy() {
       setPolicy({
         ...option,
         policyName: option.policyName,
-        platforms: platformOptions.filter((platform) =>
-          platformsList.includes(platform.id)
+        platform: platformOptions.filter((p) =>
+          platformsList.includes(p.id)
         ),
         duration: DURATIONS_LIST.filter((duration) =>
           option.duration.includes(duration.id)
@@ -97,12 +104,23 @@ export default function Policy() {
         cp3_auth: getCookie("cp3_auth"),
       },
     };
+    const exception = []
+
+    policyException.forEach((exec) => {
+      exception.push({
+        ...exec,
+        platform: exec.platform ? exec.platform.map((p) => p.id).join(",") : '',
+        duration: exec.duration ? exec.duration.id : ''
+      })
+    })
     const data = {
       ...policy,
-      platform: policy.platforms ? policy.platforms.map((platform) => platform.id).join(",") : '',
+      platform: policy.platform ? policy.platform.map((p) => p.id).join(",") : '',
       duration: policy.duration ? policy.duration.id : '',
+      exceptions: exception,
       username: getUsername(),
     };
+
     if (policy.blockPolicyId) {
       axios
         .put(BASE_URL + "BlockPolicy/UpdateBlockPolicy", data, config)
@@ -122,6 +140,140 @@ export default function Policy() {
     }
   };
 
+  const createExceptionRow = () => {
+    setPolicyException([...policyException, defaultException])
+  }
+
+  const removeException = (index) => {
+    let newArr = [...policyException]
+    newArr.splice(index, 1);
+    console.log(newArr, index)
+    setPolicyException(newArr)
+  }
+
+  const getExceptions = () => {
+    return policyException.map((exc, index) => {
+      let newArr = [...policyException];
+      return (
+        <div className="create-policy-wrapper exceptions" key={index}>
+          <Row>
+            <Col md={2}>
+              <div className="bg-secondary-light exception-field">
+                <strong>Exception</strong>
+              </div>
+            </Col>
+            <Col md={3}>
+              <Form.Group controlId="platform">
+                <Form.Label>Platforms</Form.Label>
+                <SelectField
+                  options={platformOptions}
+                  isMulti={true}
+                  value={exc.platform}
+                  name="exceptionPlatform"
+                  handleChange={(data) => {
+                    newArr[index].platform = data;
+                    setPolicyException(newArr)
+                  }
+                  }
+                />
+              </Form.Group>
+            </Col>
+            <Col md={2}>
+              <Form.Group controlId="action">
+                <Form.Label>Action</Form.Label>
+                <div className="d-flex">
+                  <Form.Check
+                    type="radio"
+                    checked={exc.action === "block"}
+                    label="Block"
+                    onChange={() => {
+                      newArr[index].action = 'block';
+                      setPolicyException(newArr)
+                    }}
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Allow"
+                    checked={exc.action === "allow"}
+                    onChange={() => {
+                      newArr[index].action = 'allow';
+                      setPolicyException(newArr)
+                    }}
+                  />
+                </div>
+              </Form.Group>
+            </Col>
+            <Col md={3}>
+              <Form.Group controlId="duration">
+                <Form.Label>Duration</Form.Label>
+                <SelectField
+                  options={DURATIONS_LIST}
+                  name="exceptionDuration"
+                  value={exc.duration}
+                  handleChange={(data) => {
+                    newArr[index].duration = data;
+                    setPolicyException(newArr)
+                  }
+                  }
+                />
+              </Form.Group>
+            </Col>
+            <Col md={2} style={{ position: 'relative' }}>
+              <Form.Group controlId="until">
+                <Form.Label>Untill</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="exceptionUntill"
+                  value={exc.date}
+                  placeholder="Release Date"
+                  onChange={(e) => {
+                    newArr[index].date = e.target.value;
+                    setPolicyException(newArr)
+                  }
+                  }
+                />
+              </Form.Group>
+              <span className="exception-close">
+                <CloseIcon fontSize="inherit" className="bg-secondary modal-cls-btn" onClick={() => removeException(index)} />
+              </span>
+            </Col>
+          </Row>
+        </div>
+      )
+    })
+  }
+
+  const getSummeryException = () => {
+    return policyException.map((exc, index) => {
+      return (
+        <div className="create-policy-wrapper exception-summary" key={index}>
+          <Row className="align-items-center">
+            <Col>
+              <div className="bg-secondary-light exception-summary">
+                <strong>Exception</strong>
+              </div>
+            </Col>
+            <Col>
+              <strong>Platforms : </strong>
+              <span> {exc.platform ? exc.platform.map((p) => p.id).join(",") : ''}</span>
+            </Col>
+            <Col>
+              <strong>Action : </strong>
+              <span> {exc.action}</span>
+            </Col>
+            <Col>
+              <strong>Duration : </strong>
+              <span> {exc.duration ? exc.duration.name : ''}</span>
+            </Col>
+            <Col>
+              <strong>Untill : </strong>
+              <span> {exc.date}</span>
+            </Col>
+          </Row>
+        </div>
+      )
+    })
+  }
 
   return (
     <div className="policy-wrapper">
@@ -134,12 +286,12 @@ export default function Policy() {
         </Col>
       </Row>
       <Row className="pt-70">
-        <Col>
+        <Col md={12}>
           <h3 className="heading">Create/Edit Policies</h3>
           <label className="sub-title">Create and Edit Policies</label>
           <div className="create-policy-wrapper">
             <Row>
-              <Col>
+              <Col md={2}>
                 <Form.Group controlId="policyName">
                   <Form.Label>Policy Name</Form.Label>
                   <Form.Control
@@ -153,21 +305,21 @@ export default function Policy() {
                   />
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={3}>
                 <Form.Group controlId="platform">
                   <Form.Label>Platforms</Form.Label>
                   <SelectField
                     options={platformOptions}
-                    value={policy.platforms}
+                    value={policy.platform}
                     isMulti={true}
                     name="platform"
                     handleChange={(data) =>
-                      setPolicy({ ...policy, platforms: data })
+                      setPolicy({ ...policy, platform: data })
                     }
                   />
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={2}>
                 <Form.Group controlId="action">
                   <Form.Label>Action</Form.Label>
                   <div className="d-flex">
@@ -186,7 +338,7 @@ export default function Policy() {
                   </div>
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={3}>
                 <Form.Group controlId="duration">
                   <Form.Label>Duration</Form.Label>
                   <SelectField
@@ -199,7 +351,7 @@ export default function Policy() {
                   />
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={2}>
                 <Form.Group controlId="date">
                   <Form.Label>Untill</Form.Label>
                   <Form.Control
@@ -213,67 +365,10 @@ export default function Policy() {
                   />
                 </Form.Group>
               </Col>
+              <Col md={1}></Col>
             </Row>
           </div>
-          <div className="create-policy-wrapper exceptions">
-            <Row>
-              <Col>
-                <div className="bg-secondary-light exception-field">
-                  Exception
-                </div>
-              </Col>
-              <Col>
-                <Form.Group controlId="platform">
-                  <Form.Label>Platforms</Form.Label>
-                  <SelectField
-                    options={[]}
-                    isMulti={true}
-                    name="platform"
-                    handleChange={console.log()}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="action">
-                  <Form.Label>Action</Form.Label>
-                  <div className="d-flex">
-                    <Form.Check
-                      type="radio"
-                      label="Block"
-                      onChange={console.log()}
-                    />
-                    <Form.Check
-                      type="radio"
-                      label="Allow"
-                      onChange={console.log()}
-                    />
-                  </div>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="duration">
-                  <Form.Label>Duration</Form.Label>
-                  <SelectField
-                    options={[]}
-                    isMulti={true}
-                    name="duration"
-                    handleChange={console.log()}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="until">
-                  <Form.Label>Untill</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="untill"
-                    placeholder="Release Date"
-                    onChange={console.log()}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-          </div>
+          {getExceptions()}
           <hr />
         </Col>
       </Row>
@@ -281,56 +376,32 @@ export default function Policy() {
         <Col>
           <h3 className="heading">Policy Summary</h3>
           <hr />
-          <div className="">
+          <div className="summary-headings">
             <Row>
               <Col>
-                <strong>Policy: </strong> <span>Policy Name</span>
+                <strong>Policy : </strong> <span> {policy.policyName}</span>
               </Col>
               <Col>
-                <strong>Platforms: </strong> <span>All</span>
+                <strong>Platforms : </strong> <span> {policy.platform ? policy.platform.map((p) => p.id).join(",") : ''}</span>
               </Col>
               <Col>
-                <strong>Action: </strong> <span>Block</span>
+                <strong>Action : </strong> <span> {policy.action}</span>
               </Col>
               <Col>
-                <strong>Duration: </strong> <span>All</span>
+                <strong>Duration : </strong> <span> {policy.duration ? policy.duration.name : ''}</span>
               </Col>
               <Col>
-                <strong>Until: </strong> <span>Release Date (Default)</span>
+                <strong>Until : </strong> <span> {policy.date}</span>
               </Col>
             </Row>
           </div>
-          <div className="create-policy-wrapper exception-summary">
-            <Row className="align-items-center">
-              <Col>
-                <div className="bg-secondary-light exception-summary">
-                  Exception
-                </div>
-              </Col>
-              <Col>
-                <strong>Platforms :</strong>
-                <span>YouTube</span>
-              </Col>
-              <Col>
-                <strong>Action :</strong>
-                <span>Allow</span>
-              </Col>
-              <Col>
-                <strong>Duration :</strong>
-                <span> Less than 30 seconds</span>
-              </Col>
-              <Col>
-                <strong>Untill :</strong>
-                <span>Sep 6, 2022</span>
-              </Col>
-            </Row>
-          </div>
+          {getSummeryException()}
         </Col>
       </Row>
-      <Row>
+      <Row className="pt-70">
         <Col md={10}>
           <Button
-            handleClick={() => { }}
+            handleClick={createExceptionRow}
             variant="secondary"
             startIcon={<AddCircleIcon />}
             label="Create Exception"

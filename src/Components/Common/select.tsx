@@ -1,5 +1,5 @@
 import React from 'react'
-import Select, { components } from 'react-select'
+import Select, { components, ValueContainerProps } from 'react-select'
 import { useColor } from './../../Context/ColorModeContext';
 
 type selectProps = {
@@ -14,12 +14,12 @@ const Option = (props: any) => {
   return (
     <div>
       <components.Option {...props}>
-        <input
+        {props.isMulti && <input
           type="checkbox"
-          className="custom-check-box"
+          className="form-check-input"
           checked={props.isSelected}
           onChange={() => null}
-        />{" "}
+        />}{" "}
         <label>{props.label}</label>
       </components.Option>
     </div>
@@ -60,6 +60,26 @@ const DarkStyles = {
   }),
 };
 
+const ValueContainer = ({
+  children,
+  ...props
+}: ValueContainerProps<any>) => {
+  let [values, input] = children as any;
+
+  if (Array.isArray(values)) {
+    const plural = values.length === 1 ? "" : "s";
+    values = `${values.length} item${plural} selected`;
+  }
+
+  return (
+    <components.ValueContainer {...props}>
+      {values}
+      {input}
+    </components.ValueContainer>
+  );
+};
+
+
 const SelectField = (props: selectProps) => {
   const colorModeContext = useColor();
 
@@ -67,10 +87,11 @@ const SelectField = (props: selectProps) => {
     getOptionValue={(option: any) => option.id}
     options={props.options}
     isMulti={props.isMulti}
+    hideSelectedOptions={false}
     name={props.name}
-    closeMenuOnSelect={false}
+    closeMenuOnSelect={!props.isMulti}
     components={{
-      Option
+      Option, ValueContainer
     }}
     value={props.value}
     defaultValue={props.value}
