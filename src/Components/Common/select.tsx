@@ -70,9 +70,8 @@ const ValueContainer = ({
     const plural = values.length === 1 ? "" : "s";
     values = `${values.length} item${plural} selected`;
   }
-
   return (
-    <components.ValueContainer {...props}>
+    <components.ValueContainer {...props} className="select-val-section">
       {values}
       {input}
     </components.ValueContainer>
@@ -95,7 +94,7 @@ const SelectField = (props: selectProps) => {
     }}
     value={props.value}
     defaultValue={props.value}
-    onChange={(data) => props.handleChange(data, props.name)}
+    onChange={(data, e) => props.handleChange(data, e, props.name)}
     styles={colorModeContext.colorMode === 'light' ? LightStyles : DarkStyles}
   />
 }

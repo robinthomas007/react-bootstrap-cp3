@@ -47,6 +47,10 @@
     padding: 15px 40px 0px;
 }
 
+.dark-theme .create-policy-wrapper.exceptions {
+    background: #000;
+}
+
 .create-policy-wrapper.exceptions {
     background: #fff;
 }
@@ -94,4 +98,18 @@
     color: currentColor;
     width: 1.15em !important;
     height: 1.15em !important;
+}
+
+.dark-theme .select-val-section>div {
+    color: #FFF;
+}
+
+.rbt-close {
+    background: #000 !important;
+    color: #fff !important;
+    border-radius: 50px !important;
+    padding: 2px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

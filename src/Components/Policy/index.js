@@ -81,7 +81,7 @@ export default function Policy() {
   const onChange = (optionArray) => {
     const [option] = optionArray;
     if (option) {
-      const platformsList = option.platforms.split(",");
+      const platformsList = option.platform.split(",");
       setPolicy({
         ...option,
         policyName: option.policyName,
@@ -90,8 +90,26 @@ export default function Policy() {
         ),
         duration: DURATIONS_LIST.filter((duration) =>
           option.duration.includes(duration.id)
-        )
+        )[0]
       });
+
+      if (option.exceptions && option.exceptions.length > 0) {
+        const exceptionDetails = []
+        option.exceptions.forEach(element => {
+          const exceptionPlatformsList = element.platform.split(",");
+          const obj = {
+            ...element,
+            platform: platformOptions.filter((p) =>
+              exceptionPlatformsList.includes(p.id)
+            ),
+            duration: DURATIONS_LIST.filter((duration) =>
+              element.duration.includes(duration.id)
+            )[0]
+          }
+          exceptionDetails.push(obj)
+        });
+        setPolicyException(exceptionDetails);
+      }
     } else {
       setPolicy(defaultPolicy);
     }
@@ -220,10 +238,10 @@ export default function Policy() {
             </Col>
             <Col md={2} style={{ position: 'relative' }}>
               <Form.Group controlId="until">
-                <Form.Label>Untill</Form.Label>
+                <Form.Label>Until</Form.Label>
                 <Form.Control
                   type="date"
-                  name="exceptionUntill"
+                  name="exceptionUntil"
                   value={exc.date}
                   placeholder="Release Date"
                   onChange={(e) => {
@@ -245,6 +263,8 @@ export default function Policy() {
 
   const getSummeryException = () => {
     return policyException.map((exc, index) => {
+
+      console.log(exc, "excexcexc")
       return (
         <div className="create-policy-wrapper exception-summary" key={index}>
           <Row className="align-items-center">
@@ -254,19 +274,19 @@ export default function Policy() {
               </div>
             </Col>
             <Col>
-              <strong>Platforms : </strong>
+              <strong>Platforms: </strong>
               <span> {exc.platform ? exc.platform.map((p) => p.id).join(",") : ''}</span>
             </Col>
             <Col>
-              <strong>Action : </strong>
+              <strong>Action: </strong>
               <span> {exc.action}</span>
             </Col>
             <Col>
-              <strong>Duration : </strong>
+              <strong>Duration: </strong>
               <span> {exc.duration ? exc.duration.name : ''}</span>
             </Col>
             <Col>
-              <strong>Untill : </strong>
+              <strong>Until: </strong>
               <span> {exc.date}</span>
             </Col>
           </Row>
@@ -313,8 +333,20 @@ export default function Policy() {
                     value={policy.platform}
                     isMulti={true}
                     name="platform"
-                    handleChange={(data) =>
-                      setPolicy({ ...policy, platform: data })
+                    handleChange={(data, e) => {
+                      const isAll = data.filter(function (item) {
+                        return item.id === 'ALL'
+                      })
+                      if (isAll.length > 0) {
+                        setPolicy({ ...policy, platform: platformOptions })
+                      } else {
+                        if (e.action === 'deselect-option' && e.option.id === 'ALL') {
+                          setPolicy({ ...policy, platform: [] })
+                        } else {
+                          setPolicy({ ...policy, platform: data })
+                        }
+                      }
+                    }
                     }
                   />
                 </Form.Group>
@@ -353,7 +385,7 @@ export default function Policy() {
               </Col>
               <Col md={2}>
                 <Form.Group controlId="date">
-                  <Form.Label>Untill</Form.Label>
+                  <Form.Label>Until</Form.Label>
                   <Form.Control
                     value={policy.date}
                     type="date"
@@ -379,19 +411,19 @@ export default function Policy() {
           <div className="summary-headings">
             <Row>
               <Col>
-                <strong>Policy : </strong> <span> {policy.policyName}</span>
+                <strong>Policy: </strong> <span> {policy.policyName}</span>
               </Col>
               <Col>
-                <strong>Platforms : </strong> <span> {policy.platform ? policy.platform.map((p) => p.id).join(",") : ''}</span>
+                <strong>Platforms: </strong> <span> {policy.platform ? policy.platform.map((p) => p.name).join(",") : ''}</span>
               </Col>
               <Col>
-                <strong>Action : </strong> <span> {policy.action}</span>
+                <strong>Action: </strong> <span> {policy.action}</span>
               </Col>
               <Col>
-                <strong>Duration : </strong> <span> {policy.duration ? policy.duration.name : ''}</span>
+                <strong>Duration: </strong> <span> {policy.duration ? policy.duration.name : ''}</span>
               </Col>
               <Col>
-                <strong>Until : </strong> <span> {policy.date}</span>
+                <strong>Until: </strong> <span> {policy.date}</span>
               </Col>
             </Row>
           </div>
