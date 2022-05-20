@@ -154,6 +154,7 @@ export default function Policy() {
             closeOnClick: true,
           });
           setLoadData(loadData => !loadData);
+          setPolicy({ ...policy, blockPolicyId: response.data.blockPolicyId })
         })
         .catch((err) => {
           if (err.response && err.response.data) {
