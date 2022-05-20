@@ -97,6 +97,7 @@ export default function Policy() {
       }
     } else {
       setPolicy(defaultPolicy);
+      setPolicyException([]);
     }
   };
 
@@ -135,13 +136,19 @@ export default function Policy() {
           setLoadData(loadData => !loadData);
         })
         .catch((err) => {
-          console.log("error feching data", err);
+          if (err.response && err.response.data) {
+            toast.error(err.response.data.Message, {
+              autoClose: 5000,
+              closeOnClick: true,
+            });
+          }
         })
         .finally(() => setLoading(false));
     } else {
       axios
         .post(BASE_URL + "BlockPolicy/AddBlockPolicy", data, config)
-        .then(() => {
+        .then((response) => {
+          console.log(response, "res")
           toast.success('Policy Saved!', {
             autoClose: 5000,
             closeOnClick: true,
@@ -149,7 +156,12 @@ export default function Policy() {
           setLoadData(loadData => !loadData);
         })
         .catch((err) => {
-          console.log("error feching data", err);
+          if (err.response && err.response.data) {
+            toast.error(err.response.data.Message, {
+              autoClose: 5000,
+              closeOnClick: true,
+            });
+          }
         })
         .finally(() => setLoading(false));
     }
@@ -168,7 +180,12 @@ export default function Policy() {
   const destructurePolicyPlatform = (platform) => {
     platform = platform.filter((p) => p.id !== 'ALL')
     for (let i = 0; i < platform.length; i++) {
-      platform[i] = platform[i].id.charAt(0).toUpperCase() + platform[i].id.slice(1);
+      // not a good practice bt we dont have other option.
+      if (platform[i].id === 'youtube') {
+        platform[i] = 'YouTube'
+      } else {
+        platform[i] = platform[i].id.charAt(0).toUpperCase() + platform[i].id.slice(1);
+      }
     }
     return platform ? platform.join(",") : ''
   }
@@ -281,7 +298,7 @@ export default function Policy() {
             </Col>
             <Col>
               <strong>Action: </strong>
-              <span> {exc.action}</span>
+              <span>{exc.action ? exc.action.charAt(0).toUpperCase() + exc.action.slice(1) : ''}</span>
             </Col>
             <Col>
               <strong>Duration: </strong>
@@ -409,7 +426,7 @@ export default function Policy() {
                 <strong>Platforms: </strong> <span> {destructurePolicyPlatform(policy.platform)}</span>
               </Col>
               <Col>
-                <strong>Action: </strong> <span> {policy.action}</span>
+                <strong>Action: </strong> <span> {policy.action ? policy.action.charAt(0).toUpperCase() + policy.action.slice(1) : ''}</span>
               </Col>
               <Col>
                 <strong>Duration: </strong> <span> {policy.duration ? policy.duration.name : ''}</span>

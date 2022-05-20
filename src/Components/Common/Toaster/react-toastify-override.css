@@ -16,10 +16,12 @@
 
 .Toastify__toast--info {
   background-color: #01578b;
+  color: #F5F5F5;
 }
 
 .Toastify__toast--error {
   background-color: #7f1b2e;
+  color: #F5F5F5;
 }
 
 .Toastify__toast-body {
