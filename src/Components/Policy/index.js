@@ -10,31 +10,16 @@ import "./policy.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import jwt_decode from "jwt-decode";
-import youtube from './../../Static/Images/youtube.png'
-import facebook from './../../Static/Images/facebook.png'
-import soundCloud from './../../Static/Images/soundCloud.png'
-import instagram from './../../Static/Images/instagram.png'
 import CloseIcon from '@mui/icons-material/Close';
-
-const platformOptions = [
-  { id: 'ALL', name: 'ALL' },
-  { id: "youtube", name: <div className="select-platform-images"><img alt="youtube" src={youtube} /></div> },
-  { id: 'soundCloud', name: <div className="select-platform-images"><img alt="soundCloud" src={soundCloud} /></div> },
-  { id: 'facebook', name: <div className="select-platform-images"><img alt="facebook" src={facebook} /></div> },
-  { id: 'instagram', name: <div className="select-platform-images"><img alt="instagram" src={instagram} /></div> }
-];
-
-const DURATIONS_LIST = [
-  { id: "<30 sec", name: "Less than 30 seconds" },
-  { id: "<1:00", name: "Less than 60 seconds" },
-  { id: "<1:30", name: "Less than 1 min 30 seconds" },
-  { id: "<2:00", name: "Less than 2 mins" },
-  { id: "<2:30", name: "Less than 2 mins 30 seconds" },
-]
+import { PLATFORM_LIST, DURATIONS_LIST } from './../Common/staticDatas'
+import { handleSelectAll } from "../Common/select";
+import { toast } from 'react-toastify';
+import moment from 'moment';
 
 export default function Policy() {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadData, setLoadData] = useState(false)
   const defaultPolicy = {
     policyName: "",
     platform: [],
@@ -66,7 +51,7 @@ export default function Policy() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [loadData]);
 
   const getUsername = () => {
     try {
@@ -85,7 +70,7 @@ export default function Policy() {
       setPolicy({
         ...option,
         policyName: option.policyName,
-        platform: platformOptions.filter((p) =>
+        platform: PLATFORM_LIST.filter((p) =>
           platformsList.includes(p.id)
         ),
         duration: DURATIONS_LIST.filter((duration) =>
@@ -99,7 +84,7 @@ export default function Policy() {
           const exceptionPlatformsList = element.platform.split(",");
           const obj = {
             ...element,
-            platform: platformOptions.filter((p) =>
+            platform: PLATFORM_LIST.filter((p) =>
               exceptionPlatformsList.includes(p.id)
             ),
             duration: DURATIONS_LIST.filter((duration) =>
@@ -142,7 +127,13 @@ export default function Policy() {
     if (policy.blockPolicyId) {
       axios
         .put(BASE_URL + "BlockPolicy/UpdateBlockPolicy", data, config)
-        .then(() => alert("Policy Saved"))
+        .then(() => {
+          toast.success('Policy Saved!', {
+            autoClose: 5000,
+            closeOnClick: true,
+          });
+          setLoadData(loadData => !loadData);
+        })
         .catch((err) => {
           console.log("error feching data", err);
         })
@@ -150,7 +141,13 @@ export default function Policy() {
     } else {
       axios
         .post(BASE_URL + "BlockPolicy/AddBlockPolicy", data, config)
-        .then(() => alert("Policy Saved"))
+        .then(() => {
+          toast.success('Policy Saved!', {
+            autoClose: 5000,
+            closeOnClick: true,
+          });
+          setLoadData(loadData => !loadData);
+        })
         .catch((err) => {
           console.log("error feching data", err);
         })
@@ -165,8 +162,15 @@ export default function Policy() {
   const removeException = (index) => {
     let newArr = [...policyException]
     newArr.splice(index, 1);
-    console.log(newArr, index)
     setPolicyException(newArr)
+  }
+
+  const destructurePolicyPlatform = (platform) => {
+    platform = platform.filter((p) => p.id !== 'ALL')
+    for (let i = 0; i < platform.length; i++) {
+      platform[i] = platform[i].id.charAt(0).toUpperCase() + platform[i].id.slice(1);
+    }
+    return platform ? platform.join(",") : ''
   }
 
   const getExceptions = () => {
@@ -184,12 +188,12 @@ export default function Policy() {
               <Form.Group controlId="platform">
                 <Form.Label>Platforms</Form.Label>
                 <SelectField
-                  options={platformOptions}
+                  options={PLATFORM_LIST}
                   isMulti={true}
                   value={exc.platform}
                   name="exceptionPlatform"
-                  handleChange={(data) => {
-                    newArr[index].platform = data;
+                  handleChange={(data, e) => {
+                    newArr[index].platform = handleSelectAll(data, e, PLATFORM_LIST)
                     setPolicyException(newArr)
                   }
                   }
@@ -263,8 +267,6 @@ export default function Policy() {
 
   const getSummeryException = () => {
     return policyException.map((exc, index) => {
-
-      console.log(exc, "excexcexc")
       return (
         <div className="create-policy-wrapper exception-summary" key={index}>
           <Row className="align-items-center">
@@ -275,7 +277,7 @@ export default function Policy() {
             </Col>
             <Col>
               <strong>Platforms: </strong>
-              <span> {exc.platform ? exc.platform.map((p) => p.id).join(",") : ''}</span>
+              <span> {destructurePolicyPlatform(exc.platform)}</span>
             </Col>
             <Col>
               <strong>Action: </strong>
@@ -287,12 +289,16 @@ export default function Policy() {
             </Col>
             <Col>
               <strong>Until: </strong>
-              <span> {exc.date}</span>
+              <span> {exc.date ? moment(exc.date).format('MM-DD-YYYY') : ''}</span>
             </Col>
           </Row>
         </div>
       )
     })
+  }
+
+  const handlePlatformChange = (data, e) => {
+    setPolicy({ ...policy, platform: handleSelectAll(data, e, PLATFORM_LIST) })
   }
 
   return (
@@ -329,25 +335,11 @@ export default function Policy() {
                 <Form.Group controlId="platform">
                   <Form.Label>Platforms</Form.Label>
                   <SelectField
-                    options={platformOptions}
+                    options={PLATFORM_LIST}
                     value={policy.platform}
                     isMulti={true}
                     name="platform"
-                    handleChange={(data, e) => {
-                      const isAll = data.filter(function (item) {
-                        return item.id === 'ALL'
-                      })
-                      if (isAll.length > 0) {
-                        setPolicy({ ...policy, platform: platformOptions })
-                      } else {
-                        if (e.action === 'deselect-option' && e.option.id === 'ALL') {
-                          setPolicy({ ...policy, platform: [] })
-                        } else {
-                          setPolicy({ ...policy, platform: data })
-                        }
-                      }
-                    }
-                    }
+                    handleChange={(data, e) => { handlePlatformChange(data, e) }}
                   />
                 </Form.Group>
               </Col>
@@ -414,7 +406,7 @@ export default function Policy() {
                 <strong>Policy: </strong> <span> {policy.policyName}</span>
               </Col>
               <Col>
-                <strong>Platforms: </strong> <span> {policy.platform ? policy.platform.map((p) => p.name).join(",") : ''}</span>
+                <strong>Platforms: </strong> <span> {destructurePolicyPlatform(policy.platform)}</span>
               </Col>
               <Col>
                 <strong>Action: </strong> <span> {policy.action}</span>
@@ -423,7 +415,7 @@ export default function Policy() {
                 <strong>Duration: </strong> <span> {policy.duration ? policy.duration.name : ''}</span>
               </Col>
               <Col>
-                <strong>Until: </strong> <span> {policy.date}</span>
+                <strong>Until: </strong> <span> {policy.date ? moment(policy.date).format('MM-DD-YYYY') : ''}</span>
               </Col>
             </Row>
           </div>

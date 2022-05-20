@@ -2,6 +2,8 @@ import React from "react";
 import Router from "./Router";
 import { ColorModeProvider } from "./Context/ColorModeContext";
 import { AuthProvider } from "./Context/authContext";
+import Toaster from './Components/Common/Toaster';
+
 import "./custom.scss";
 
 let url = "https://api.dev.cp3.umgapps.com/api/";
@@ -28,6 +30,7 @@ function App() {
     <div className="App">
       <AuthProvider>
         <ColorModeProvider>
+          <Toaster />
           <Router />
         </ColorModeProvider>
       </AuthProvider>

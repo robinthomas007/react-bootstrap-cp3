@@ -10,6 +10,20 @@ type selectProps = {
   value: Array<object>;
 };
 
+export const handleSelectAll = (data: any, e: any, options: any) => {
+  if (e.action === "select-option" && e.option.id === "ALL") {
+    return options
+  } else if (e.action === "deselect-option" && e.option.id === "ALL") {
+    return []
+  } else if (e.action === "deselect-option") {
+    return data.filter((o: any) => o.id !== "ALL")
+  } else if (data.length === options.length - 1) {
+    return data.filter((o: any) => o.id !== "ALL")
+  } else {
+    return data
+  }
+}
+
 const Option = (props: any) => {
   return (
     <div>
@@ -68,8 +82,13 @@ const ValueContainer = ({
 
   if (Array.isArray(values)) {
     const plural = values.length === 1 ? "" : "s";
-    values = `${values.length} item${plural} selected`;
+    if (values && values.some((o: any) => o.key === "ALL-ALL")) {
+      values = `All ${values.length - 1} selected`;
+    } else {
+      values = `${values.length} item${plural} selected`;
+    }
   }
+
   return (
     <components.ValueContainer {...props} className="select-val-section">
       {values}
