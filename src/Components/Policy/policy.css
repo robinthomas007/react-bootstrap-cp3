@@ -113,3 +113,24 @@
     align-items: center;
     justify-content: center;
 }
+
+.custom-date-picker svg {
+    position: absolute;
+    right: 3px;
+    top: 5px;
+}
+
+.custom-date-picker input {
+    width: 100%;
+    border: none;
+    height: 37px;
+    padding-left: 10px;
+}
+
+.react-datepicker__close-icon::after {
+    background-color: #F57F17 !important;
+}
+
+.create-policy-wrapper.exceptions .custom-date-picker input {
+    background: #f5f5f5;
+}

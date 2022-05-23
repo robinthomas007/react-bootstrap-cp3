@@ -15,6 +15,7 @@ import { PLATFORM_LIST, DURATIONS_LIST } from './../Common/staticDatas'
 import { handleSelectAll } from "../Common/select";
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import Datepicker from '../Common/DatePicker'
 
 export default function Policy() {
   const [options, setOptions] = useState([]);
@@ -25,7 +26,7 @@ export default function Policy() {
     platform: [],
     action: "",
     duration: "",
-    date: "",
+    date: null,
     exceptions: []
   };
   const [policy, setPolicy] = useState(defaultPolicy);
@@ -261,17 +262,10 @@ export default function Policy() {
             <Col md={2} style={{ position: 'relative' }}>
               <Form.Group controlId="until">
                 <Form.Label>Until</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="exceptionUntil"
-                  value={exc.date}
-                  placeholder="Release Date"
-                  onChange={(e) => {
-                    newArr[index].date = e.target.value;
-                    setPolicyException(newArr)
-                  }
-                  }
-                />
+                <Datepicker selected={exc.date} handleDateChange={(date) => {
+                  newArr[index].date = date;
+                  setPolicyException(newArr)
+                }} />
               </Form.Group>
               <span className="exception-close">
                 <CloseIcon fontSize="inherit" className="bg-secondary modal-cls-btn" onClick={() => removeException(index)} />
@@ -396,15 +390,7 @@ export default function Policy() {
               <Col md={2}>
                 <Form.Group controlId="date">
                   <Form.Label>Until</Form.Label>
-                  <Form.Control
-                    value={policy.date}
-                    type="date"
-                    name="date"
-                    placeholder="Date"
-                    onChange={(e) =>
-                      setPolicy({ ...policy, date: e.target.value })
-                    }
-                  />
+                  <Datepicker selected={policy.date} handleDateChange={(date) => setPolicy({ ...policy, date: date })} />
                 </Form.Group>
               </Col>
               <Col md={1}></Col>
