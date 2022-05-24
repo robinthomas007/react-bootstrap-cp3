@@ -25,7 +25,7 @@ export default function Policy() {
     policyName: "",
     platform: [],
     action: "",
-    duration: [],
+    duration: {},
     when: { id: 'Pre-Release', name: 'Pre-Release' },
     date: null,
     exceptions: []
@@ -34,7 +34,7 @@ export default function Policy() {
   const defaultException = {
     platform: [],
     action: "",
-    duration: [],
+    duration: {},
     when: { id: 'Pre-Release', name: 'Pre-Release' },
     date: "",
   }
@@ -70,7 +70,6 @@ export default function Policy() {
     const [option] = optionArray;
     if (option) {
       const platformsList = option.platform.split(",");
-      const durationList = option.duration.split(",");
       setPolicy({
         ...option,
         policyName: option.policyName,
@@ -78,8 +77,8 @@ export default function Policy() {
           platformsList.includes(p.id)
         ),
         duration: DURATIONS_LIST.filter((duration) =>
-          durationList.includes(duration.id)
-        ),
+          option.duration.includes(duration.id)
+        )[0],
         when: WHEN_LIST.filter((when) =>
           option.release.includes(when.id)
         )[0]
@@ -89,15 +88,14 @@ export default function Policy() {
         const exceptionDetails = []
         option.exceptions.forEach(element => {
           const exceptionPlatformsList = element.platform.split(",");
-          const exceptionDurationList = element.duration.split(",");
           const obj = {
             ...element,
             platform: PLATFORM_LIST.filter((p) =>
               exceptionPlatformsList.includes(p.id)
             ),
             duration: DURATIONS_LIST.filter((duration) =>
-              exceptionDurationList.includes(duration.id)
-            ),
+              element.duration.includes(duration.id)
+            )[0],
             when: WHEN_LIST.filter((when) =>
               element.release.includes(when.id)
             )[0]
@@ -125,14 +123,14 @@ export default function Policy() {
       exception.push({
         ...exec,
         platform: exec.platform ? exec.platform.map((p) => p.id).join(",") : '',
-        duration: exec.duration ? exec.duration.map((d) => d.id).join(",") : '',
+        duration: exec.duration ? exec.duration.id : '',
         release: exec.when ? exec.when.id : ''
       })
     })
     const data = {
       ...policy,
       platform: policy.platform ? policy.platform.map((p) => p.id).join(",") : '',
-      duration: policy.duration ? policy.duration.map((d) => d.id).join(",") : '',
+      duration: policy.duration ? policy.duration.id : '',
       release: policy.when ? policy.when.id : '',
       exceptions: exception,
       username: getUsername(),
@@ -204,13 +202,6 @@ export default function Policy() {
     return platform ? platform.join(", ") : ''
   }
 
-  const destructureDuration = (duration) => {
-    duration = duration.filter((p) => p.id !== 'ALL')
-    return duration ? duration.map(function (elem) {
-      return elem.name;
-    }).join(", ") : ''
-  }
-
   const getExceptions = () => {
     return policyException.map((exc, index) => {
       let newArr = [...policyException];
@@ -271,10 +262,9 @@ export default function Policy() {
                 <SelectField
                   options={DURATIONS_LIST}
                   name="exceptionDuration"
-                  isMulti={true}
                   value={exc.duration}
-                  handleChange={(data, e) => {
-                    newArr[index].duration = handleSelectAll(data, e, DURATIONS_LIST)
+                  handleChange={(data) => {
+                    newArr[index].duration = data
                     setPolicyException(newArr)
                   }
                   }
@@ -336,7 +326,7 @@ export default function Policy() {
             </Col>
             <Col>
               <strong>Duration: </strong>
-              <span> {destructureDuration(exc.duration)}</span>
+              <span> {exc.duration ? exc.duration.name : ''}</span>
             </Col>
             <Col>
               <strong>When: </strong>
@@ -354,10 +344,6 @@ export default function Policy() {
 
   const handlePlatformChange = (data, e) => {
     setPolicy({ ...policy, platform: handleSelectAll(data, e, PLATFORM_LIST) })
-  }
-
-  const handleDurationChange = (data, e) => {
-    setPolicy({ ...policy, duration: handleSelectAll(data, e, DURATIONS_LIST) })
   }
 
   const POLICY_DATE_LABEL = policy.when.id === 'Post-Release' ? 'After' : 'Until';
@@ -427,12 +413,11 @@ export default function Policy() {
                 <Form.Group controlId="duration">
                   <Form.Label>Duration</Form.Label>
                   <SelectField
-                    isMulti={true}
                     options={DURATIONS_LIST}
                     value={policy.duration}
                     name="duration"
-                    handleChange={(data, e) =>
-                      handleDurationChange(data, e)
+                    handleChange={(data) =>
+                      setPolicy({ ...policy, duration: data })
                     }
                   />
                 </Form.Group>
@@ -477,7 +462,7 @@ export default function Policy() {
                 <strong>Action: </strong> <span> {policy.action ? policy.action.charAt(0).toUpperCase() + policy.action.slice(1) : ''}</span>
               </Col>
               <Col>
-                <strong>Duration: </strong> <span> {destructureDuration(policy.duration)}</span>
+                <strong>Duration: </strong> <span> {policy.duration ? policy.duration.name : ''}</span>
               </Col>
               <Col>
                 <strong>When: </strong>
