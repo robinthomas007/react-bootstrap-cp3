@@ -444,7 +444,10 @@ export default function Policy() {
             handleClick={handleSubmit}
           />
           <Button
-            handleClick={() => { }}
+            handleClick={() => {
+              setPolicy(defaultPolicy);
+              setPolicyException([]);
+            }}
             variant="light"
             label="Cancel"
             className=""

@@ -118,6 +118,7 @@
     position: absolute;
     right: 3px;
     top: 5px;
+    color: #000;
 }
 
 .custom-date-picker input {
