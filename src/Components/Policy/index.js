@@ -343,7 +343,7 @@ export default function Policy() {
               <span> {exc.when ? exc.when.name : ''}</span>
             </Col>
             <Col>
-              <strong>Until: </strong>
+              <strong>{exc.when && exc.when.name === 'Post-Release' ? 'After:' : 'Until:'}</strong>
               <span> {exc.date ? moment(exc.date).format('MM-DD-YYYY') : ''}</span>
             </Col>
           </Row>
@@ -484,7 +484,7 @@ export default function Policy() {
                 <span> {policy.when ? policy.when.name : ''}</span>
               </Col>
               <Col>
-                <strong>Until: </strong> <span> {policy.date ? moment(policy.date).format('MM-DD-YYYY') : ''}</span>
+                <strong>{policy.when && policy.when.name === 'Post-Release' ? 'After:' : 'Until:'}</strong> <span> {policy.date ? moment(policy.date).format('MM-DD-YYYY') : ''}</span>
               </Col>
             </Row>
           </div>
