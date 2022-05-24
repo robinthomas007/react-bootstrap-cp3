@@ -12,9 +12,16 @@ export const PLATFORM_LIST = [
 ];
 
 export const DURATIONS_LIST = [
+  { id: 'ALL', name: 'ALL' },
   { id: "<30 sec", name: "Less than 30 seconds" },
   { id: "<1:00", name: "Less than 60 seconds" },
   { id: "<1:30", name: "Less than 1 min 30 seconds" },
   { id: "<2:00", name: "Less than 2 mins" },
   { id: "<2:30", name: "Less than 2 mins 30 seconds" },
+]
+
+export const WHEN_LIST = [
+  { id: 'Pre-Release', name: 'Pre-Release' },
+  { id: "Post-Release", name: "Post-Release" },
+  { id: "Always", name: "Always" }
 ]

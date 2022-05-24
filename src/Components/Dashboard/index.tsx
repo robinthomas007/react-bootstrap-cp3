@@ -8,8 +8,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
 import { reducer, initialState } from "./searchReducer";
 import ProjectSearchDataGrid from "./ProjectSearchDataGrid";
-// import AddCircleIcon from '@mui/icons-material/AddCircle';
-// import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Pagination from "@mui/material/Pagination";
 import ClearIcon from "@mui/icons-material/Clear";
 import Form from "react-bootstrap/Form";
@@ -215,7 +215,7 @@ const Dashboard = () => {
           show={openNotes}
           handleClose={handleNotesModalClose}
           selectedNotes={selectedNotes}
-          // setSelectedFilters={setSelectedFilters}
+        // setSelectedFilters={setSelectedFilters}
         />
       )}
 
@@ -283,12 +283,10 @@ const Dashboard = () => {
                 onChange={handlePageChange}
               />
             </Col>
-            {/* <Col md={1}>
+            <Col md={4} className=" d-flex footer-actions justify-content-end">
               <Button handleClick={() => { }} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />
-            </Col>
-            <Col md={1}>
               <Button handleClick={() => { }} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
-            </Col> */}
+            </Col>
           </Row>
         </Col>
       </Row>

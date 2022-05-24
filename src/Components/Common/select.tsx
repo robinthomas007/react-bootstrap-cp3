@@ -101,7 +101,7 @@ const ValueContainer = ({
 const SelectField = (props: selectProps) => {
   const colorModeContext = useColor();
 
-  return <Select className="f-width cp3-react-select" getOptionLabel={(option: any) => option.name}
+  return <Select className="f-width cp3-react-select cp3-select-field" getOptionLabel={(option: any) => option.name}
     getOptionValue={(option: any) => option.id}
     options={props.options}
     isMulti={props.isMulti}

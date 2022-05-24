@@ -11,7 +11,7 @@ import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import jwt_decode from "jwt-decode";
 import CloseIcon from '@mui/icons-material/Close';
-import { PLATFORM_LIST, DURATIONS_LIST } from './../Common/staticDatas'
+import { PLATFORM_LIST, DURATIONS_LIST, WHEN_LIST } from './../Common/staticDatas'
 import { handleSelectAll } from "../Common/select";
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -25,7 +25,8 @@ export default function Policy() {
     policyName: "",
     platform: [],
     action: "",
-    duration: "",
+    duration: [],
+    when: { id: 'Pre-Release', name: 'Pre-Release' },
     date: null,
     exceptions: []
   };
@@ -33,7 +34,8 @@ export default function Policy() {
   const defaultException = {
     platform: [],
     action: "",
-    duration: "",
+    duration: [],
+    when: { id: 'Pre-Release', name: 'Pre-Release' },
     date: "",
   }
   const [policyException, setPolicyException] = useState([]);
@@ -68,6 +70,7 @@ export default function Policy() {
     const [option] = optionArray;
     if (option) {
       const platformsList = option.platform.split(",");
+      const durationList = option.duration.split(",");
       setPolicy({
         ...option,
         policyName: option.policyName,
@@ -75,7 +78,10 @@ export default function Policy() {
           platformsList.includes(p.id)
         ),
         duration: DURATIONS_LIST.filter((duration) =>
-          option.duration.includes(duration.id)
+          durationList.includes(duration.id)
+        ),
+        when: WHEN_LIST.filter((when) =>
+          option.release.includes(when.id)
         )[0]
       });
 
@@ -83,13 +89,17 @@ export default function Policy() {
         const exceptionDetails = []
         option.exceptions.forEach(element => {
           const exceptionPlatformsList = element.platform.split(",");
+          const exceptionDurationList = element.duration.split(",");
           const obj = {
             ...element,
             platform: PLATFORM_LIST.filter((p) =>
               exceptionPlatformsList.includes(p.id)
             ),
             duration: DURATIONS_LIST.filter((duration) =>
-              element.duration.includes(duration.id)
+              exceptionDurationList.includes(duration.id)
+            ),
+            when: WHEN_LIST.filter((when) =>
+              element.release.includes(when.id)
             )[0]
           }
           exceptionDetails.push(obj)
@@ -115,13 +125,15 @@ export default function Policy() {
       exception.push({
         ...exec,
         platform: exec.platform ? exec.platform.map((p) => p.id).join(",") : '',
-        duration: exec.duration ? exec.duration.id : ''
+        duration: exec.duration ? exec.duration.map((d) => d.id).join(",") : '',
+        release: exec.when ? exec.when.id : ''
       })
     })
     const data = {
       ...policy,
       platform: policy.platform ? policy.platform.map((p) => p.id).join(",") : '',
-      duration: policy.duration ? policy.duration.id : '',
+      duration: policy.duration ? policy.duration.map((d) => d.id).join(",") : '',
+      release: policy.when ? policy.when.id : '',
       exceptions: exception,
       username: getUsername(),
     };
@@ -189,12 +201,20 @@ export default function Policy() {
         platform[i] = platform[i].id.charAt(0).toUpperCase() + platform[i].id.slice(1);
       }
     }
-    return platform ? platform.join(",") : ''
+    return platform ? platform.join(", ") : ''
+  }
+
+  const destructureDuration = (duration) => {
+    duration = duration.filter((p) => p.id !== 'ALL')
+    return duration ? duration.map(function (elem) {
+      return elem.name;
+    }).join(", ") : ''
   }
 
   const getExceptions = () => {
     return policyException.map((exc, index) => {
       let newArr = [...policyException];
+      const EXCEPTION_DATE_LABEL = exc.when.id === 'Post-Release' ? 'After' : 'Until';
       return (
         <div className="create-policy-wrapper exceptions" key={index}>
           <Row>
@@ -203,10 +223,11 @@ export default function Policy() {
                 <strong>Exception</strong>
               </div>
             </Col>
-            <Col md={3}>
+            <Col md={2}>
               <Form.Group controlId="platform">
                 <Form.Label>Platforms</Form.Label>
                 <SelectField
+                  className="cp3-select-field"
                   options={PLATFORM_LIST}
                   isMulti={true}
                   value={exc.platform}
@@ -244,25 +265,43 @@ export default function Policy() {
                 </div>
               </Form.Group>
             </Col>
-            <Col md={3}>
+            <Col md={2}>
               <Form.Group controlId="duration">
                 <Form.Label>Duration</Form.Label>
                 <SelectField
                   options={DURATIONS_LIST}
                   name="exceptionDuration"
+                  isMulti={true}
                   value={exc.duration}
-                  handleChange={(data) => {
-                    newArr[index].duration = data;
+                  handleChange={(data, e) => {
+                    newArr[index].duration = handleSelectAll(data, e, DURATIONS_LIST)
                     setPolicyException(newArr)
                   }
                   }
                 />
               </Form.Group>
             </Col>
+            <Col md={2}>
+              <Form.Group controlId="when">
+                <Form.Label>When</Form.Label>
+                <SelectField
+                  options={WHEN_LIST}
+                  name="exceptionWhen"
+                  value={exc.when}
+                  handleChange={(data) => {
+                    if (data.id === 'Always') {
+                      newArr[index].date = ''
+                    }
+                    newArr[index].when = data
+                    setPolicyException(newArr)
+                  }}
+                />
+              </Form.Group>
+            </Col>
             <Col md={2} style={{ position: 'relative' }}>
               <Form.Group controlId="until">
-                <Form.Label>Until</Form.Label>
-                <Datepicker selected={exc.date} handleDateChange={(date) => {
+                <Form.Label>{EXCEPTION_DATE_LABEL}</Form.Label>
+                <Datepicker disabled={exc.when.id === 'Always'} selected={exc.date} handleDateChange={(date) => {
                   newArr[index].date = date;
                   setPolicyException(newArr)
                 }} />
@@ -297,7 +336,11 @@ export default function Policy() {
             </Col>
             <Col>
               <strong>Duration: </strong>
-              <span> {exc.duration ? exc.duration.name : ''}</span>
+              <span> {destructureDuration(exc.duration)}</span>
+            </Col>
+            <Col>
+              <strong>When: </strong>
+              <span> {exc.when ? exc.when.name : ''}</span>
             </Col>
             <Col>
               <strong>Until: </strong>
@@ -312,6 +355,12 @@ export default function Policy() {
   const handlePlatformChange = (data, e) => {
     setPolicy({ ...policy, platform: handleSelectAll(data, e, PLATFORM_LIST) })
   }
+
+  const handleDurationChange = (data, e) => {
+    setPolicy({ ...policy, duration: handleSelectAll(data, e, DURATIONS_LIST) })
+  }
+
+  const POLICY_DATE_LABEL = policy.when.id === 'Post-Release' ? 'After' : 'Until';
 
   return (
     <div className="policy-wrapper">
@@ -328,7 +377,7 @@ export default function Policy() {
           <h3 className="heading">Create/Edit Policies</h3>
           <label className="sub-title">Create and Edit Policies</label>
           <div className="create-policy-wrapper">
-            <Row>
+            <Row className="align-items-center">
               <Col md={2}>
                 <Form.Group controlId="policyName">
                   <Form.Label>Policy Name</Form.Label>
@@ -343,7 +392,7 @@ export default function Policy() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={3}>
+              <Col md={2}>
                 <Form.Group controlId="platform">
                   <Form.Label>Platforms</Form.Label>
                   <SelectField
@@ -374,23 +423,35 @@ export default function Policy() {
                   </div>
                 </Form.Group>
               </Col>
-              <Col md={3}>
+              <Col md={2}>
                 <Form.Group controlId="duration">
                   <Form.Label>Duration</Form.Label>
                   <SelectField
+                    isMulti={true}
                     options={DURATIONS_LIST}
                     value={policy.duration}
                     name="duration"
-                    handleChange={(data) =>
-                      setPolicy({ ...policy, duration: data })
+                    handleChange={(data, e) =>
+                      handleDurationChange(data, e)
                     }
                   />
                 </Form.Group>
               </Col>
               <Col md={2}>
+                <Form.Group controlId="when">
+                  <Form.Label>When</Form.Label>
+                  <SelectField
+                    options={WHEN_LIST}
+                    value={policy.when}
+                    name="when"
+                    handleChange={(data) => setPolicy({ ...policy, date: data.id === 'Always' ? '' : policy.date, when: data })}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={2}>
                 <Form.Group controlId="date">
-                  <Form.Label>Until</Form.Label>
-                  <Datepicker selected={policy.date} handleDateChange={(date) => setPolicy({ ...policy, date: date })} />
+                  <Form.Label>{POLICY_DATE_LABEL}</Form.Label>
+                  <Datepicker disabled={policy.when.id === 'Always'} selected={policy.date} handleDateChange={(date) => setPolicy({ ...policy, date: date })} />
                 </Form.Group>
               </Col>
               <Col md={1}></Col>
@@ -416,7 +477,11 @@ export default function Policy() {
                 <strong>Action: </strong> <span> {policy.action ? policy.action.charAt(0).toUpperCase() + policy.action.slice(1) : ''}</span>
               </Col>
               <Col>
-                <strong>Duration: </strong> <span> {policy.duration ? policy.duration.name : ''}</span>
+                <strong>Duration: </strong> <span> {destructureDuration(policy.duration)}</span>
+              </Col>
+              <Col>
+                <strong>When: </strong>
+                <span> {policy.when ? policy.when.name : ''}</span>
               </Col>
               <Col>
                 <strong>Until: </strong> <span> {policy.date ? moment(policy.date).format('MM-DD-YYYY') : ''}</span>

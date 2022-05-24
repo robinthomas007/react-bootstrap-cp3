@@ -1,5 +1,17 @@
+$primary:#01579B;
+$white:#ffffff;
+$secondary:#F57F17;
+$light-yellow:#FBC02D;
+$dark-yellow:#FFF176;
+$dark:#212121;
+$gray:#9E9E9E;
+$header-theme:#212121;
+$light:#F5F5F5;
+$sky-blue:#4FC3F7;
+$light-blue:#B3E5FC;
+
 $theme-colors: (
-  "primary": #01579B,
+  "primary": $primary,
   "secondary": #F57F17,
   "secondary-light":#FBC02D,
   "header-theme":#212121,
@@ -56,5 +68,14 @@ $border-radius:  2px;
 .Mui-checked {
   color:#F57F17 !important;
 }
+
+// $form-check-input-width:                 1.5em !default;
+// $form-check-input-bg:$white;                     //$input-bg !default;
+$form-check-input-border:1px solid #9E9E9E;                 //1px solid rgba($black, .25) !default;
+$form-check-input-border-radius: 2px;         //.25em !default;
+$form-check-input-focus-box-shadow: none;      //$input-btn-focus-box-shadow !default;
+$form-check-input-checked-bg-color:$secondary;
+$form-check-input-checked-border-color: $white;  //$form-check-input-checked-bg-color !default;
+$form-check-radio-checked-bg-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='#{$secondary}'/></svg>") !default;
 
 @import "~bootstrap/scss/bootstrap";

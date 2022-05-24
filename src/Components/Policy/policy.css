@@ -1,5 +1,5 @@
 .policy-wrapper {
-    padding: 10px 61px;
+    padding: 10px 100px;
 }
 
 .pt-70 {
@@ -20,7 +20,7 @@
 }
 
 .create-policy-wrapper {
-    padding: 10px 40px;
+    padding: 15px 40px;
 }
 
 .create-policy-wrapper .form-control {
@@ -40,7 +40,7 @@
 }
 
 .create-policy-wrapper .form-check {
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .policy-items {
@@ -59,11 +59,15 @@
     padding: 8px;
     border-radius: 4px;
     margin-top: 30px;
+    width: 50%;
+    height: 40px;
 }
 
-.exception-summary {
-    padding: 10px 40px;
+.exception-summary.bg-secondary-light {
+    padding: 8px;
     border-radius: 4px;
+    width: 50%;
+    height: 40px;
 }
 
 .create-policy-wrapper.exception-summary {
@@ -134,4 +138,8 @@
 
 .create-policy-wrapper.exceptions .custom-date-picker input {
     background: #f5f5f5;
+}
+
+.create-policy-wrapper .custom-date-picker input:disabled {
+    background: #d7d7d7;
 }

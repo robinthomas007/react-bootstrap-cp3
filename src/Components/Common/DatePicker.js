@@ -18,7 +18,6 @@ const DateField = (props) => {
       showTimeSelect={showTimeSelect}
       showYearDropdown
       selected={selected ? new Date(selected) : null}
-      isClearable={true}
     />
 
   );
@@ -28,10 +27,8 @@ const DateField = (props) => {
 const CustomInput = props => {
   return (
     <div className="custom-date-picker">
-      <input onClick={props.onClick} value={props.value} type="text" readOnly={props.isreadOnly} />
-      {!props.value && (
-        <CalendarTodayIcon onClick={props.onClick} />
-      )}
+      <input disabled={props.disabled} onClick={props.onClick} value={props.value} type="text" readOnly={props.isreadOnly} />
+      <CalendarTodayIcon onClick={props.onClick} />
     </div>
   );
 };

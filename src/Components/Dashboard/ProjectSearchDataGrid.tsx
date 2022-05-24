@@ -105,21 +105,21 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         <QuestionAnswerIcon onClick={() => NotesModal(params)} />
       ),
     },
-    // {
-    //   field: 'action',
-    //   headerName: 'Action',
-    //   sortable: false,
-    //   flex: 1,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    //   renderCell: (params) => (
-    //     <div>
-    //       <EditIcon className="icon editIcon" onClick={(() => editModal(params))} />
-    //       &nbsp;&nbsp;&nbsp;
-    //       <DeleteIcon />
-    //     </div>
-    //   ),
-    // },
+    {
+      field: 'action',
+      headerName: 'Action',
+      sortable: false,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <div>
+          <EditIcon className="icon editIcon" onClick={(() => editModal(params))} />
+          &nbsp;&nbsp;&nbsp;
+          <DeleteIcon />
+        </div>
+      ),
+    },
   ];
 
   const NotesModal = (params: editNotesPropTypes) => {
