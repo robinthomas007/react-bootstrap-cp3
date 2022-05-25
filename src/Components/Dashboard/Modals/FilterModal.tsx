@@ -76,7 +76,7 @@ export default function FilterModal(props: filterProps) {
     props.handleSubmit(filterdItems)
   }
 
-  const handleSelectChange = (data: any, name: string) => {
+  const handleSelectChange = (data: any, e: any, name: string) => {
     setSearchFilter({ ...searchFilter, [name]: data.length > 0 ? data : null });
   }
 
@@ -100,21 +100,22 @@ export default function FilterModal(props: filterProps) {
               <Col md={2}>
                 <label>Search Within </label>
               </Col>
-              <Col md={2}>
+              <Col>
                 <Form.Check type='checkbox' disabled={searchFilter.searchWithins.includes('ALL')} checked={searchFilter.searchWithins.includes('ALL')} label="All" id="ALL" onChange={handleChange} />
               </Col>
-              <Col md={2}>
+              <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('title')} label="Title" id="title" onChange={handleChange} />
               </Col>
-              <Col md={2}>
+              <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('artist')} label="Artist" id="artist" onChange={handleChange} />
               </Col>
-              <Col md={2}>
+              <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('isrc')} label="ISRC" id="isrc" onChange={handleChange} />
               </Col>
-              <Col md={2}>
+              <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('notes')} label="Notes" id="notes" onChange={handleChange} />
               </Col>
+              <Col></Col>
             </Row>
             <Row className="pb-20">
               <Col md={6}>
@@ -125,31 +126,38 @@ export default function FilterModal(props: filterProps) {
               </Col>
             </Row>
             <Row className="pb-20">
-              <Col md={6}>
-                <Form.Group controlId="leakFrom" className="d-flex align-items-center">
-                  <Form.Label className="form-label-width">Leak Date</Form.Label>
-                  <Form.Control value={leakFrom} type="date" name="leakFrom" placeholder="Leak Date From" onChange={handleChange} />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="leakTo" className="d-flex align-items-center">
-                  <Form.Label className="form-label-width">to</Form.Label>
-                  <Form.Control value={leakTo} type="date" name="leakTo" placeholder="Leak Date To" onChange={handleChange} />
-                </Form.Group>
+              <Col md={10} className="d-flex">
+                <div>
+                  <Form.Group controlId="leakFrom" className="d-flex align-items-center">
+                    <Form.Label className="form-label-width">Leak Date</Form.Label>
+                    <Form.Control value={leakFrom} type="date" name="leakFrom" placeholder="Leak Date From" onChange={handleChange} />
+                  </Form.Group>
+                </div>
+                <div>
+                  <Form.Group controlId="leakTo" className="d-flex align-items-center">
+                    <Form.Label className="form-label-sm-width">to</Form.Label>
+                    <Form.Control value={leakTo} type="date" name="leakTo" placeholder="Leak Date To" onChange={handleChange} />
+                  </Form.Group>
+                </div>
               </Col>
             </Row>
             <Row className="pb-20">
-              <Col md={6}>
-                <Form.Group controlId="releaseFrom" className="d-flex align-items-center">
-                  <Form.Label className="form-label-width">Release Date</Form.Label>
-                  <Form.Control value={releaseFrom} type="date" name="releaseFrom" placeholder="Release From" onChange={handleChange} />
-                </Form.Group>
+              <Col md={10} className="d-flex">
+                <div>
+                  <Form.Group controlId="releaseFrom" className="d-flex align-items-center">
+                    <Form.Label className="form-label-width">Release Date</Form.Label>
+                    <Form.Control value={releaseFrom} type="date" name="releaseFrom" placeholder="Release From" onChange={handleChange} />
+                  </Form.Group>
+                </div>
+                <div>
+                  <Form.Group controlId="releaseTo" className="d-flex align-items-center">
+                    <Form.Label className="form-label-sm-width">to</Form.Label>
+                    <Form.Control value={releaseTo} type="date" name="releaseTo" placeholder="Release To" onChange={handleChange} />
+                  </Form.Group>
+                </div>
               </Col>
-              <Col md={6}>
-                <Form.Group controlId="releaseTo" className="d-flex align-items-center">
-                  <Form.Label className="form-label-width">to</Form.Label>
-                  <Form.Control value={releaseTo} type="date" name="releaseTo" placeholder="Release To" onChange={handleChange} />
-                </Form.Group>
+              <Col md={4}>
+
               </Col>
             </Row>
           </Form>
