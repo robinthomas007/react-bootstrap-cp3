@@ -129,12 +129,6 @@ code {
   outline: none !important;
 }
 
-.cp3-select-field, input[type="text"] {
-  /* width: 240px !important; */
-  /* height: 40px !important; */
+input[type="date"] {
+  width: 140px;
 }
-
-/* .react-datepicker__input-container {
-  width: 144px !important;
-  height: 40px !important;
-} */

@@ -1,5 +1,5 @@
 .policy-wrapper {
-    padding: 10px 100px;
+    padding: 10px 150px;
 }
 
 .pt-70 {
@@ -61,6 +61,7 @@
     margin-top: 30px;
     width: 50%;
     height: 40px;
+    text-align: center;
 }
 
 .exception-summary.bg-secondary-light {
@@ -68,6 +69,7 @@
     border-radius: 4px;
     width: 50%;
     height: 40px;
+    text-align: center;
 }
 
 .create-policy-wrapper.exception-summary {
@@ -91,7 +93,7 @@
 
 .exception-close {
     position: absolute;
-    right: -25px;
+    right: 20px;
     top: 36px;
 }
 
@@ -142,4 +144,17 @@
 
 .create-policy-wrapper .custom-date-picker input:disabled {
     background: #d7d7d7;
+}
+
+.react-datepicker-wrapper {
+    display: flex !important;
+    width: 144px !important;
+}
+
+.policy-wrapper .col-md-2 {
+    padding: 0px 20px;
+}
+
+.create-policy-wrapper.exception-summary .col, .summary-headings .col {
+    padding: 0px 20px;
 }
