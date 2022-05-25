@@ -45,10 +45,10 @@ export default function Header() {
   return (
     <Container fluid>
       <Row className='bg-header-theme text-white cp3-header'>
-        <Col md={6}>
+        <Col xl={4} xxl={6}>
           <img className="cp3-logo" src={logo} alt="Logo" />
         </Col>
-        <Col md={6}>
+        <Col xl={8} xxl={6}>
           <Nav className="justify-content-around">
             <Nav.Item className="nav-item-link">
               <NavLink to='/'>

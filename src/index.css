@@ -68,6 +68,7 @@ code {
 .cp3-logo {
   height: 62px;
   transform: scale(1.5);
+  margin-left: 40px;
 }
 
 .cp3-header .nav {

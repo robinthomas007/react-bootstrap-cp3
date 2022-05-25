@@ -1,5 +1,15 @@
 .policy-wrapper {
-    padding: 10px 150px;
+    padding: 10px 142px;
+}
+
+@media (min-width: 780px) and (max-width: 1400px) {
+    .policy-wrapper {
+        padding: 10px 50px !important;
+    }
+
+    .create-policy-wrapper {
+        padding: 15px 10px !important;
+    }
 }
 
 .pt-70 {
