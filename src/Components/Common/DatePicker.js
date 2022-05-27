@@ -2,14 +2,21 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import moment from 'moment';
 
 const DateField = (props) => {
   const { disabled, readOnly, placeholder, showTimeSelect, selected } = props;
+
+  const onChange = (date) => {
+    console.log(date, "asdadadas")
+    props.handleDateChange(moment(date).format('MM-DD-YYYY'))
+  }
+
   return (
     <DatePicker
       {...props}
       dateFormat="MM-dd-yyyy"
-      onChange={props.handleDateChange}
+      onChange={onChange}
       customInput={
         <CustomInput placeholder={placeholder} isreadOnly={readOnly} {...props} />
       }

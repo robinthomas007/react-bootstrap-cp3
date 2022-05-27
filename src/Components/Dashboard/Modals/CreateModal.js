@@ -16,6 +16,7 @@ import { getUsername, config } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
 import { toast } from 'react-toastify';
 import Loader from "./../../Common/loader";
+import moment from 'moment';
 
 export default function FilterModal(props) {
 
@@ -66,6 +67,8 @@ export default function FilterModal(props) {
       }
       setTrack({
         ...props.editParams,
+        leakDate: moment(props.editParams.leakDate).format('MM-DD-YYYY'),
+        releaseDate: moment(props.editParams.releaseDate).format('MM-DD-YYYY'),
         labelId: props.labelFacets.filter((label) => props.editParams.labelId.includes(label.id))[0],
         blockPolicyId: policy.filter((p) => props.editParams.blockPolicyId === p.id)[0],
         ...obj
@@ -239,7 +242,11 @@ export default function FilterModal(props) {
                   <Col md={12}>
                     <Form.Group controlId="leakDate" className="d-flex align-items-center">
                       <Form.Label className="form-label-width">Leak Date</Form.Label>
-                      <Datepicker selected={track.leakDate} handleDateChange={(date) => setTrack({ ...track, leakDate: date })} />
+                      <Datepicker selected={track.leakDate} handleDateChange={(date) => {
+                        console.log(date, "date")
+                        setTrack({ ...track, leakDate: date })
+                      }
+                      } />
                     </Form.Group>
                   </Col>
                 </Row>
