@@ -8,19 +8,20 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loader from "./../Common/loader";
 import "./policy.css";
 import { BASE_URL } from "../../App";
-import getCookie from "../Common/cookie";
-import jwt_decode from "jwt-decode";
 import CloseIcon from '@mui/icons-material/Close';
 import { PLATFORM_LIST, DURATIONS_LIST, WHEN_LIST } from './../Common/staticDatas'
 import { handleSelectAll } from "../Common/select";
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import Datepicker from '../Common/DatePicker'
+import { getPolicy } from './../Common/Api'
+import { getUsername, config } from './../Common/Utils'
 
 export default function Policy() {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadData, setLoadData] = useState(false)
+
   const defaultPolicy = {
     policyName: "",
     platform: [],
@@ -42,29 +43,13 @@ export default function Policy() {
 
 
   useEffect(() => {
-    axios
-      .get(BASE_URL + "BlockPolicy/GetBlockPolicy", {
-        headers: {
-          cp3_auth: getCookie("cp3_auth"),
-        },
-      })
-      .then((res) => {
-        setOptions(res.data);
-      })
+    getPolicy().then((res) => {
+      setOptions(res.data);
+    })
       .catch((err) => {
         console.log(err);
       });
   }, [loadData]);
-
-  const getUsername = () => {
-    try {
-      const token = getCookie("cp3_auth");
-      let user = jwt_decode(token);
-      return user.name;
-    } catch (err) {
-      console.log("Error getting Token", err);
-    }
-  };
 
   const onChange = (optionArray) => {
     const [option] = optionArray;
@@ -112,11 +97,7 @@ export default function Policy() {
 
   const handleSubmit = () => {
     setLoading(true);
-    const config = {
-      headers: {
-        cp3_auth: getCookie("cp3_auth"),
-      },
-    };
+
     const exception = []
 
     policyException.forEach((exec) => {

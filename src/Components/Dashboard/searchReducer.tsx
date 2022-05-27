@@ -7,6 +7,7 @@ type searchState = {
   totalPages: number,
   totalItems: number,
   labelFacets: Array<object>,
+  policyFacets: Array<object>,
   pageNumber: number,
   facets: Array<string>,
   searchCriteria: any
@@ -26,6 +27,7 @@ export const initialState = {
   totalPages: 0,
   totalItems: 0,
   labelFacets: [],
+  policyFacets: [],
   pageNumber: 1,
   facets: [],
   searchCriteria: {
@@ -87,6 +89,12 @@ export const reducer = (state: searchState, action: searchActions) => {
         ...state,
         loading: true,
         searchCriteria: { ...state.searchCriteria, filter: action.payload.filter },
+      }
+    case 'POLICY_FETCH_SUCCESS':
+      return {
+        ...state,
+        loading: true,
+        policyFacets: action.payload,
       }
     default:
       return state

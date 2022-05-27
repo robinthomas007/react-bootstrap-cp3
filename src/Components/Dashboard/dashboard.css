@@ -78,3 +78,13 @@
   display: flex;
   justify-content: flex-start;
 }
+
+.alt-title-icon {
+  background: #f5f5f5;
+  margin-left: 10px;
+  padding: 5px;
+}
+
+.filter-modal-wrapper .custom-date-picker input {
+  background: #f5f5f5;
+}

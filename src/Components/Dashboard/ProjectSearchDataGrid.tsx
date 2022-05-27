@@ -5,7 +5,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Col from "react-bootstrap/Col";
 import { useColor } from "../../Context/ColorModeContext";
-import { Filter } from "@mui/icons-material";
 
 const filterOperators = getGridStringOperators().filter((operator) =>
   ["contains"].includes(operator.value)
@@ -22,6 +21,7 @@ type searchProps = {
   onSortModelChange: any;
   openNotesModal: any;
   dispatch: any;
+  openCreateModal: any
 };
 
 type editNotesPropTypes = {
@@ -127,8 +127,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   };
 
   const editModal = (params: object) => {
-    // setParam(params)
-    // handleClickOpen()
+    props.openCreateModal(params)
   };
 
   const colorModeContext = useColor();

@@ -15,6 +15,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Form from "react-bootstrap/Form";
 import FilterModal from "./Modals/FilterModal";
 import NotesModal from "./Modals/NotesModal";
+import CreateModal from "./Modals/CreateModal"
 import SearchIcon from "@mui/icons-material/Search";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
@@ -33,6 +34,8 @@ const Dashboard = () => {
   const [openNotes, setOpenNotes] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState<any>({});
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
+  const [showCreate, setShowCreate] = React.useState(false);
+  const [editParams, setEditParams] = React.useState({})
 
   React.useEffect(() => {
     const {
@@ -125,17 +128,18 @@ const Dashboard = () => {
     setOpenFilter(true);
   };
 
+  const openCreateModal = (params: any) => {
+    if (params.id) {
+      setEditParams(params.row)
+    }
+    setShowCreate(true);
+  };
+
   const openNotesModal = (row: object) => {
     setOpenNotes(true);
     setSelectedNotes(row);
   };
 
-  const handleFilterModalClose = () => {
-    setOpenFilter(false);
-  };
-  const handleNotesModalClose = () => {
-    setOpenNotes(false);
-  };
   const selectedFilterKeys = Object.keys(selectedFilters);
 
   const renderSelectedFilters = () => {
@@ -203,7 +207,7 @@ const Dashboard = () => {
       <FilterModal
         labelFacets={state.labelFacets}
         show={openFilter}
-        handleClose={handleFilterModalClose}
+        handleClose={() => setOpenFilter(false)}
         handleSubmit={handleFlterModalSubmit}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
@@ -212,9 +216,20 @@ const Dashboard = () => {
         <NotesModal
           labelFacets={state.labelFacets}
           show={openNotes}
-          handleClose={handleNotesModalClose}
+          handleClose={() => setOpenNotes(false)}
           selectedNotes={selectedNotes}
-        // setSelectedFilters={setSelectedFilters}
+        />
+      )}
+      {showCreate && (
+        <CreateModal
+          labelFacets={state.labelFacets}
+          show={showCreate}
+          handleClose={() => {
+            setShowCreate(false);
+            setEditParams({})
+          }}
+          selectedNotes={selectedNotes}
+          editParams={editParams}
         />
       )}
 
@@ -283,7 +298,7 @@ const Dashboard = () => {
               />
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
-              <Button handleClick={() => { }} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />
+              <Button handleClick={openCreateModal} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />
               <Button handleClick={() => { }} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
             </Col>
           </Row>
@@ -301,6 +316,7 @@ const Dashboard = () => {
           onSortModelChange={onSortModelChange}
           openNotesModal={openNotesModal}
           dispatch={dispatch}
+          openCreateModal={openCreateModal}
         />
       </Row>
     </Container>
