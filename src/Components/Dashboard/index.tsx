@@ -37,15 +37,8 @@ const Dashboard = () => {
   const [showCreate, setShowCreate] = React.useState(false);
   const [editParams, setEditParams] = React.useState({})
 
-  React.useEffect(() => {
-    const {
-      searchTerm,
-      itemsPerPage,
-      pageNumber,
-      sortColumn,
-      sortOrder,
-      filter,
-    } = state.searchCriteria;
+  const getSearchPageData = React.useCallback(() => {
+    const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter } = state.searchCriteria;
     axios
       .get(BASE_URL + "TrackSearch", {
         params: {
@@ -75,6 +68,10 @@ const Dashboard = () => {
         console.log("error feching data", err);
       });
   }, [state.searchCriteria]);
+
+  React.useEffect(() => {
+    getSearchPageData()
+  }, [getSearchPageData]);
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "CHANGE_LIMIT", payload: event.target.value });
@@ -230,6 +227,7 @@ const Dashboard = () => {
           }}
           selectedNotes={selectedNotes}
           editParams={editParams}
+          getSearchPageData={getSearchPageData}
         />
       )}
 

@@ -91,7 +91,7 @@ export default function FilterModal(props) {
       leakDate: track.leakDate,
       releaseDate: track.releaseDate,
       blockPolicyId: track.blockPolicyId ? track.blockPolicyId.id : '',
-      labelId: track.labelId ? track.labelId.id : '',
+      labelId: track.labelId ? Number(track.labelId.id) : '',
       subTitle: subTitle.length > 0 ? subTitle.join(",") : '',
       username: getUsername(),
     };
@@ -103,6 +103,8 @@ export default function FilterModal(props) {
             autoClose: 3000,
             closeOnClick: true,
           });
+          props.handleClose()
+          props.getSearchPageData()
         })
         .catch((err) => {
           if (err.response && err.response.data) {
@@ -122,6 +124,8 @@ export default function FilterModal(props) {
             closeOnClick: true,
           });
           setTrack({ ...track, trackId: response.data.trackId })
+          props.handleClose()
+          props.getSearchPageData()
         })
         .catch((err) => {
           if (err.response && err.response.data) {
