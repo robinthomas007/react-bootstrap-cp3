@@ -228,6 +228,7 @@ const Dashboard = () => {
           selectedNotes={selectedNotes}
           editParams={editParams}
           getSearchPageData={getSearchPageData}
+          policyFacets={state.policyFacets}
         />
       )}
 

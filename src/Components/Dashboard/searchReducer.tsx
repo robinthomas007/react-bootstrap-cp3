@@ -51,7 +51,8 @@ export const reducer = (state: searchState, action: searchActions) => {
         tracks: action.payload.tracks,
         totalPages: Number(action.payload.totalPages),
         totalItems: Number(action.payload.totalItems),
-        labelFacets: state.labelFacets.length === 0 ? action.payload.labelFacets : state.labelFacets
+        labelFacets: state.labelFacets.length === 0 ? action.payload.labelFacets : state.labelFacets,
+        policyFacets: state.policyFacets.length === 0 ? action.payload.facets.policyFacets : state.policyFacets
       }
     case 'FETCH_FAILURE':
       return {
@@ -89,12 +90,6 @@ export const reducer = (state: searchState, action: searchActions) => {
         ...state,
         loading: true,
         searchCriteria: { ...state.searchCriteria, filter: action.payload.filter },
-      }
-    case 'POLICY_FETCH_SUCCESS':
-      return {
-        ...state,
-        loading: true,
-        policyFacets: action.payload,
       }
     default:
       return state

@@ -11,7 +11,6 @@ import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { getPolicy } from './../../Common/Api'
 import { getUsername, config } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
 import { toast } from 'react-toastify';
@@ -20,7 +19,6 @@ import moment from 'moment';
 
 export default function FilterModal(props) {
 
-  const [policy, setPolicy] = useState([])
   const [altTitle, setAltTitle] = useState([])
   const [track, setTrack] = useState({
     title: '',
@@ -32,28 +30,6 @@ export default function FilterModal(props) {
     blockPolicyId: '',
   })
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setLoading(true)
-    getPolicy().then((res) => {
-      const policyRes = []
-      if (res.data) {
-        res.data.forEach(element => {
-          const obj = {
-            id: element.blockPolicyId,
-            name: element.policyName
-          }
-          policyRes.push(obj)
-        });
-        setLoading(false)
-      }
-      setPolicy(policyRes);
-    })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
 
   useEffect(() => {
     if (props.editParams && props.editParams.trackId) {
@@ -73,11 +49,11 @@ export default function FilterModal(props) {
         leakDate: moment(props.editParams.leakDate).format('MM-DD-YYYY'),
         releaseDate: moment(props.editParams.releaseDate).format('MM-DD-YYYY'),
         labelId: props.labelFacets.filter((label) => Number(props.editParams.labelId) === Number(label.id))[0],
-        blockPolicyId: policy.filter((p) => props.editParams.blockPolicyId === p.id)[0],
+        blockPolicyId: props.policyFacets.filter((p) => Number(props.editParams.blockPolicyId) === Number(p.id))[0],
         ...obj
       });
     }
-  }, [props, policy])
+  }, [props])
 
   const handleSubmit = () => {
     setLoading(true);
@@ -93,7 +69,7 @@ export default function FilterModal(props) {
       isrc: track.isrc,
       leakDate: track.leakDate,
       releaseDate: track.releaseDate,
-      blockPolicyId: track.blockPolicyId ? track.blockPolicyId.id : '',
+      blockPolicyId: track.blockPolicyId ? Number(track.blockPolicyId.id) : '',
       labelId: track.labelId ? Number(track.labelId.id) : '',
       subTitle: subTitle.length > 0 ? subTitle.join(",") : '',
       username: getUsername(),
@@ -237,7 +213,7 @@ export default function FilterModal(props) {
                   <Col md={12}>
                     <Form.Group controlId="blockPolicyId" className="d-flex align-items-center">
                       <Form.Label className="form-label-width">Policy</Form.Label>
-                      <SelectField value={track.blockPolicyId} options={policy} name="blockPolicyId" handleChange={(data) =>
+                      <SelectField value={track.blockPolicyId} options={props.policyFacets} name="blockPolicyId" handleChange={(data) =>
                         setTrack({ ...track, blockPolicyId: data })
                       } />
                     </Form.Group>

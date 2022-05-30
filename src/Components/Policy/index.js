@@ -14,7 +14,7 @@ import { handleSelectAll } from "../Common/select";
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import Datepicker from '../Common/DatePicker'
-import { getPolicy } from './../Common/Api'
+import getCookie from "./../Common/cookie";
 import { getUsername, config } from './../Common/Utils'
 
 export default function Policy() {
@@ -41,11 +41,15 @@ export default function Policy() {
   }
   const [policyException, setPolicyException] = useState([]);
 
-
   useEffect(() => {
-    getPolicy().then((res) => {
-      setOptions(res.data);
-    })
+    axios
+      .get(BASE_URL + "BlockPolicy/GetBlockPolicy", {
+        headers: {
+          cp3_auth: getCookie("cp3_auth"),
+        },
+      }).then((res) => {
+        setOptions(res.data);
+      })
       .catch((err) => {
         console.log(err);
       });
