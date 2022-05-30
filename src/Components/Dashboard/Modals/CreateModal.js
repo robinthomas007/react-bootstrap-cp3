@@ -65,11 +65,12 @@ export default function FilterModal(props) {
         });
         setAltTitle(temp)
       }
+
       setTrack({
         ...props.editParams,
         leakDate: moment(props.editParams.leakDate).format('MM-DD-YYYY'),
         releaseDate: moment(props.editParams.releaseDate).format('MM-DD-YYYY'),
-        labelId: props.labelFacets.filter((label) => props.editParams.labelId.includes(label.id))[0],
+        labelId: props.labelFacets.filter((label) => Number(props.editParams.labelId) === Number(label.id))[0],
         blockPolicyId: policy.filter((p) => props.editParams.blockPolicyId === p.id)[0],
         ...obj
       });
