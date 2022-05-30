@@ -11,6 +11,8 @@ import axios from "axios";
 import moment from "moment";
 import { useAuth } from "./../../../Context/authContext";
 import { BASE_URL } from "../../../App";
+import getCookie from "./../../Common/cookie";
+import { config } from "./../../Common/Utils";
 
 type filterProps = {
   show: boolean;
@@ -34,6 +36,9 @@ export default function NotesrModal(props: filterProps) {
         params: {
           trackId: props.selectedNotes.trackId,
         },
+        headers: {
+          cp3_auth: getCookie("cp3_auth"),
+        },
       })
       .then((res: any) => {
         setNotesData(res.data);
@@ -49,7 +54,7 @@ export default function NotesrModal(props: filterProps) {
         trackId: props.selectedNotes.trackId,
         comments: notes,
         userName: auth.user.name || "Guest",
-      })
+      }, config)
       .then((res: any) => {
         setNotesData([...notesData, res.data]);
         setNotes("");

@@ -34,6 +34,7 @@ export default function FilterModal(props) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     getPolicy().then((res) => {
       const policyRes = []
       if (res.data) {
@@ -44,6 +45,7 @@ export default function FilterModal(props) {
           }
           policyRes.push(obj)
         });
+        setLoading(false)
       }
       setPolicy(policyRes);
     })

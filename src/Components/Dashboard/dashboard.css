@@ -98,6 +98,6 @@
 }
 
 .dark-theme .custom-date-picker input {
-  background: #333333;
+  background: #333333 !important;
   color: #fff;
 }
