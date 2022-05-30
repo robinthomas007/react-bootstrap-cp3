@@ -91,7 +91,7 @@ export default function FilterModal(props) {
       leakDate: track.leakDate,
       releaseDate: track.releaseDate,
       blockPolicyId: track.blockPolicyId ? track.blockPolicyId.id : '',
-      labelId: track.blockPolicyId ? track.blockPolicyId.id : '',
+      labelId: track.labelId ? track.labelId.id : '',
       subTitle: subTitle.length > 0 ? subTitle.join(",") : '',
       username: getUsername(),
     };
@@ -153,7 +153,7 @@ export default function FilterModal(props) {
           <Col md={12}>
             <Form.Group controlId="title" className="d-flex align-items-center">
               <Form.Label className="form-label-width">Alt Title {index + 1}</Form.Label>
-              <Form.Control value={track[altTitle]} type="text" name="title" placeholder="Enter Title" onChange={(e) =>
+              <Form.Control value={track[altTitle] ? track[altTitle] : ''} type="text" name="title" placeholder="Enter Title" onChange={(e) =>
                 setTrack({ ...track, [altTitle]: e.target.value })
               } />
               <span className="alt-title-icon"><RemoveCircleIcon onClick={() => removeAltTitle(ele, index)} /></span>
@@ -243,7 +243,6 @@ export default function FilterModal(props) {
                     <Form.Group controlId="leakDate" className="d-flex align-items-center">
                       <Form.Label className="form-label-width">Leak Date</Form.Label>
                       <Datepicker selected={track.leakDate} handleDateChange={(date) => {
-                        console.log(date, "date")
                         setTrack({ ...track, leakDate: date })
                       }
                       } />

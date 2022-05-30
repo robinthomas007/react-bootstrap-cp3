@@ -5,6 +5,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Col from "react-bootstrap/Col";
 import { useColor } from "../../Context/ColorModeContext";
+import Tooltip from 'react-bootstrap/Tooltip'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 
 const filterOperators = getGridStringOperators().filter((operator) =>
   ["contains"].includes(operator.value)
@@ -29,6 +31,7 @@ type editNotesPropTypes = {
 };
 
 export default function ProjectSearchDataGrid(props: searchProps) {
+
   const columns: GridColDef[] = [
     {
       field: "title",
@@ -37,6 +40,21 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       headerAlign: "left",
       align: "left",
       filterOperators,
+      renderCell: (params: any) => {
+        if (params.row.subTitle) {
+          return (<OverlayTrigger
+            placement="top"
+            overlay={<Tooltip id="button-tooltip">
+              {params.row.subTitle}
+            </Tooltip>}
+          >
+            <span>{params.row.title}</span>
+          </OverlayTrigger>)
+        }
+        return (
+          <span>{params.row.title}</span>
+        )
+      }
     },
     {
       field: "artist",
