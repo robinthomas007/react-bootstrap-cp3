@@ -91,6 +91,10 @@ export const reducer = (state: searchState, action: searchActions) => {
         loading: true,
         searchCriteria: { ...state.searchCriteria, filter: action.payload.filter },
       }
+    case 'DELETE_SUCCESS':
+      return {
+        ...state,
+      }
     default:
       return state
   }

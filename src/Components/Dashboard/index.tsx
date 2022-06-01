@@ -135,33 +135,33 @@ const Dashboard = () => {
   };
 
   const deleteTrack = (ids: Array<any>) => {
-    if (window.confirm("Are you sure to delete this track?"))
-      axios
-        .delete(BASE_URL + "Track/DeleteTrack", {
-          data: {
-            trackId: ids,
-          },
-          headers: {
-            cp3_auth: getCookie("cp3_auth"),
-          },
-        })
-        .then((res: any) => {
-          if (res) {
-            toast.success('Track details deleted successfully!', {
-              autoClose: 3000,
-              closeOnClick: true,
-            });
-            getSearchPageData()
-          } else {
-            toast.error("Error deleting Track details", {
-              autoClose: 3000,
-              closeOnClick: true,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log("error feching data", err);
-        });
+    // if (window.confirm("Are you sure to delete this track?"))
+    //   axios
+    //     .delete(BASE_URL + "Track/DeleteTrack", {
+    //       data: {
+    //         trackIds: ids,
+    //       },
+    //       headers: {
+    //         cp3_auth: getCookie("cp3_auth"),
+    //       },
+    //     })
+    //     .then((res: any) => {
+    //       if (res) {
+    //         toast.success('Track details deleted successfully!', {
+    //           autoClose: 3000,
+    //           closeOnClick: true,
+    //         });
+    //         dispatch({ type: "DELETE_SUCCESS", payload: ids });
+    //       } else {
+    //         toast.error("Error deleting Track details", {
+    //           autoClose: 3000,
+    //           closeOnClick: true,
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("error feching data", err);
+    //     });
   }
 
   const openNotesModal = (row: object) => {
