@@ -22,6 +22,7 @@ import Badge from "react-bootstrap/Badge";
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
+import { toast } from 'react-toastify';
 
 type notesPropTypes = {
   trackId?: number;
@@ -51,6 +52,7 @@ const Dashboard = () => {
             ? filter.searchWithins.toString()
             : "",
           labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
+          policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
           releaseFrom: filter.releaseFrom,
           releaseTo: filter.releaseTo,
           leakFrom: filter.leakFrom,
@@ -132,6 +134,36 @@ const Dashboard = () => {
     setShowCreate(true);
   };
 
+  const deleteTrack = (ids: Array<any>) => {
+    if (window.confirm("Are you sure to delete this track?"))
+      axios
+        .delete(BASE_URL + "Track/DeleteTrack", {
+          data: {
+            trackId: ids,
+          },
+          headers: {
+            cp3_auth: getCookie("cp3_auth"),
+          },
+        })
+        .then((res: any) => {
+          if (res) {
+            toast.success('Track details deleted successfully!', {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
+            getSearchPageData()
+          } else {
+            toast.error("Error deleting Track details", {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error feching data", err);
+        });
+  }
+
   const openNotesModal = (row: object) => {
     setOpenNotes(true);
     setSelectedNotes(row);
@@ -165,7 +197,7 @@ const Dashboard = () => {
             <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
           );
       }
-      if (item === "policy") {
+      if (item === "policyIds") {
         const selectedPolicy = selectedFilters[item].map(
           (policy: any) => policy.name
         );
@@ -208,6 +240,7 @@ const Dashboard = () => {
         handleSubmit={handleFlterModalSubmit}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
+        policyFacets={state.policyFacets}
       />
       {openNotes && (
         <NotesModal
@@ -316,6 +349,7 @@ const Dashboard = () => {
           openNotesModal={openNotesModal}
           dispatch={dispatch}
           openCreateModal={openCreateModal}
+          deleteTrack={deleteTrack}
         />
       </Row>
     </Container>

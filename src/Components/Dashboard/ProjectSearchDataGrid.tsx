@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid, GridColDef, getGridStringOperators } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, getGridStringOperators, GridSelectionModel } from "@mui/x-data-grid";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,6 +24,7 @@ type searchProps = {
   openNotesModal: any;
   dispatch: any;
   openCreateModal: any
+  deleteTrack: any
 };
 
 type editNotesPropTypes = {
@@ -31,6 +32,7 @@ type editNotesPropTypes = {
 };
 
 export default function ProjectSearchDataGrid(props: searchProps) {
+  const [selectionModel, setSelectionModel] = React.useState<GridSelectionModel>([]);
 
   const columns: GridColDef[] = [
     {
@@ -134,7 +136,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         <div>
           <EditIcon className="icon editIcon" onClick={(() => editModal(params))} />
           &nbsp;&nbsp;&nbsp;
-          <DeleteIcon />
+          <DeleteIcon onClick={(() => deleteTrack(params))} />
         </div>
       ),
     },
@@ -147,6 +149,14 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const editModal = (params: object) => {
     props.openCreateModal(params)
   };
+
+  const deleteTrack = (params: any) => {
+    if (selectionModel.length > 0) {
+      props.deleteTrack(selectionModel)
+    } else {
+      props.deleteTrack([params.row.trackId])
+    }
+  }
 
   const colorModeContext = useColor();
 
@@ -191,6 +201,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           onPageSizeChange={(newPageSize) => console.log(newPageSize)}
           hideFooter={true}
           filterMode="server"
+          onSelectionModelChange={(newSelectionModel) => {
+            setSelectionModel(newSelectionModel);
+          }}
           onFilterModelChange={onFilterModelChange}
           className={`${colorModeContext.colorMode === "light" ? "" : "text-white"
             }`}

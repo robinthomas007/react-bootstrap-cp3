@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
+import Datepicker from './../../Common/DatePicker'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -15,7 +16,8 @@ type selectedFiltersProps = {
   leakFrom: string,
   leakTo: string,
   releaseFrom: string,
-  releaseTo: string
+  releaseTo: string,
+  policyIds: Array<object>
 }
 
 type filterProps = {
@@ -23,13 +25,14 @@ type filterProps = {
   handleSubmit: any;
   handleClose: any;
   labelFacets: Array<any>;
-  selectedFilters: selectedFiltersProps
-  setSelectedFilters: any
+  policyFacets: Array<any>;
+  selectedFilters: selectedFiltersProps;
+  setSelectedFilters: any;
 }
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds } = props.selectedFilters
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
       searchWithins: searchWithins || ["ALL"],
@@ -38,7 +41,8 @@ export default function FilterModal(props: filterProps) {
       leakFrom: leakFrom || null,
       leakTo: leakTo || null,
       releaseFrom: releaseFrom || null,
-      releaseTo: releaseTo || null
+      releaseTo: releaseTo || null,
+      policyIds: policyIds || null
     }
   );
 
@@ -121,7 +125,15 @@ export default function FilterModal(props: filterProps) {
               <Col md={6}>
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Label</Form.Label>
-                  <SelectField value={labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
+                  <SelectField value={searchFilter.labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="pb-20">
+              <Col md={6}>
+                <Form.Group controlId="policyIds" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Policy</Form.Label>
+                  <SelectField value={searchFilter.policyIds} options={props.policyFacets} isMulti={true} name="policyIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>
@@ -130,13 +142,17 @@ export default function FilterModal(props: filterProps) {
                 <div>
                   <Form.Group controlId="leakFrom" className="d-flex align-items-center">
                     <Form.Label className="form-label-width">Leak Date</Form.Label>
-                    <Form.Control value={leakFrom} type="date" name="leakFrom" placeholder="Leak Date From" onChange={handleChange} />
+                    <Datepicker selected={searchFilter.leakFrom} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, leakFrom: date })
+                    }} />
                   </Form.Group>
                 </div>
                 <div>
                   <Form.Group controlId="leakTo" className="d-flex align-items-center">
                     <Form.Label className="form-label-sm-width">to</Form.Label>
-                    <Form.Control value={leakTo} type="date" name="leakTo" placeholder="Leak Date To" onChange={handleChange} />
+                    <Datepicker selected={searchFilter.leakTo} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, leakTo: date })
+                    }} />
                   </Form.Group>
                 </div>
               </Col>
@@ -146,13 +162,17 @@ export default function FilterModal(props: filterProps) {
                 <div>
                   <Form.Group controlId="releaseFrom" className="d-flex align-items-center">
                     <Form.Label className="form-label-width">Release Date</Form.Label>
-                    <Form.Control value={releaseFrom} type="date" name="releaseFrom" placeholder="Release From" onChange={handleChange} />
+                    <Datepicker selected={searchFilter.releaseFrom} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, releaseFrom: date })
+                    }} />
                   </Form.Group>
                 </div>
                 <div>
                   <Form.Group controlId="releaseTo" className="d-flex align-items-center">
                     <Form.Label className="form-label-sm-width">to</Form.Label>
-                    <Form.Control value={releaseTo} type="date" name="releaseTo" placeholder="Release To" onChange={handleChange} />
+                    <Datepicker selected={searchFilter.releaseTo} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, releaseTo: date })
+                    }} />
                   </Form.Group>
                 </div>
               </Col>
