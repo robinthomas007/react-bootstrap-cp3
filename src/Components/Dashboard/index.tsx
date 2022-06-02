@@ -265,7 +265,7 @@ const Dashboard = () => {
         />
       )}
 
-      <Row className="bg-header-theme text-white justify-content-md-center min-row-ht-100 pt-3">
+      <Row className="justify-content-md-center min-row-ht-100 mt-5">
         <Col md={4} className="align-item-center align-items-center ">
           <InputGroup>
             <Button
