@@ -174,7 +174,7 @@ export default function FilterModal(props) {
                       <Form.Control value={track.title} type="text" name="title" placeholder="Enter Title" onChange={(e) =>
                         setTrack({ ...track, title: e.target.value })
                       } />
-                      <span className="alt-title-icon"><AddCircleIcon onClick={() => setAltTitle([...altTitle, Number(altTitle[altTitle.length - 1]) + 1])} /></span>
+                      <span className="alt-title-icon"><AddCircleIcon onClick={() => setAltTitle([...altTitle, altTitle.length > 0 ? altTitle[altTitle.length - 1] + 1 : 0])} /></span>
                     </Form.Group>
                   </Col>
                 </Row>
