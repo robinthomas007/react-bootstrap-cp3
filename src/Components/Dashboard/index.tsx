@@ -287,7 +287,7 @@ const Dashboard = () => {
             <Button
               handleClick={() => setSearchTerm(search)}
               variant="secondary"
-              label="search"
+              label="Search"
               className="text-white"
             />
           </InputGroup>

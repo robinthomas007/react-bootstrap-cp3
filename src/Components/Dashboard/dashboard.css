@@ -101,3 +101,15 @@
   background: #333333 !important;
   color: #fff;
 }
+
+.MuiDataGrid-row .MuiDataGrid-cell {
+  white-space: break-spaces !important;
+}
+
+.MuiDataGrid-row .MuiDataGrid-cell {
+  overflow: scroll !important;
+}
+
+.MuiDataGrid-row .MuiDataGrid-cell::-webkit-scrollbar {
+  display: none;
+}

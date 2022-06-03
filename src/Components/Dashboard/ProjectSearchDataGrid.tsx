@@ -73,6 +73,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       headerAlign: "left",
       align: "left",
       filterOperators,
+      maxWidth: 135,
     },
     {
       field: "label",
@@ -93,6 +94,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       align: "left",
       filterOperators,
       filterable: false,
+      maxWidth: 135,
     },
     {
       field: "leakDate",
@@ -103,6 +105,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       align: "left",
       filterOperators,
       filterable: false,
+      maxWidth: 135,
     },
     {
       field: "blockPolicyName",
@@ -121,6 +124,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       headerAlign: "center",
       align: "center",
       filterable: false,
+      maxWidth: 135,
       renderCell: (params) => (
         <QuestionAnswerIcon onClick={() => NotesModal(params)} />
       ),
@@ -132,6 +136,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      maxWidth: 135,
       renderCell: (params) => (
         <div>
           <EditIcon className="icon editIcon" onClick={(() => editModal(params))} />
@@ -187,7 +192,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
 
   return (
     <Col md={11}>
-      <div style={{ height: props.height, width: "100%" }}>
+      <div style={{ height: props.height, width: "100%", flexGrow: 1 }}>
         <DataGrid
           sortingMode="server"
           onSortModelChange={onSortModelChange}
