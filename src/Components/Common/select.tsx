@@ -106,6 +106,7 @@ const SelectField = (props: selectProps) => {
     options={props.options}
     isMulti={props.isMulti}
     hideSelectedOptions={false}
+    placeholder="Select.."
     name={props.name}
     closeMenuOnSelect={!props.isMulti}
     components={{

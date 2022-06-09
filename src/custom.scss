@@ -39,15 +39,6 @@ $border-radius:  2px;
     color: #fff !important;
   }
   //MUI DATA GRID THEME CHANGES FOR DARK BACKGROUND
-  .MuiDataGrid-menuList, .MuiDataGrid-filterForm {
-    background: #333333;
-  }
-  .MuiInput-root, .MuiInputLabel-root {
-    color: #ffffff;
-  }
-  .MuiCheckbox-root{
-    color: #ddd
-  }
   .MuiButtonBase-root, .MuiPaginationItem-ellipsis {
     color: #fff;
   }
@@ -64,9 +55,6 @@ $border-radius:  2px;
 
 .MuiPaginationItem-root.Mui-selected {
   background-color:#F57F17 !important;
-}
-.Mui-checked {
-  color:#F57F17 !important;
 }
 
 // $form-check-input-width:                 1.5em !default;

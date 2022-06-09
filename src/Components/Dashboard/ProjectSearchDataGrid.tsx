@@ -1,5 +1,4 @@
 import React from "react";
-import { DataGrid, GridColDef, getGridStringOperators, GridSelectionModel } from "@mui/x-data-grid";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -7,10 +6,10 @@ import Col from "react-bootstrap/Col";
 import { useColor } from "../../Context/ColorModeContext";
 import Tooltip from 'react-bootstrap/Tooltip'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-
-const filterOperators = getGridStringOperators().filter((operator) =>
-  ["contains"].includes(operator.value)
-);
+import Table from 'react-bootstrap/Table'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -27,193 +26,121 @@ type searchProps = {
   deleteTrack: any
 };
 
-type editNotesPropTypes = {
-  row: object;
-};
-
 export default function ProjectSearchDataGrid(props: searchProps) {
-  const [selectionModel, setSelectionModel] = React.useState<GridSelectionModel>([]);
-
-  const columns: GridColDef[] = [
-    {
-      field: "title",
-      headerName: "Track Title",
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterOperators,
-      renderCell: (params: any) => {
-        if (params.row.subTitle) {
-          return (<OverlayTrigger
-            placement="top"
-            overlay={<Tooltip id="button-tooltip">
-              {params.row.subTitle}
-            </Tooltip>}
-          >
-            <span>{params.row.title}</span>
-          </OverlayTrigger>)
-        }
-        return (
-          <span>{params.row.title}</span>
-        )
-      }
-    },
-    {
-      field: "artist",
-      headerName: "Artist",
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterOperators,
-    },
-    {
-      field: "isrc",
-      headerName: "ISRC",
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterOperators,
-      maxWidth: 135,
-    },
-    {
-      field: "label",
-      headerName: "Label",
-      sortable: true,
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterOperators,
-      filterable: false,
-    },
-    {
-      field: "releaseDate",
-      headerName: "Release Date",
-      sortable: true,
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterOperators,
-      filterable: false,
-      maxWidth: 135,
-    },
-    {
-      field: "leakDate",
-      headerName: "Leak Date",
-      sortable: true,
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterOperators,
-      filterable: false,
-      maxWidth: 135,
-    },
-    {
-      field: "blockPolicyName",
-      headerName: "Policy",
-      sortable: false,
-      flex: 1,
-      headerAlign: "left",
-      align: "left",
-      filterable: false,
-    },
-    {
-      field: "comments",
-      headerName: "Notes",
-      sortable: false,
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      filterable: false,
-      maxWidth: 135,
-      renderCell: (params) => (
-        <QuestionAnswerIcon onClick={() => NotesModal(params)} />
-      ),
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      sortable: false,
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      maxWidth: 135,
-      renderCell: (params) => (
-        <div>
-          <EditIcon className="icon editIcon" onClick={(() => editModal(params))} />
-          &nbsp;&nbsp;&nbsp;
-          <DeleteIcon onClick={(() => deleteTrack(params))} />
-        </div>
-      ),
-    },
-  ];
-
-  const NotesModal = (params: editNotesPropTypes) => {
-    props.openNotesModal(params.row);
-  };
-
-  const editModal = (params: object) => {
-    props.openCreateModal(params)
-  };
-
-  const deleteTrack = (params: any) => {
-    if (selectionModel.length > 0) {
-      props.deleteTrack(selectionModel)
-    } else {
-      props.deleteTrack([params.row.trackId])
-    }
-  }
+  const [selectedRows, setSelectedRows] = React.useState<any>([]);
+  const [activeSort, setActiveSort] = React.useState('releaseDate');
+  const [sortOrder, setSortOrder] = React.useState('desc');
 
   const colorModeContext = useColor();
 
-  const onSortModelChange = (data: any[]) => {
-    if (data.length > 0)
-      props.onSortModelChange({
-        sortColumn: data[0].field,
-        sortOrder: data[0].sort,
-      });
-    else
-      props.onSortModelChange({ sortColumn: "releaseDate", sortOrder: "desc" });
+  const NotesModal = (track: object) => {
+    props.openNotesModal(track);
   };
-  const onFilterModelChange = (data: any) => {
-    data = data.items;
-    if (data && data.length > 0 && data[0].hasOwnProperty("value")) {
-      let item = data[0];
-      if (["title", "artist", "isrc"].includes(item.columnField)) {
-        props.dispatch({
-          type: "SET_SEARCH",
-          payload: {
-            searchTerm: item.value,
-            filter: { searchWithins: [item.columnField] },
-          },
-        });
-      }
+
+  const editModal = (track: object) => {
+    props.openCreateModal(track)
+  };
+
+  const deleteTrack = (track: any) => {
+    if (selectedRows.length > 0) {
+      props.deleteTrack(selectedRows)
+    } else {
+      props.deleteTrack([track.trackId])
     }
-  };
+  }
+
+  const handleCheckboxAll = (e: any) => {
+    if (e.target.checked) {
+      setSelectedRows(props.tracks.map((t: any) => t.trackId))
+    } else {
+      setSelectedRows([])
+    }
+  }
+
+  const handleCheckboxChange = (e: any, trackId: Number) => {
+    if (e.target.checked) {
+      setSelectedRows([...selectedRows, trackId])
+    } else {
+      setSelectedRows(selectedRows.filter((id: any) => id !== trackId))
+    }
+  }
+
+  const handleSortOrderChange = (order: string, column: string) => {
+    setActiveSort(column)
+    setSortOrder(order)
+    props.onSortModelChange({ sortColumn: column, sortOrder: order });
+  }
 
   return (
     <Col md={11}>
-      <div style={{ height: props.height, width: "100%", flexGrow: 1 }}>
-        <DataGrid
-          sortingMode="server"
-          onSortModelChange={onSortModelChange}
-          rows={props.tracks}
-          sortingOrder={["asc", "desc"]}
-          getRowId={(row) => row.trackId}
-          columns={columns}
-          pageSize={props.limit}
-          checkboxSelection
-          disableSelectionOnClick
-          onPageSizeChange={(newPageSize) => console.log(newPageSize)}
-          hideFooter={true}
-          filterMode="server"
-          onSelectionModelChange={(newSelectionModel) => {
-            setSelectionModel(newSelectionModel);
-          }}
-          onFilterModelChange={onFilterModelChange}
-          className={`${colorModeContext.colorMode === "light" ? "" : "text-white"
-            }`}
-        />
-      </div>
+      <Table responsive className={`${colorModeContext.colorMode === "light" ? "srch-dg-tbl" : "srch-dg-tbl text-white"}`}>
+        <thead>
+          <tr>
+            <th><input type="checkbox" checked={selectedRows.length === props.tracks.length} className="form-check-input" onChange={handleCheckboxAll} /></th>
+            <th>Track Title <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'title' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'title')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'title')} />}</span></th>
+            <th>Artist <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'artist' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'artist')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'artist')} />}</span></th>
+            <th>ISRC <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'isrc' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'isrc')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'isrc')} />}</span></th>
+            <th>Label <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'label' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'label')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'label')} />}</span></th>
+            <th>Policy <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'blockPolicyName' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'blockPolicyName')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'blockPolicyName')} />}</span></th>
+            <th>Leak Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'leakDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'leakDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'leakDate')} />}</span></th>
+            <th>Release Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'releaseDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'releaseDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'releaseDate')} />}</span></th>
+            <th>Source</th>
+            <th className="text-center">Notes</th>
+            <th className="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.tracks.map((track: any, index: number) => (
+            <React.Fragment key={index}>
+              <tr key={index} className={`${selectedRows.includes(track.trackId) ? 'selected-row' : ''}`}>
+                <td><input type="checkbox" checked={selectedRows.includes(track.trackId)} onChange={(e) => handleCheckboxChange(e, track.trackId)} className="form-check-input" /></td>
+                <td>
+                  {track.subTitle ?
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="button-tooltip">{track.subTitle}</Tooltip>}>
+                      <span>{track.title}</span>
+                    </OverlayTrigger> : track.title}
+                </td>
+                <td>{track.artist}</td>
+                <td>{track.isrc}</td>
+                <td>{track.label}</td>
+                <td>{track.blockPolicyName}</td>
+                <td>{track.leakDate}</td>
+                <td>{track.releaseDate}</td>
+                <td><span className="soruce-box grd">GRD <KeyboardArrowDownIcon /></span></td>
+                <td className="text-center"><QuestionAnswerIcon onClick={() => NotesModal(track)} /></td>
+                <td>
+                  <div className="action-icons">
+                    <EditIcon className="icon editIcon" onClick={(() => editModal(track))} />
+                    <ArchiveIcon />
+                    <DeleteIcon onClick={(() => deleteTrack(track))} />
+                  </div>
+                </td>
+              </tr>
+              {track.extended_tracks && <tr className="extended-list">
+                <td></td>
+                <td>Some Track Title 2</td>
+                <td>Some Artist Name</td>
+                <td>0123499999990</td>
+                <td>Universal Music</td>
+                <td>Block</td>
+                <td></td>
+                <td></td>
+                <td><span className="soruce-box cp3">CP3</span></td>
+                <td className="text-center"><QuestionAnswerIcon onClick={() => NotesModal(track)} /></td>
+                <td>
+                  <div className="action-icons">
+                    <EditIcon className="icon editIcon" onClick={(() => editModal(track))} />
+                    <ArchiveIcon />
+                    <DeleteIcon onClick={(() => deleteTrack(track))} />
+                  </div>
+                </td>
+              </tr>}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </Table>
     </Col>
   );
 }

@@ -7,10 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.MuiDataGrid-root {
-  font-family: 'Roboto Condensed' !important;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -123,10 +119,6 @@ code {
 
 .footer-actions>* {
   margin: auto 5px;
-}
-
-.MuiDataGrid-root .MuiDataGrid-cell:focus-within {
-  outline: none !important;
 }
 
 input[type="date"] {

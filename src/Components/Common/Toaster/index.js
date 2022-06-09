@@ -1,12 +1,12 @@
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './react-toastify-override.css';
 
 const CustomToast = () => (
   <ToastContainer
     closeButton={false}
-    position="top-right"
+    position="top-center"
     autoClose={false}
     hideProgressBar={false}
     closeOnClick
@@ -14,6 +14,7 @@ const CustomToast = () => (
     draggable={false}
     pauseOnFocusLoss={false}
     pauseOnHover={false}
+    transition={Zoom}
   />
 );
 

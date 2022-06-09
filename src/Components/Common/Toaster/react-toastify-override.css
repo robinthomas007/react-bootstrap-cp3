@@ -11,17 +11,24 @@
   right: 0;
   top: 0;
   padding: 0;
-  opacity: 0.9;
 }
 
-.Toastify__toast--info {
-  background-color: #01578b;
-  color: #F5F5F5;
+.Toastify__toast--success {
+  background-color: #F57F17;
+  color: #FFFFFF;
+}
+
+.Toastify__toast--success svg {
+  fill: #FFFFFF;
 }
 
 .Toastify__toast--error {
   background-color: #7f1b2e;
   color: #F5F5F5;
+}
+
+.Toastify__progress-bar--success {
+  background-color: #E5E5E5;
 }
 
 .Toastify__toast-body {

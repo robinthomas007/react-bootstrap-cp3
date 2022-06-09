@@ -127,9 +127,9 @@ const Dashboard = () => {
     setOpenFilter(true);
   };
 
-  const openCreateModal = (params: any) => {
-    if (params.id) {
-      setEditParams(params.row)
+  const openCreateModal = (track: any) => {
+    if (track.trackId) {
+      setEditParams(track)
     }
     setShowCreate(true);
   };

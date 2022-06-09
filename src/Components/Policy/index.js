@@ -26,7 +26,7 @@ export default function Policy() {
     policyName: "",
     platform: [],
     action: "",
-    duration: {},
+    duration: '',
     when: { id: 'Pre-Release', name: 'Pre-Release' },
     date: null,
     exceptions: []
@@ -35,7 +35,7 @@ export default function Policy() {
   const defaultException = {
     platform: [],
     action: "",
-    duration: {},
+    duration: '',
     when: { id: 'Pre-Release', name: 'Pre-Release' },
     date: "",
   }
@@ -59,6 +59,9 @@ export default function Policy() {
     const [option] = optionArray;
     if (option) {
       const platformsList = option.platform.split(",");
+      if (platformsList.length === 4) {
+        platformsList.push('ALL')
+      }
       setPolicy({
         ...option,
         policyName: option.policyName,
@@ -77,6 +80,9 @@ export default function Policy() {
         const exceptionDetails = []
         option.exceptions.forEach(element => {
           const exceptionPlatformsList = element.platform.split(",");
+          if (exceptionPlatformsList.length === 4) {
+            exceptionPlatformsList.push('ALL')
+          }
           const obj = {
             ...element,
             platform: PLATFORM_LIST.filter((p) =>
@@ -107,14 +113,14 @@ export default function Policy() {
     policyException.forEach((exec) => {
       exception.push({
         ...exec,
-        platform: exec.platform ? exec.platform.map((p) => p.id).join(",") : '',
+        platform: exec.platform ? exec.platform.filter((p) => p.id !== 'ALL').map((p) => p.id !== 'ALL' && p.id).join(",") : '',
         duration: exec.duration ? exec.duration.id : '',
         release: exec.when ? exec.when.id : ''
       })
     })
     const data = {
       ...policy,
-      platform: policy.platform ? policy.platform.map((p) => p.id).join(",") : '',
+      platform: policy.platform ? policy.platform.filter((p) => p.id !== 'ALL').map((p) => p.id !== 'ALL' && p.id).join(",") : '',
       duration: policy.duration ? policy.duration.id : '',
       release: policy.when ? policy.when.id : '',
       exceptions: exception,
@@ -177,7 +183,7 @@ export default function Policy() {
   const destructurePolicyPlatform = (platform) => {
     platform = platform.filter((p) => p.id !== 'ALL')
     for (let i = 0; i < platform.length; i++) {
-      // not a good practice bt we dont have other option.
+      // just for display purpose ,not a good practice bt we dont have other option.
       if (platform[i].id === 'youtube') {
         platform[i] = 'YouTube'
       } else {

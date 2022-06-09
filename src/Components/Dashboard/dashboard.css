@@ -102,14 +102,88 @@
   color: #fff;
 }
 
-.MuiDataGrid-row .MuiDataGrid-cell {
-  white-space: break-spaces !important;
+/* react-bootstrap table css */
+
+.srch-dg-tbl thead th, .srch-dg-tbl td {
+  font-weight: 400;
+  font-size: 14px;
+  /* color: #212121; */
+  padding: 14px 10px !important;
 }
 
-.MuiDataGrid-row .MuiDataGrid-cell {
-  overflow: scroll !important;
+.srch-dg-tbl thead th {
+  font-weight: 700;
 }
 
-.MuiDataGrid-row .MuiDataGrid-cell::-webkit-scrollbar {
-  display: none;
+.srch-dg-tbl tbody {
+  border-top: none !important;
+}
+
+.srch-dg-tbl thead tr {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd !important;
+}
+
+.srch-dg-tbl .form-check-input {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+span.sort-icons {
+  visibility: hidden;
+}
+
+.srch-dg-tbl thead th:hover span.sort-icons {
+  visibility: visible;
+}
+
+span.sort-icons svg {
+  color: #979797;
+  width: 25px;
+  height: 25px;
+  padding: 2px;
+}
+
+span.sort-icons svg:hover {
+  background-color: rgb(250, 246, 246);
+  border-radius: 50px;
+  padding: 2px;
+}
+
+.srch-dg-tbl thead th:not(:first-child) {
+  min-width: 100px !important;
+}
+
+.srch-dg-tbl thead th:first-child {
+  min-width: 40px !important;
+}
+
+.selected-row {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+}
+
+.action-icons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.srch-dg-tbl .extended-list {
+  background: #F5F5F5;
+}
+
+.srch-dg-tbl .soruce-box {
+  border-radius: 4px;
+  padding: 2px 0px;
+  color: #000;
+  max-width: 65px;
+  display: block;
+  text-align: center;
+}
+
+.grd {
+  background-color: rgb(244, 67, 54, 0.6);
+}
+
+.cp3 {
+  background-color: rgba(245, 127, 23, 0.6);
 }
