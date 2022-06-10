@@ -71,6 +71,21 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     props.onSortModelChange({ sortColumn: column, sortOrder: order });
   }
 
+  const getPrivacyToolTip = (tooltip: any) => {
+    let tooltipContent = null;
+    let exceptionContent = ''
+    if (tooltip.policyDetails) {
+      tooltipContent = <div>{tooltip.policyDetails.action.charAt(0).toUpperCase() + tooltip.policyDetails.action.slice(1)}  {tooltip.policyDetails.platform}  {tooltip.policyDetails.release} {tooltip.policyDetails.duration} {tooltip.policyDetails.date} </div>
+    }
+
+    if (tooltip.exceptionDetails && tooltip.exceptionDetails.length > 0) {
+      exceptionContent = tooltip.exceptionDetails.map((exception: any, i: number) => {
+        return <div className="exception" key={i}>{exception.action.charAt(0).toUpperCase() + exception.action.slice(1)} {exception.platform}  {exception.release} {exception.duration} {exception.date}</div>
+      })
+    }
+    return <div>{tooltipContent} {exceptionContent !== '' ? <strong>Exception : </strong> : ''}{exceptionContent}</div>;
+  }
+
   return (
     <Col md={11}>
       <Table responsive className={`${colorModeContext.colorMode === "light" ? "srch-dg-tbl" : "srch-dg-tbl text-white"}`}>
@@ -105,7 +120,12 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 <td>{track.artist}</td>
                 <td>{track.isrc}</td>
                 <td>{track.label}</td>
-                <td>{track.blockPolicyName}</td>
+                <td> {track.policyDetails ?
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip id="button-tooltip">{getPrivacyToolTip(track)}</Tooltip>}>
+                    <span>{track.title}</span>
+                  </OverlayTrigger> : track.blockPolicyName}</td>
                 <td>{track.leakDate}</td>
                 <td>{track.releaseDate}</td>
                 <td><span className="soruce-box grd">GRD <KeyboardArrowDownIcon /></span></td>

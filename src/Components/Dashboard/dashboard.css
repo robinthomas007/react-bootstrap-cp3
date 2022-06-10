@@ -107,7 +107,7 @@
 .srch-dg-tbl thead th, .srch-dg-tbl td {
   font-weight: 400;
   font-size: 14px;
-  /* color: #212121; */
+  max-width: 180px;
   padding: 14px 10px !important;
 }
 
@@ -151,10 +151,14 @@ span.sort-icons svg:hover {
 }
 
 .srch-dg-tbl thead th:not(:first-child) {
-  min-width: 100px !important;
+  min-width: 122px !important;
 }
 
-.srch-dg-tbl thead th:first-child {
+.srch-dg-tbl thead th:first-child, .srch-dg-tbl tbody td:first-child {
+  max-width: 40px !important;
+}
+
+.srch-dg-tbl thead th:nth-child(10) {
   min-width: 40px !important;
 }
 
@@ -173,8 +177,7 @@ span.sort-icons svg:hover {
 
 .srch-dg-tbl .soruce-box {
   border-radius: 4px;
-  padding: 2px 0px;
-  color: #000;
+  padding: 2px 5px;
   max-width: 65px;
   display: block;
   text-align: center;

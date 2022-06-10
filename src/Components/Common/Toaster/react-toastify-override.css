@@ -14,7 +14,7 @@
 }
 
 .Toastify__toast--success {
-  background-color: #F57F17;
+  background-color: rgba(245, 127, 23, 0.8);
   color: #FFFFFF;
 }
 
