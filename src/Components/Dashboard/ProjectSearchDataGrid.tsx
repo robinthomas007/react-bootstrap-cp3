@@ -124,7 +124,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip id="button-tooltip">{getPrivacyToolTip(track)}</Tooltip>}>
-                    <span>{track.title}</span>
+                    <span>{track.blockPolicyName}</span>
                   </OverlayTrigger> : track.blockPolicyName}</td>
                 <td>{track.leakDate}</td>
                 <td>{track.releaseDate}</td>
