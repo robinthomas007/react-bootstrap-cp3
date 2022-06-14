@@ -30,6 +30,7 @@ export default function FilterModal(props) {
     blockPolicyId: '',
   })
   const [loading, setLoading] = useState(false)
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
     if (props.editParams && props.editParams.trackId) {
@@ -56,65 +57,71 @@ export default function FilterModal(props) {
   }, [props])
 
   const handleSubmit = () => {
-    setLoading(true);
-    const subTitle = []
-    Object.keys(track).forEach(function (k, i) {
-      if (k.includes('altTitile')) {
-        subTitle.push(track[k])
-      }
-    })
-    const data = {
-      title: track.title,
-      artist: track.artist,
-      isrc: track.isrc,
-      leakDate: track.leakDate,
-      releaseDate: track.releaseDate,
-      blockPolicyId: track.blockPolicyId ? Number(track.blockPolicyId.id) : '',
-      labelId: track.labelId ? Number(track.labelId.id) : '',
-      subTitle: subTitle.length > 0 ? subTitle.join(",") : '',
-      username: getUsername(),
-    };
-    if (track.trackId) {
-      axios
-        .put(BASE_URL + "Track/UpdateTracks", { ...data, trackId: track.trackId }, config)
-        .then(() => {
-          toast.success('Track details updated successfully!', {
-            autoClose: 3000,
-            closeOnClick: true,
-          });
-          props.handleClose()
-          props.getSearchPageData()
-        })
-        .catch((err) => {
-          if (err.response && err.response.data) {
-            toast.error(err.response.data.Message, {
-              autoClose: 3000,
-              closeOnClick: true,
-            });
-          }
-        })
-        .finally(() => setLoading(false));
+    const form = document.querySelector('#create-resource-form');
+    if (form.checkValidity() === false) {
+      setValidated(true);
     } else {
-      axios
-        .post(BASE_URL + "Track/AddTracks", data, config)
-        .then((response) => {
-          toast.success('Track Created successfully!', {
-            autoClose: 3000,
-            closeOnClick: true,
-          });
-          setTrack({ ...track, trackId: response.data.trackId })
-          props.handleClose()
-          props.getSearchPageData()
-        })
-        .catch((err) => {
-          if (err.response && err.response.data) {
-            toast.error(err.response.data.Message, {
+      setValidated(false);
+      setLoading(true);
+      const subTitle = []
+      Object.keys(track).forEach(function (k, i) {
+        if (k.includes('altTitile')) {
+          subTitle.push(track[k])
+        }
+      })
+      const data = {
+        title: track.title,
+        artist: track.artist,
+        isrc: track.isrc,
+        leakDate: track.leakDate,
+        releaseDate: track.releaseDate,
+        blockPolicyId: track.blockPolicyId ? Number(track.blockPolicyId.id) : '',
+        labelId: track.labelId ? Number(track.labelId.id) : '',
+        subTitle: subTitle.length > 0 ? subTitle.join(",") : '',
+        username: getUsername(),
+      };
+      if (track.trackId) {
+        axios
+          .put(BASE_URL + "Track/UpdateTracks", { ...data, trackId: track.trackId }, config)
+          .then(() => {
+            toast.success('Track details updated successfully!', {
               autoClose: 3000,
               closeOnClick: true,
             });
-          }
-        })
-        .finally(() => setLoading(false));
+            props.handleClose()
+            props.getSearchPageData()
+          })
+          .catch((err) => {
+            if (err.response && err.response.data) {
+              toast.error(err.response.data.Message, {
+                autoClose: 3000,
+                closeOnClick: true,
+              });
+            }
+          })
+          .finally(() => setLoading(false));
+      } else {
+        axios
+          .post(BASE_URL + "Track/AddTracks", data, config)
+          .then((response) => {
+            toast.success('Track Created successfully!', {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
+            setTrack({ ...track, trackId: response.data.trackId })
+            props.handleClose()
+            props.getSearchPageData()
+          })
+          .catch((err) => {
+            if (err.response && err.response.data) {
+              toast.error(err.response.data.Message, {
+                autoClose: 3000,
+                closeOnClick: true,
+              });
+            }
+          })
+          .finally(() => setLoading(false));
+      }
     }
   }
 
@@ -164,16 +171,19 @@ export default function FilterModal(props) {
       </Modal.Header>
       <Modal.Body>
         <Container>
-          <Form>
+          <Form noValidate validated={validated} id="create-resource-form" onSubmit={handleSubmit}>
             <Row className="pb-20">
               <Col md={6}>
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group controlId="title" className="d-flex align-items-center">
                       <Form.Label className="form-label-width">Title</Form.Label>
-                      <Form.Control value={track.title} type="text" name="title" placeholder="Enter Title" onChange={(e) =>
-                        setTrack({ ...track, title: e.target.value })
-                      } />
+                      <div className="f-width">
+                        <Form.Control required value={track.title} type="text" name="title" placeholder="Enter Title" onChange={(e) =>
+                          setTrack({ ...track, title: e.target.value })
+                        } />
+                        <Form.Control.Feedback type="invalid">Looks good!</Form.Control.Feedback>
+                      </div>
                       <span className="alt-title-icon"><AddCircleIcon onClick={() => setAltTitle([...altTitle, altTitle.length > 0 ? altTitle[altTitle.length - 1] + 1 : 0])} /></span>
                     </Form.Group>
                   </Col>

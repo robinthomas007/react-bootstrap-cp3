@@ -40,13 +40,8 @@ code {
 /* TODO */
 
 .form-control {
-  border: none !important;
+  border: none;
   background: #F5F5F5 !important;
-}
-
-.form-check-input:checked {
-  background-color: #F57F17 !important;
-  border-color: #F57F17 !important;
 }
 
 .form-control:focus, .form-control:active, .form-control:hover {
@@ -125,8 +120,6 @@ input[type="date"] {
   width: 140px;
 }
 
-
-
 .cp3-header .nav-item-link a:hover .line, .cp3-header .nav-item a.active .line {
   position: absolute;
   width: 100%;
@@ -134,4 +127,27 @@ input[type="date"] {
   background: #FBC02D;
   top: 40px;
   left: 10px;
+}
+
+
+.was-validated .form-control:invalid, .form-control.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.was-validated .form-control:valid:focus, .form-control.is-valid:focus {
+  border: none !important;
+}
+
+.was-validated .form-control:valid, .form-control.is-valid {
+  border: none !important;
+}
+
+.invalid-feedback {
+  background: #BD1818;
+  color: #fff !important;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-top: 0px !important;
+  width: auto !important;
 }
