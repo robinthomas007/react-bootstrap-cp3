@@ -22,7 +22,8 @@ import Badge from "react-bootstrap/Badge";
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { useAuth } from './../../Context/authContext'
 
 type notesPropTypes = {
   trackId?: number;
@@ -37,6 +38,8 @@ const Dashboard = () => {
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
   const [showCreate, setShowCreate] = React.useState(false);
   const [editParams, setEditParams] = React.useState({})
+
+  const auth = useAuth();
 
   const getSearchPageData = React.useCallback(() => {
     const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter } = state.searchCriteria;
@@ -330,7 +333,7 @@ const Dashboard = () => {
               />
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
-              <Button handleClick={openCreateModal} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />
+              {auth.user.role === 'admin' && <Button handleClick={openCreateModal} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />}
               <Button handleClick={() => { }} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
             </Col>
           </Row>
@@ -350,6 +353,7 @@ const Dashboard = () => {
           dispatch={dispatch}
           openCreateModal={openCreateModal}
           deleteTrack={deleteTrack}
+          role={auth.user.role}
         />
       </Row>
     </Container>

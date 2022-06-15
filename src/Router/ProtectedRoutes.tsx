@@ -6,7 +6,7 @@ import Header from './../Components/Header'
 export const ProtectedRoutes = () => {
   const auth = useAuth();
   const location = useLocation()
-  if (!auth.user) {
+  if (auth.user && auth.user.role !== 'admin') {
     return <Navigate to='/' state={{ path: location.pathname }} />
   }
   return (

@@ -14,6 +14,7 @@ import Nav from 'react-bootstrap/Nav'
 import { NavLink } from 'react-router-dom';
 import SearchIcon from "@mui/icons-material/Search";
 import ApprovalIcon from '@mui/icons-material/Approval';
+import { ADMIN } from './../Common/Utils';
 
 export default function Header() {
 
@@ -34,6 +35,7 @@ export default function Header() {
     try {
       const token = getCookie('cp3_auth');
       let user: any = jwt_decode(token);
+      user.role = user.groups.includes(ADMIN) ? 'admin' : 'user'
       localStorage.setItem('user', user);
       auth.login(user)
       console.log("Logged in success --", user)
@@ -41,6 +43,14 @@ export default function Header() {
       console.log("Error getting Token", err)
     }
   }, [])
+
+  const adminNavLinks = [
+    {
+      name: 'Policy',
+      icon: <ApprovalIcon />,
+      path: '/policy'
+    }
+  ]
 
   return (
     <Container fluid>
@@ -56,14 +66,15 @@ export default function Header() {
                 <div className="line"></div>
               </NavLink>
             </Nav.Item>
-            <Nav.Item className="nav-item-link">
-              <NavLink to='/policy'>
-                <ApprovalIcon /> Policy
-                <div className="line"></div>
-              </NavLink>
-            </Nav.Item>
+            {auth.user.role === 'admin' && adminNavLinks.map((nav, i) =>
+              <Nav.Item key={i} className="nav-item-link">
+                <NavLink to={nav.path}>
+                  {nav.icon} {nav.name}
+                  <div className="line"></div>
+                </NavLink>
+              </Nav.Item>
+            )}
             <Nav.Item>
-
               <Nav.Link>
                 <span onClick={colorModeContext.toggleColorMode}>
                   {colorModeContext.colorMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}

@@ -23,7 +23,8 @@ type searchProps = {
   openNotesModal: any;
   dispatch: any;
   openCreateModal: any
-  deleteTrack: any
+  deleteTrack: any,
+  role: string
 };
 
 export default function ProjectSearchDataGrid(props: searchProps) {
@@ -132,9 +133,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 <td className="text-center"><QuestionAnswerIcon onClick={() => NotesModal(track)} /></td>
                 <td>
                   <div className="action-icons">
-                    <EditIcon className="icon editIcon" onClick={(() => editModal(track))} />
+                    {props.role === 'admin' && <EditIcon className="icon editIcon" onClick={(() => editModal(track))} />}
                     <ArchiveIcon />
-                    <DeleteIcon onClick={(() => deleteTrack(track))} />
+                    {props.role === 'admin' && <DeleteIcon onClick={(() => deleteTrack(track))} />}
                   </div>
                 </td>
               </tr>

@@ -5,7 +5,8 @@ type AuthContextProps = {
 }
 type userTypeProps = {
   name: string,
-  unique_name: string
+  unique_name: string,
+  role: String
 }
 type Authype = {
   user: userTypeProps

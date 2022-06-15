@@ -17,3 +17,6 @@ export const config = {
     cp3_auth: getCookie("cp3_auth"),
   },
 };
+
+export const ADMIN = '4d460fe7-b447-454c-bb0d-7f60797a74a0'
+export const USER = '7ac0853c-8182-42cc-b034-9e4804144f75'
