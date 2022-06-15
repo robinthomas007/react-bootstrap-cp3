@@ -40,7 +40,7 @@ code {
 /* TODO */
 
 .form-control {
-  border: none;
+  border: none !important;
   background: #F5F5F5 !important;
 }
 
@@ -131,7 +131,7 @@ input[type="date"] {
 
 
 .was-validated .form-control:invalid, .form-control.is-invalid {
-  border-color: #dc3545 !important;
+  border: 1px solid #dc3545 !important;
 }
 
 .was-validated .form-control:valid:focus, .form-control.is-valid:focus {
@@ -142,6 +142,10 @@ input[type="date"] {
   border: none !important;
 }
 
+.was-validated .form-check-input:valid~.form-check-label, .form-check-input.is-valid~.form-check-label, .was-validated .form-check-input:valid, .form-check-input.is-valid {
+  color: inherit !important;
+}
+
 .invalid-feedback {
   background: #BD1818;
   color: #fff !important;
@@ -150,4 +154,14 @@ input[type="date"] {
   font-weight: bold;
   margin-top: 0px !important;
   width: auto !important;
+  font-size: 12px;
+}
+
+.was-validated :invalid~.invalid-feedback, .was-validated :invalid~.invalid-tooltip, .is-invalid~.invalid-feedback, .is-invalid~.invalid-tooltip {
+  display: inline-block !important;
+}
+
+.was-validated :invalid~.cp3-react-select, .is-invalid~.cp3-react-select {
+  border: 1px solid #dc3545 !important;
+  border-radius: 4px;
 }

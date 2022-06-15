@@ -206,7 +206,7 @@ export default function FilterModal(props) {
                   <Col md={12}>
                     <Form.Group
                       controlId="title"
-                      className="d-flex align-items-center"
+                      className="d-flex align-items-start"
                     >
                       <Form.Label className="form-label-width">
                         Title
@@ -297,14 +297,26 @@ export default function FilterModal(props) {
                       <Form.Label className="form-label-width">
                         Label
                       </Form.Label>
-                      <SelectField
-                        value={track.labelId}
-                        options={props.labelFacets}
-                        name="labelId"
-                        handleChange={(data) =>
-                          setTrack({ ...track, labelId: data })
-                        }
-                      />
+                      <div className="f-width">
+                        <Form.Control
+                          required
+                          value={track.labelId}
+                          name="labelId"
+                          className="d-none"
+                          onChange={(e) => null}
+                        />
+                        <SelectField
+                          value={track.labelId}
+                          options={props.labelFacets}
+                          name="labelId"
+                          handleChange={(data) =>
+                            setTrack({ ...track, labelId: data })
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          Label is required
+                        </Form.Control.Feedback>
+                      </div>
                     </Form.Group>
                   </Col>
                 </Row>
