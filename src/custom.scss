@@ -1,60 +1,50 @@
-$primary:#01579B;
-$white:#ffffff;
-$secondary:#F57F17;
-$light-yellow:#FBC02D;
-$dark-yellow:#FFF176;
-$dark:#212121;
-$gray:#9E9E9E;
-$header-theme:#212121;
-$light:#F5F5F5;
-$sky-blue:#4FC3F7;
-$light-blue:#B3E5FC;
+@import 'colours';
 
 $theme-colors: (
   "primary": $primary,
-  "secondary": #F57F17,
-  "secondary-light":#FBC02D,
-  "header-theme":#212121,
-  "white":#ffffff,
-  "light":#F5F5F5,
+  "secondary": $secondary,
+  "secondary-light":$secondary-light,
+  "header-theme":$header-theme,
+  "white":$white,
+  "light":$light,
 );
 $border-radius:  2px;
 
 .dark-theme {
-  background-color: #000000;
-  color: #ffffff;
-  $body-color: #fff;
+  background-color: $dark-theme-bg;
+  color: $white;
+  $body-color: $white;
   
-  .modal-content {
-    background: #212121;
+  .modal-content {  
+    background: $dark;
   }
   .btn.btn-light {
-    background-color: #333333;
-    color: #fff;
-    border-color: #333333;
+    background-color: $dark-light;
+    color: $white;
+    border-color: $dark-light;
   }
   .form-control{
-    background-color: #333333 !important;
-    border-color: #333333;
+    background-color: $dark-light !important;
+    border-color: $dark-light;
     color: #fff !important;
   }
   //MUI DATA GRID THEME CHANGES FOR DARK BACKGROUND
   .MuiButtonBase-root, .MuiPaginationItem-ellipsis {
-    color: #fff;
+    color: $white;
   }
 }
 
 .light-theme {
-  background-color: #ffffff;
-  color: #000000;
-  $body-color: #111;
+  background-color: $white;
+  color: $dark-theme-bg;
+  $body-color: $dark-v1;
   .close-icon, .txt-fld-search-icon {
-    color: #000;
+    color: $dark-theme-bg;
   }
 }
 
 .MuiPaginationItem-root.Mui-selected {
-  background-color:#F57F17 !important;
+  background-color:$secondary !important;
 }
 
 .form-check-input:checked {

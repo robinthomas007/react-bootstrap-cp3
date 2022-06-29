@@ -129,7 +129,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   </OverlayTrigger> : track.blockPolicyName}</td>
                 <td>{track.leakDate}</td>
                 <td>{track.releaseDate}</td>
-                <td><span className="soruce-box grd">{track.source} <KeyboardArrowDownIcon /></span></td>
+                <td><span className={`soruce-box ${track.source}`}>{track.source} {/*<KeyboardArrowDownIcon />*/}</span></td>
                 <td className="text-center"><QuestionAnswerIcon onClick={() => NotesModal(track)} /></td>
                 <td>
                   <div className="action-icons">

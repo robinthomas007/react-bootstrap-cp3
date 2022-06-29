@@ -83,13 +83,15 @@ export const reducer = (state: searchState, action: searchActions) => {
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm, filter: action.payload.filter },
+        searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm, filter: action.payload.filter, pageNumber: "1" },
+        pageNumber: 1
       }
     case 'SET_FILTER':
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, filter: action.payload.filter },
+        searchCriteria: { ...state.searchCriteria, filter: action.payload.filter, pageNumber: "1" },
+        pageNumber: 1
       }
     case 'DELETE_SUCCESS':
       return {
