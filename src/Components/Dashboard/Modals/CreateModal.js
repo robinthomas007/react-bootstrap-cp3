@@ -81,7 +81,7 @@ export default function FilterModal(props) {
         releaseDate: track.releaseDate,
         blockPolicyId: track.blockPolicyId
           ? Number(track.blockPolicyId.id)
-          : "",
+          : 0,
         labelId: track.labelId ? Number(track.labelId.id) : "",
         subTitle: subTitle.length > 0 ? subTitle.join(",") : "",
         username: getUsername(),
