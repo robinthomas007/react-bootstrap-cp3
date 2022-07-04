@@ -43,11 +43,11 @@ export default function FilterModal(props) {
         });
         setAltTitle(temp);
       }
-
+      console.log(props.editParams.leakDate, "props.editParams.leakDateprops.editParams.leakDateprops.editParams.leakDate")
       setTrack({
         ...props.editParams,
-        leakDate: moment(props.editParams.leakDate).format("MM-DD-YYYY"),
-        releaseDate: moment(props.editParams.releaseDate).format("MM-DD-YYYY"),
+        leakDate: props.editParams.leakDate ? moment(props.editParams.leakDate).format("MM-DD-YYYY") : '',
+        releaseDate: props.editParams.releaseDate ? moment(props.editParams.releaseDate).format("MM-DD-YYYY") : '',
         labelId: props.labelFacets.filter(
           (label) => Number(props.editParams.labelId) === Number(label.id)
         )[0],
@@ -76,6 +76,7 @@ export default function FilterModal(props) {
         title: track.title,
         artist: track.artist,
         isrc: track.isrc,
+        source: props.editParams.trackId ? props.editParams.source : '',
         leakDate: track.leakDate,
         releaseDate: track.releaseDate,
         blockPolicyId: track.blockPolicyId
@@ -351,22 +352,22 @@ export default function FilterModal(props) {
                       <Form.Label className="form-label-width">
                         Leak Date
                       </Form.Label>
-                      <Form.Control
+                      {/*<Form.Control
                         required
                         value={track.leakDate}
                         name="leakDate"
                         className="d-none"
                         onChange={(e) => null}
-                      />
+                      />*/}
                       <Datepicker
                         selected={track.leakDate}
                         handleDateChange={(date) => {
                           setTrack({ ...track, leakDate: date });
                         }}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      {/*<Form.Control.Feedback type="invalid">
                         Leak date is required
-                      </Form.Control.Feedback>
+                      </Form.Control.Feedback>*/}
                     </Form.Group>
                   </Col>
                 </Row>

@@ -35,6 +35,7 @@ export default function NotesrModal(props: filterProps) {
       .get(BASE_URL + "Track/GetTrackNotes", {
         params: {
           trackId: props.selectedNotes.trackId,
+          source: props.selectedNotes.source
         },
         headers: {
           cp3_auth: getCookie("cp3_auth"),
@@ -46,13 +47,14 @@ export default function NotesrModal(props: filterProps) {
       .catch((err) => {
         console.log("error feching data", err);
       });
-  }, [props.selectedNotes.trackId]);
+  }, [props.selectedNotes.trackId, props.selectedNotes.source]);
 
   const handleSubmit = () => {
     axios
       .put(BASE_URL + "Track/UpdateNotes", {
         trackId: props.selectedNotes.trackId,
         comments: notes,
+        source: props.selectedNotes.source,
         userName: auth.user.name || "Guest",
       }, config)
       .then((res: any) => {
