@@ -134,7 +134,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 <td>
                   <div className="action-icons">
                     {props.role === 'admin' && <EditIcon className="icon editIcon" onClick={(() => editModal(track))} />}
-                    {props.role === 'admin' && <ArchiveIcon onClick={(() => deleteTrack(track))} />}
+                    {props.role === 'admin' && track.source === 'CP3' && <ArchiveIcon onClick={(() => deleteTrack(track))} />}
                     {/*props.role === 'admin' && <DeleteIcon onClick={(() => deleteTrack(track))} />*/}
                   </div>
                 </td>
