@@ -125,9 +125,9 @@ export default function Policy() {
           ...exec,
           platform: exec.platform
             ? exec.platform
-                .filter((p) => p.id !== "ALL")
-                .map((p) => p.id !== "ALL" && p.id)
-                .join(",")
+              .filter((p) => p.id !== "ALL")
+              .map((p) => p.id !== "ALL" && p.id)
+              .join(",")
             : "",
           duration: exec.duration ? exec.duration.id : "",
           release: exec.when ? exec.when.id : "",
@@ -137,9 +137,9 @@ export default function Policy() {
         ...policy,
         platform: policy.platform
           ? policy.platform
-              .filter((p) => p.id !== "ALL")
-              .map((p) => p.id !== "ALL" && p.id)
-              .join(",")
+            .filter((p) => p.id !== "ALL")
+            .map((p) => p.id !== "ALL" && p.id)
+            .join(",")
           : "",
         duration: policy.duration ? policy.duration.id : "",
         release: policy.when ? policy.when.id : "",
@@ -400,8 +400,29 @@ export default function Policy() {
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="pt-70">
           <Col md={12}>
-            <h3 className="heading">Create/Edit Policies</h3>
-            <label className="sub-title">Create and Edit Policies</label>
+            <Row>
+              <Col md={10}>
+                <h3 className="heading">Create/Edit Policies</h3>
+                <label className="sub-title">Create and Edit Policies</label>
+              </Col>
+              {policyException && policyException.length > 3 && <Col md={2} className="d-flex justify-content-end align-items-center">
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  label="Save"
+                  className="text-white mr-20"
+                />
+                <Button
+                  handleClick={() => {
+                    setPolicy(defaultPolicy);
+                    setPolicyException([]);
+                  }}
+                  variant="light"
+                  label="Cancel"
+                  className=""
+                />
+              </Col>}
+            </Row>
             <div className="create-policy-wrapper">
               <Row className="align-items-center">
                 <Col md={2}>
@@ -509,6 +530,34 @@ export default function Policy() {
           </Col>
         </Row>
         <Row className="pt-70">
+          <Col md={10}>
+            <Button
+              handleClick={createExceptionRow}
+              variant="secondary"
+              startIcon={<AddCircleIcon />}
+              label="Create Exception"
+              className="text-white"
+            />
+          </Col>
+          <Col md={2} className="d-flex justify-content-end">
+            <Button
+              type="submit"
+              variant="secondary"
+              label="Save"
+              className="text-white mr-20"
+            />
+            <Button
+              handleClick={() => {
+                setPolicy(defaultPolicy);
+                setPolicyException([]);
+              }}
+              variant="light"
+              label="Cancel"
+              className=""
+            />
+          </Col>
+        </Row>
+        <Row className="pt-70">
           <Col>
             <h3 className="heading">Policy Summary</h3>
             <hr />
@@ -527,7 +576,7 @@ export default function Policy() {
                     {" "}
                     {policy.action
                       ? policy.action.charAt(0).toUpperCase() +
-                        policy.action.slice(1)
+                      policy.action.slice(1)
                       : ""}
                   </span>
                 </Col>
@@ -555,34 +604,6 @@ export default function Policy() {
               </Row>
             </div>
             {getSummeryException()}
-          </Col>
-        </Row>
-        <Row className="pt-70">
-          <Col md={10}>
-            <Button
-              handleClick={createExceptionRow}
-              variant="secondary"
-              startIcon={<AddCircleIcon />}
-              label="Create Exception"
-              className="text-white"
-            />
-          </Col>
-          <Col md={2} className="d-flex justify-content-end">
-            <Button
-              type="submit"
-              variant="secondary"
-              label="Save"
-              className="text-white mr-20"
-            />
-            <Button
-              handleClick={() => {
-                setPolicy(defaultPolicy);
-                setPolicyException([]);
-              }}
-              variant="light"
-              label="Cancel"
-              className=""
-            />
           </Col>
         </Row>
       </Form>

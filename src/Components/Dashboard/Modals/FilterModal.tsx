@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
+import { SOURCE_LIST } from './../../Common/staticDatas'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -17,7 +18,8 @@ type selectedFiltersProps = {
   leakTo: string,
   releaseFrom: string,
   releaseTo: string,
-  policyIds: Array<object>
+  policyIds: Array<object>,
+  source: Array<object>,
 }
 
 type filterProps = {
@@ -32,7 +34,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source } = props.selectedFilters
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
       searchWithins: searchWithins || ["ALL"],
@@ -42,7 +44,8 @@ export default function FilterModal(props: filterProps) {
       leakTo: leakTo || null,
       releaseFrom: releaseFrom || null,
       releaseTo: releaseTo || null,
-      policyIds: policyIds || null
+      policyIds: policyIds || null,
+      source: source || null
     }
   );
 
@@ -134,6 +137,14 @@ export default function FilterModal(props: filterProps) {
                 <Form.Group controlId="policyIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Policy</Form.Label>
                   <SelectField value={searchFilter.policyIds} options={props.policyFacets} isMulti={true} name="policyIds" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="pb-20">
+              <Col md={6}>
+                <Form.Group controlId="source" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Source</Form.Label>
+                  <SelectField value={searchFilter.source} options={SOURCE_LIST} isMulti={true} name="source" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>

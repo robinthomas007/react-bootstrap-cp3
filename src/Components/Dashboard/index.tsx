@@ -22,7 +22,7 @@ import Badge from "react-bootstrap/Badge";
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useAuth } from './../../Context/authContext'
 
 type notesPropTypes = {
@@ -56,6 +56,7 @@ const Dashboard = () => {
             : "",
           labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
           policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
+          source: filter.source ? getIds(filter.source) : "",
           releaseFrom: filter.releaseFrom,
           releaseTo: filter.releaseTo,
           leakFrom: filter.leakFrom,
@@ -138,33 +139,33 @@ const Dashboard = () => {
   };
 
   const deleteTrack = (ids: Array<any>) => {
-    // if (window.confirm("Are you sure to delete this track?"))
-    //   axios
-    //     .delete(BASE_URL + "Track/DeleteTrack", {
-    //       data: {
-    //         trackIds: ids,
-    //       },
-    //       headers: {
-    //         cp3_auth: getCookie("cp3_auth"),
-    //       },
-    //     })
-    //     .then((res: any) => {
-    //       if (res) {
-    //         toast.success('Track details deleted successfully!', {
-    //           autoClose: 3000,
-    //           closeOnClick: true,
-    //         });
-    //         dispatch({ type: "DELETE_SUCCESS", payload: ids });
-    //       } else {
-    //         toast.error("Error deleting Track details", {
-    //           autoClose: 3000,
-    //           closeOnClick: true,
-    //         });
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log("error feching data", err);
-    //     });
+    if (window.confirm("Are you sure to delete this track?"))
+      axios
+        .delete(BASE_URL + "Track/DeleteTrack", {
+          data: {
+            trackIds: ids,
+          },
+          headers: {
+            cp3_auth: getCookie("cp3_auth"),
+          },
+        })
+        .then((res: any) => {
+          if (res) {
+            toast.success('Track details deleted successfully!', {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
+            dispatch({ type: "DELETE_SUCCESS", payload: ids });
+          } else {
+            toast.error("Error deleting Track details", {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error feching data", err);
+        });
   }
 
   const openNotesModal = (row: object) => {
@@ -198,6 +199,15 @@ const Dashboard = () => {
         if (selectedLabel.length > 0)
           content = (
             <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
+          );
+      }
+      if (item === "source") {
+        const selectedSource = selectedFilters[item].map(
+          (label: any) => label.name
+        );
+        if (selectedSource.length > 0)
+          content = (
+            <span> Source : {selectedSource && selectedSource.toString()} </span>
           );
       }
       if (item === "policyIds") {

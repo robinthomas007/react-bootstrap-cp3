@@ -96,6 +96,7 @@ export const reducer = (state: searchState, action: searchActions) => {
     case 'DELETE_SUCCESS':
       return {
         ...state,
+        tracks: state.tracks.filter((track: any) => !action.payload.includes(track.trackId))
       }
     default:
       return state
