@@ -101,7 +101,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             <th>Leak Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'leakDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'leakDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'leakDate')} />}</span></th>
             <th>Release Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'releaseDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'releaseDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'releaseDate')} />}</span></th>
             <th>Source <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'source' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'source')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'source')} />}</span></th>
-            <th className="text-center">Notes</th>
             <th className="text-center">Actions</th>
           </tr>
         </thead>
@@ -130,9 +129,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 <td>{track.leakDate}</td>
                 <td>{track.releaseDate}</td>
                 <td><span className={`soruce-box ${track.source}`}>{track.source} {/*<KeyboardArrowDownIcon />*/}</span></td>
-                <td className="text-center"><QuestionAnswerIcon onClick={() => NotesModal(track)} /></td>
                 <td>
-                  <div className="action-icons">
+                  <div className="action-icons justify-content-space-between">
+                    <QuestionAnswerIcon onClick={() => NotesModal(track)} />
                     {props.role === 'admin' && <EditIcon className="icon editIcon" onClick={(() => editModal(track))} />}
                     {props.role === 'admin' && <ArchiveIcon className={track.source !== 'CP3' ? 'disabled' : ''} onClick={(() => track.source === 'CP3' && deleteTrack(track))} />}
                     {/*props.role === 'admin' && <DeleteIcon onClick={(() => deleteTrack(track))} />*/}
