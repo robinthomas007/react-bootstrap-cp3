@@ -95,11 +95,13 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             <th><input type="checkbox" checked={selectedRows.length === props.tracks.length} className="form-check-input" onChange={handleCheckboxAll} /></th>
             <th>Track Title <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'title' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'title')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'title')} />}</span></th>
             <th>Artist <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'artist' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'artist')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'artist')} />}</span></th>
+            <th>Album <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'album' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'album')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'album')} />}</span></th>
             <th>ISRC <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'isrc' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'isrc')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'isrc')} />}</span></th>
             <th>Label <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'label' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'label')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'label')} />}</span></th>
             <th>Policy <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'blockPolicyName' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'blockPolicyName')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'blockPolicyName')} />}</span></th>
             <th>Leak Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'leakDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'leakDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'leakDate')} />}</span></th>
             <th>Release Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'releaseDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'releaseDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'releaseDate')} />}</span></th>
+            <th>Updated Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'updatedDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'updatedDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'updatedDate')} />}</span></th>
             <th>Source <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'source' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'source')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'source')} />}</span></th>
             <th className="text-center">Actions</th>
           </tr>
@@ -118,6 +120,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                     </OverlayTrigger> : track.title}
                 </td>
                 <td>{track.artist}</td>
+                <td>{track.album}</td>
                 <td>{track.isrc}</td>
                 <td>{track.label}</td>
                 <td> {track.policyDetails ?
@@ -128,6 +131,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   </OverlayTrigger> : track.blockPolicyName}</td>
                 <td>{track.leakDate}</td>
                 <td>{track.releaseDate}</td>
+                <td>{track.updatedDate}</td>
                 <td><span className={`soruce-box ${track.source}`}>{track.source} {/*<KeyboardArrowDownIcon />*/}</span></td>
                 <td>
                   <div className="action-icons justify-content-space-between">
