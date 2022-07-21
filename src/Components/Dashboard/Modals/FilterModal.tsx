@@ -18,6 +18,8 @@ type selectedFiltersProps = {
   leakTo: string,
   releaseFrom: string,
   releaseTo: string,
+  updatedFrom: string,
+  updatedTo: string,
   policyIds: Array<object>,
   source: Array<object>,
 }
@@ -34,7 +36,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo } = props.selectedFilters
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
       searchWithins: searchWithins || ["ALL"],
@@ -44,6 +46,8 @@ export default function FilterModal(props: filterProps) {
       leakTo: leakTo || null,
       releaseFrom: releaseFrom || null,
       releaseTo: releaseTo || null,
+      updatedFrom: updatedFrom || null,
+      updatedTo: updatedTo || null,
       policyIds: policyIds || null,
       source: source || null
     }
@@ -122,7 +126,9 @@ export default function FilterModal(props: filterProps) {
               <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('notes')} label="Notes" id="notes" onChange={handleChange} />
               </Col>
-              <Col></Col>
+              <Col>
+                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('album')} label="Album" id="album" onChange={handleChange} />
+              </Col>
             </Row>
             <Row className="pb-20">
               <Col md={6}>
@@ -187,8 +193,25 @@ export default function FilterModal(props: filterProps) {
                   </Form.Group>
                 </div>
               </Col>
-              <Col md={4}>
-
+            </Row>
+            <Row className="pb-20">
+              <Col md={10} className="d-flex">
+                <div>
+                  <Form.Group controlId="updatedFrom" className="d-flex align-items-center">
+                    <Form.Label className="form-label-width">Updated Date</Form.Label>
+                    <Datepicker selected={searchFilter.updatedFrom} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, updatedFrom: date })
+                    }} />
+                  </Form.Group>
+                </div>
+                <div>
+                  <Form.Group controlId="updatedTo" className="d-flex align-items-center">
+                    <Form.Label className="form-label-sm-width">to</Form.Label>
+                    <Datepicker selected={searchFilter.updatedTo} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, updatedTo: date })
+                    }} />
+                  </Form.Group>
+                </div>
               </Col>
             </Row>
           </Form>

@@ -61,6 +61,8 @@ const Dashboard = () => {
           releaseTo: filter.releaseTo,
           leakFrom: filter.leakFrom,
           leakTo: filter.leakTo,
+          updatedTo: filter.updatedTo,
+          updatedFrom: filter.updatedFrom
         },
         headers: {
           cp3_auth: getCookie("cp3_auth"),
@@ -181,10 +183,13 @@ const Dashboard = () => {
       releaseTo: "Release To",
       leakFrom: "Leak From",
       leakTo: "Leak To",
+      updatedFrom: "Updated From",
+      updatedTo: "Updated To",
     };
+    const dateLabelsArr = ["releaseFrom", "releaseTo", "leakFrom", "leakTo", "updatedFrom", "updatedTo"]
     return selectedFilterKeys.map((item, index) => {
       let content = null;
-      if (["releaseFrom", "releaseTo", "leakFrom", "leakTo"].includes(item)) {
+      if (dateLabelsArr.includes(item)) {
         content = (
           <span>
             {" "}
