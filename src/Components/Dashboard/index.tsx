@@ -53,7 +53,7 @@ const Dashboard = () => {
           sortOrder: sortOrder,
           searchWithins: filter.searchWithins
             ? filter.searchWithins.toString()
-            : "",
+            : "ALL",
           labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
           policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
           source: filter.source ? getIds(filter.source) : "",
@@ -98,13 +98,13 @@ const Dashboard = () => {
   const setSearchTerm = (searchTerm: string) => {
     dispatch({
       type: "SET_SEARCH",
-      payload: { searchTerm: searchTerm, filter: { searchWithins: ["ALL"] } },
+      payload: { searchTerm: searchTerm, filter: { searchWithins: selectedFilters['searchWithins'] || ["ALL"] } },
     });
   };
 
-  const handleFlterModalSubmit = (filterValues: object) => {
+  const handleFlterModalSubmit = (filterValues: any) => {
     setSelectedFilters(filterValues);
-    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
+    dispatch({ type: "SET_FILTER", payload: { filter: filterValues, searchTerm: search } });
     setOpenFilter(false);
   };
 
@@ -251,7 +251,7 @@ const Dashboard = () => {
   return (
     <Container fluid>
       {state.loading && <Loader />}
-      <FilterModal
+      {openFilter && <FilterModal
         labelFacets={state.labelFacets}
         show={openFilter}
         handleClose={() => setOpenFilter(false)}
@@ -259,7 +259,7 @@ const Dashboard = () => {
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
         policyFacets={state.policyFacets}
-      />
+      />}
       {openNotes && (
         <NotesModal
           labelFacets={state.labelFacets}

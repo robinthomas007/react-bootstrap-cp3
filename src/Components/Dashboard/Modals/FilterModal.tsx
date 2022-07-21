@@ -37,6 +37,7 @@ type filterProps = {
 
 export default function FilterModal(props: filterProps) {
   const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo } = props.selectedFilters
+
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
       searchWithins: searchWithins || ["ALL"],
