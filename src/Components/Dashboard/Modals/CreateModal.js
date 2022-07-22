@@ -23,6 +23,7 @@ export default function FilterModal(props) {
     title: "",
     artist: "",
     isrc: "",
+    album: "",
     labelId: "",
     leakDate: "",
     releaseDate: "",
@@ -43,7 +44,6 @@ export default function FilterModal(props) {
         });
         setAltTitle(temp);
       }
-      console.log(props.editParams.leakDate, "props.editParams.leakDateprops.editParams.leakDateprops.editParams.leakDate")
       setTrack({
         ...props.editParams,
         leakDate: props.editParams.leakDate ? moment(props.editParams.leakDate).format("MM-DD-YYYY") : '',
@@ -76,6 +76,7 @@ export default function FilterModal(props) {
         title: track.title,
         artist: track.artist,
         isrc: track.isrc,
+        album: track.album,
         source: props.editParams.trackId ? props.editParams.source : '',
         leakDate: track.leakDate,
         releaseDate: track.releaseDate,
@@ -284,6 +285,25 @@ export default function FilterModal(props) {
                         placeholder="Enter ISRC"
                         onChange={(e) =>
                           setTrack({ ...track, isrc: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="pb-20">
+                  <Col md={12}>
+                    <Form.Group
+                      controlId="album"
+                      className="d-flex align-items-center"
+                    >
+                      <Form.Label className="form-label-width">Album</Form.Label>
+                      <Form.Control
+                        value={track.album}
+                        type="text"
+                        name="album"
+                        placeholder="Enter Album"
+                        onChange={(e) =>
+                          setTrack({ ...track, album: e.target.value })
                         }
                       />
                     </Form.Group>
