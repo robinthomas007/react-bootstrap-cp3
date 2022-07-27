@@ -10,6 +10,13 @@ import Table from 'react-bootstrap/Table'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Popover from 'react-bootstrap/Popover';
+import SelectField from './../Common/select'
+import Button from "./../Common/button";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CloseIcon from "@mui/icons-material/Close";
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -20,6 +27,8 @@ type searchProps = {
   totalItems: number;
   pageNumber: number;
   onSortModelChange: any;
+  onFilterColumnSearch: any,
+  clearSearch: any,
   openNotesModal: any;
   dispatch: any;
   openCreateModal: any
@@ -27,10 +36,31 @@ type searchProps = {
   role: string
 };
 
+type tableHeaderObj = {
+  id: any,
+  name: string
+}
+
+const TITLES = [
+  { id: 'title', name: 'Track Title' },
+  { id: 'artist', name: 'Artist' },
+  { id: 'album', name: 'Album' },
+  { id: 'isrc', name: 'ISRC' },
+  { id: 'label', name: 'Label' },
+  { id: 'blockPolicyName', name: 'Policy' },
+  { id: 'leakDate', name: 'Leak Date' },
+  { id: 'releaseDate', name: 'Release Date' },
+  { id: 'updatedDate', name: 'Last Updated' },
+  { id: 'source', name: 'Source' },
+]
+
 export default function ProjectSearchDataGrid(props: searchProps) {
   const [selectedRows, setSelectedRows] = React.useState<any>([]);
   const [activeSort, setActiveSort] = React.useState('releaseDate');
   const [sortOrder, setSortOrder] = React.useState('desc');
+  const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: 'title', name: 'Track Title' }]);
+  const [filterSearch, setFilterSearch] = React.useState('');
+  const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
 
   const colorModeContext = useColor();
 
@@ -87,22 +117,60 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     return <div>{tooltipContent} {exceptionContent !== '' ? <strong>Exception : </strong> : ''}{exceptionContent}</div>;
   }
 
+  const clearColumnFilter = () => {
+    setFilterSearch('')
+    props.clearSearch()
+  }
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Body>
+        <div className="clmn-filter-bdy">
+          {hideColumns.includes(columnFilter[0].id) ? <VisibilityOffIcon onClick={() => setHideColumns(hideColumns.filter(element => element !== columnFilter[0].id))} /> : <VisibilityIcon onClick={() => setHideColumns([...hideColumns, columnFilter[0].id])} />}
+          <SelectField value={columnFilter} isMulti={false} options={TITLES} name="labelIds" handleChange={(data: any) =>
+            setcolumnFilter([data])
+          } />
+          <input value={filterSearch} type="text" onChange={(e: any) => setFilterSearch(e.target.value)} />
+          {filterSearch && <CloseIcon className="filter-close" onClick={() => clearColumnFilter()} />}
+          <Button
+            type="submit"
+            variant="secondary"
+            label="Search"
+            className="text-white mr-20"
+            handleClick={() => handleFilterSearch()}
+          />
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
+
+  const handleFilterSearch = () => {
+    props.onFilterColumnSearch(filterSearch, columnFilter[0].id)
+  }
+
+  const getTableIcons = (active: string, title: string) => {
+    return (
+      <span>
+        <span>{title}</span>
+        <span className="sort-icons">{sortOrder === 'desc' && activeSort === active ?
+          <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', active)} /> :
+          <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', active)} />}
+          <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>
+            <MoreVertIcon className="header-filter-icon" onClick={() => !filterSearch && setcolumnFilter([{ id: active, name: title }])} />
+          </OverlayTrigger>
+        </span>
+      </span>)
+  }
+
   return (
     <Col md={11}>
       <Table responsive className={`${colorModeContext.colorMode === "light" ? "srch-dg-tbl" : "srch-dg-tbl text-white"}`}>
         <thead>
           <tr>
             <th><input type="checkbox" checked={selectedRows.length === props.tracks.length} className="form-check-input" onChange={handleCheckboxAll} /></th>
-            <th>Track Title <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'title' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'title')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'title')} />}</span></th>
-            <th>Artist <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'artist' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'artist')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'artist')} />}</span></th>
-            <th>Album <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'album' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'album')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'album')} />}</span></th>
-            <th>ISRC <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'isrc' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'isrc')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'isrc')} />}</span></th>
-            <th>Label <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'label' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'label')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'label')} />}</span></th>
-            <th>Policy <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'blockPolicyName' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'blockPolicyName')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'blockPolicyName')} />}</span></th>
-            <th>Leak Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'leakDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'leakDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'leakDate')} />}</span></th>
-            <th>Release Date <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'releaseDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'releaseDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'releaseDate')} />}</span></th>
-            <th>Last Updated <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'updatedDate' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'updatedDate')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'updatedDate')} />}</span></th>
-            <th>Source <span className="sort-icons">{sortOrder === 'desc' && activeSort === 'source' ? <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', 'source')} /> : <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', 'source')} />}</span></th>
+            {TITLES.map((ele, index) => {
+              return !hideColumns.includes(ele.id) && <th key={index}>{getTableIcons(ele.id, ele.name)}</th>
+            })}
             <th className="text-center">Actions</th>
           </tr>
         </thead>
@@ -111,28 +179,28 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             <React.Fragment key={index}>
               <tr key={index} className={`${selectedRows.includes(track.trackId) ? 'selected-row' : ''}`}>
                 <td><input type="checkbox" checked={selectedRows.includes(track.trackId)} onChange={(e) => handleCheckboxChange(e, track.trackId)} className="form-check-input" /></td>
-                <td>
+                {!hideColumns.includes('title') && <td>
                   {track.subTitle ?
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip id="button-tooltip">{track.subTitle}</Tooltip>}>
                       <span>{track.title}</span>
                     </OverlayTrigger> : track.title}
-                </td>
-                <td>{track.artist}</td>
-                <td>{track.album}</td>
-                <td>{track.isrc}</td>
-                <td>{track.label}</td>
-                <td> {track.policyDetails ?
+                </td>}
+                {!hideColumns.includes('artist') && <td>{track.artist}</td>}
+                {!hideColumns.includes('album') && <td>{track.album}</td>}
+                {!hideColumns.includes('isrc') && <td>{track.isrc}</td>}
+                {!hideColumns.includes('label') && <td>{track.label}</td>}
+                {!hideColumns.includes('blockPolicyName') && <td> {track.policyDetails ?
                   <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip id="button-tooltip">{getPrivacyToolTip(track)}</Tooltip>}>
                     <span>{track.blockPolicyName}</span>
-                  </OverlayTrigger> : track.blockPolicyName}</td>
-                <td>{track.leakDate}</td>
-                <td>{track.releaseDate}</td>
-                <td>{track.updatedDate}</td>
-                <td><span className={`soruce-box ${track.source}`}>{track.source} {/*<KeyboardArrowDownIcon />*/}</span></td>
+                  </OverlayTrigger> : track.blockPolicyName}</td>}
+                {!hideColumns.includes('leakDate') && <td>{track.leakDate}</td>}
+                {!hideColumns.includes('releaseDate') && <td>{track.releaseDate}</td>}
+                {!hideColumns.includes('updatedDate') && <td>{track.updatedDate}</td>}
+                {!hideColumns.includes('source') && <td><span className={`soruce-box ${track.source}`}>{track.source} {/*<KeyboardArrowDownIcon />*/}</span></td>}
                 <td>
                   <div className="action-icons justify-content-space-between">
                     <QuestionAnswerIcon onClick={() => NotesModal(track)} />

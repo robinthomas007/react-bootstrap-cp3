@@ -102,6 +102,13 @@ const Dashboard = () => {
     });
   };
 
+  const onFilterColumnSearch = (searchTerm: string, searchWithins: string) => {
+    dispatch({
+      type: "SET_SEARCH",
+      payload: { searchTerm: searchTerm, filter: { searchWithins: [searchWithins] } },
+    });
+  }
+
   const handleFlterModalSubmit = (filterValues: any) => {
     setSelectedFilters(filterValues);
     dispatch({ type: "SET_FILTER", payload: { filter: filterValues, searchTerm: search } });
@@ -366,8 +373,10 @@ const Dashboard = () => {
           onSortModelChange={onSortModelChange}
           openNotesModal={openNotesModal}
           dispatch={dispatch}
+          clearSearch={clearSearch}
           openCreateModal={openCreateModal}
           deleteTrack={deleteTrack}
+          onFilterColumnSearch={onFilterColumnSearch}
           role={auth.user.role}
         />
       </Row>

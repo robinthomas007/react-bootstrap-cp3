@@ -113,6 +113,7 @@
 
 .srch-dg-tbl thead th {
   font-weight: 700;
+  position: relative;
 }
 
 .srch-dg-tbl tbody {
@@ -131,6 +132,11 @@
 
 span.sort-icons {
   visibility: hidden;
+}
+
+.header-filter-icon {
+  position: absolute;
+  right: 0;
 }
 
 .srch-dg-tbl thead th:hover span.sort-icons {
@@ -195,4 +201,30 @@ span.sort-icons svg:hover {
 svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-root {
   color: #bcbaba;
   pointer-events: none;
+}
+
+.popover {
+  max-width: 500px !important;
+  min-width: 480px;
+}
+
+.clmn-filter-bdy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clmn-filter-bdy .cp3-react-select {
+  flex-basis: 130px;
+}
+
+.clmn-filter-bdy input {
+  padding: 5px;
+  position: relative;
+}
+
+.filter-close {
+  position: absolute;
+  right: 130px;
+  font-size: 14px !important;
 }
