@@ -41,19 +41,6 @@ type tableHeaderObj = {
   name: string
 }
 
-const TITLES = [
-  { id: 'title', name: 'Track Title' },
-  { id: 'artist', name: 'Artist' },
-  { id: 'album', name: 'Album' },
-  { id: 'isrc', name: 'ISRC' },
-  { id: 'label', name: 'Label' },
-  { id: 'blockPolicyName', name: 'Policy' },
-  { id: 'leakDate', name: 'Leak Date' },
-  { id: 'releaseDate', name: 'Release Date' },
-  { id: 'updatedDate', name: 'Last Updated' },
-  { id: 'source', name: 'Source' },
-]
-
 export default function ProjectSearchDataGrid(props: searchProps) {
   const [selectedRows, setSelectedRows] = React.useState<any>([]);
   const [activeSort, setActiveSort] = React.useState('releaseDate');
@@ -63,6 +50,19 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
 
   const colorModeContext = useColor();
+
+  const TITLES = [
+    { id: 'title', name: 'Track Title', },
+    { id: 'artist', name: 'Artist' },
+    { id: 'album', name: 'Album' },
+    { id: 'isrc', name: 'ISRC' },
+    { id: 'label', name: 'Label' },
+    { id: 'blockPolicyName', name: 'Policy' },
+    { id: 'leakDate', name: 'Leak Date' },
+    { id: 'releaseDate', name: 'Release Date' },
+    { id: 'updatedDate', name: 'Last Updated' },
+    { id: 'source', name: 'Source' },
+  ]
 
   const NotesModal = (track: object) => {
     props.openNotesModal(track);
@@ -122,6 +122,14 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     props.clearSearch()
   }
 
+  const getHiddenTitles = () => {
+    return TITLES.filter((o: any) => hideColumns.includes(o.id)).map((data) => {
+      return <div className="hide-ttl-strips">
+        {data.name} <CloseIcon onClick={() => setHideColumns(hideColumns.filter(element => element !== data.id))} />
+      </div>
+    })
+  }
+
   const popover = (
     <Popover id="popover-basic">
       <Popover.Body>
@@ -140,6 +148,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             handleClick={() => handleFilterSearch()}
           />
         </div>
+        {hideColumns.length > 0 && <div className="hd-list">
+          <strong>Hide Columns </strong>
+          <div className="hd-cl-wrapper">{getHiddenTitles()}</div>
+        </div>}
       </Popover.Body>
     </Popover>
   );

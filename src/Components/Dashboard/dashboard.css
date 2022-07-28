@@ -228,3 +228,28 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   right: 130px;
   font-size: 14px !important;
 }
+
+.hd-list {
+  margin: 10px 28px;
+}
+
+.hd-cl-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.hide-ttl-strips {
+  background: #f67e15;
+  color: #fff;
+  display: flex;
+  padding: 3px 10px;
+  margin: 5px 0px;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.hide-ttl-strips .MuiSvgIcon-root {
+  font-size: 14px;
+}
