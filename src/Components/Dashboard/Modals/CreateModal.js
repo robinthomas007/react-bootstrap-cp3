@@ -218,7 +218,7 @@ export default function FilterModal(props) {
                           required
                           value={track.title}
                           type="text"
-                          name="title"
+                          name="track_title"
                           placeholder="Enter Title"
                           onChange={(e) =>
                             setTrack({ ...track, title: e.target.value })
