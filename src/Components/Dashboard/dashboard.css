@@ -236,6 +236,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
 .hd-cl-wrapper {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .hide-ttl-strips {
