@@ -203,7 +203,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   pointer-events: none;
 }
 
-.popover {
+.filter-popover .popover {
   max-width: 500px !important;
   min-width: 480px;
 }
@@ -253,4 +253,38 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
 
 .hide-ttl-strips .MuiSvgIcon-root {
   font-size: 14px;
+}
+
+.policy-popover {
+  min-width: 40%;
+}
+
+.po-exception {
+  background: #fff;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.policy-popover-bg {
+  background: #f5f5f5;
+  padding: 15px;
+}
+
+.po-plcy-name, .po-plcy-pltfm {
+  width: 50%;
+}
+
+.po-plcy-action, .po-plcy-duration, .po-plcy-when, .po-plcy-until {
+  width: 25%;
+}
+
+.plcy-bdy-pad {
+  padding: 0 !important;
+}
+
+.exe-label {
+  font-weight: bold;
+  background: #FBC02D;
+  padding: 4px 10px;
+  border-radius: 4px;
 }

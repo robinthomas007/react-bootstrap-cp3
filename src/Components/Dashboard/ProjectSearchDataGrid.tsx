@@ -102,20 +102,20 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     props.onSortModelChange({ sortColumn: column, sortOrder: order });
   }
 
-  const getPrivacyToolTip = (tooltip: any) => {
-    let tooltipContent = null;
-    let exceptionContent = ''
-    if (tooltip.policyDetails) {
-      tooltipContent = <div>{tooltip.policyDetails.action.charAt(0).toUpperCase() + tooltip.policyDetails.action.slice(1)}  {tooltip.policyDetails.platform}  {tooltip.policyDetails.release} {tooltip.policyDetails.duration} {tooltip.policyDetails.date} </div>
-    }
+  // const getPrivacyToolTip = (tooltip: any) => {
+  //   let tooltipContent = null;
+  //   let exceptionContent = ''
+  //   if (tooltip.policyDetails) {
+  //     tooltipContent = <div>{tooltip.policyDetails.action.charAt(0).toUpperCase() + tooltip.policyDetails.action.slice(1)}  {tooltip.policyDetails.platform}  {tooltip.policyDetails.release} {tooltip.policyDetails.duration} {tooltip.policyDetails.date} </div>
+  //   }
 
-    if (tooltip.exceptionDetails && tooltip.exceptionDetails.length > 0) {
-      exceptionContent = tooltip.exceptionDetails.map((exception: any, i: number) => {
-        return <div className="exception" key={i}>{exception.action.charAt(0).toUpperCase() + exception.action.slice(1)} {exception.platform}  {exception.release} {exception.duration} {exception.date}</div>
-      })
-    }
-    return <div>{tooltipContent} {exceptionContent !== '' ? <strong>Exception : </strong> : ''}{exceptionContent}</div>;
-  }
+  //   if (tooltip.exceptionDetails && tooltip.exceptionDetails.length > 0) {
+  //     exceptionContent = tooltip.exceptionDetails.map((exception: any, i: number) => {
+  //       return <div className="exception" key={i}>{exception.action.charAt(0).toUpperCase() + exception.action.slice(1)} {exception.platform}  {exception.release} {exception.duration} {exception.date}</div>
+  //     })
+  //   }
+  //   return <div>{tooltipContent} {exceptionContent !== '' ? <strong>Exception : </strong> : ''}{exceptionContent}</div>;
+  // }
 
   const clearColumnFilter = () => {
     setFilterSearch('')
@@ -131,7 +131,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   }
 
   const popover = (
-    <Popover id="popover-basic">
+    <Popover id="popover-basic filter-popover">
       <Popover.Body>
         <div className="clmn-filter-bdy">
           {hideColumns.includes(columnFilter[0].id) ? <VisibilityOffIcon onClick={() => setHideColumns(hideColumns.filter(element => element !== columnFilter[0].id))} /> : <VisibilityIcon onClick={() => setHideColumns([...hideColumns, columnFilter[0].id])} />}
@@ -204,11 +204,42 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 {!hideColumns.includes('isrc') && <td>{track.isrc}</td>}
                 {!hideColumns.includes('label') && <td>{track.label}</td>}
                 {!hideColumns.includes('blockPolicyName') && <td> {track.policyDetails ?
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip id="button-tooltip">{getPrivacyToolTip(track)}</Tooltip>}>
+                  <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={
+                    <Popover id="popover-basic" className="policy-popover">
+                      <Popover.Body className="plcy-bdy-pad">
+                        <div className="policy-popover-bg">
+                          <div className="d-flex mb-2">
+                            <div className="po-plcy-name"><strong>Policy:</strong> {track.blockPolicyName}</div>
+                            <div className="po-plcy-pltfm"><strong>Platforms:</strong> {track.policyDetails.platform.replace(/,/g, ', ')}</div>
+                          </div>
+                          <div className="d-flex">
+                            <div className="po-plcy-action"><strong>Action:</strong> {track.policyDetails.action}</div>
+                            <div className="po-plcy-duration"><strong>Duration:</strong> {track.policyDetails.duration}</div>
+                            <div className="po-plcy-when"><strong>When:</strong> {track.policyDetails.release}</div>
+                            <div className="po-plcy-until"><strong>Until:</strong> {track.policyDetails.date}</div>
+                          </div>
+                        </div>
+
+                        {track.exceptionDetails && track.exceptionDetails.map((exec: any, id: any) => {
+                          return (<div className="po-exception" key={id}>
+                            <div className="d-flex mb-2">
+                              <div className="po-plcy-name"><span className="exe-label">Exception</span></div>
+                              <div className="po-plcy-pltfm"><strong>Platforms:</strong> {exec.platform.replace(/,/g, ', ')}</div>
+                            </div>
+                            <div className="d-flex">
+                              <div className="po-plcy-action"><strong>Action:</strong> {exec.action}</div>
+                              <div className="po-plcy-duration"><strong>Duration:</strong> {exec.duration}</div>
+                              <div className="po-plcy-when"><strong>When:</strong> {exec.release}</div>
+                              <div className="po-plcy-when"><strong>Until:</strong> {exec.date}</div>
+                            </div>
+                          </div>)
+                        })}
+                      </Popover.Body>
+                    </Popover>
+                  } rootClose>
                     <span>{track.blockPolicyName}</span>
-                  </OverlayTrigger> : track.blockPolicyName}</td>}
+                  </OverlayTrigger> : <span>{track.blockPolicyName}</span>}
+                </td>}
                 {!hideColumns.includes('leakDate') && <td>{track.leakDate}</td>}
                 {!hideColumns.includes('releaseDate') && <td>{track.releaseDate}</td>}
                 {!hideColumns.includes('updatedDate') && <td>{track.updatedDate}</td>}
