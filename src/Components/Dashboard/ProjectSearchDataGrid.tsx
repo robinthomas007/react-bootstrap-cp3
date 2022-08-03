@@ -17,6 +17,7 @@ import Button from "./../Common/button";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CloseIcon from "@mui/icons-material/Close";
+import { capitalizeFirstLetter } from './../Common/Utils'
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -131,7 +132,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   }
 
   const popover = (
-    <Popover id="popover-basic filter-popover">
+    <Popover id="popover-basic" className="filter-popover">
       <Popover.Body>
         <div className="clmn-filter-bdy">
           {hideColumns.includes(columnFilter[0].id) ? <VisibilityOffIcon onClick={() => setHideColumns(hideColumns.filter(element => element !== columnFilter[0].id))} /> : <VisibilityIcon onClick={() => setHideColumns([...hideColumns, columnFilter[0].id])} />}
@@ -204,7 +205,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 {!hideColumns.includes('isrc') && <td>{track.isrc}</td>}
                 {!hideColumns.includes('label') && <td>{track.label}</td>}
                 {!hideColumns.includes('blockPolicyName') && <td> {track.policyDetails ?
-                  <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={
+                  <OverlayTrigger trigger={['click', 'focus']} placement="top" overlay={
                     <Popover id="popover-basic" className="policy-popover">
                       <Popover.Body className="plcy-bdy-pad">
                         <div className="policy-popover-bg">
@@ -213,7 +214,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                             <div className="po-plcy-pltfm"><strong>Platforms:</strong> {track.policyDetails.platform.replace(/,/g, ', ')}</div>
                           </div>
                           <div className="d-flex">
-                            <div className="po-plcy-action"><strong>Action:</strong> {track.policyDetails.action}</div>
+                            <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(track.policyDetails.action)}</div>
                             <div className="po-plcy-duration"><strong>Duration:</strong> {track.policyDetails.duration}</div>
                             <div className="po-plcy-when"><strong>When:</strong> {track.policyDetails.release}</div>
                             <div className="po-plcy-until"><strong>Until:</strong> {track.policyDetails.date}</div>
@@ -227,7 +228,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                               <div className="po-plcy-pltfm"><strong>Platforms:</strong> {exec.platform.replace(/,/g, ', ')}</div>
                             </div>
                             <div className="d-flex">
-                              <div className="po-plcy-action"><strong>Action:</strong> {exec.action}</div>
+                              <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(exec.action)}</div>
                               <div className="po-plcy-duration"><strong>Duration:</strong> {exec.duration}</div>
                               <div className="po-plcy-when"><strong>When:</strong> {exec.release}</div>
                               <div className="po-plcy-when"><strong>Until:</strong> {exec.date}</div>

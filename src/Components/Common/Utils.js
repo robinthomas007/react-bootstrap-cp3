@@ -18,5 +18,10 @@ export const config = {
   },
 };
 
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
 export const ADMIN = '4d460fe7-b447-454c-bb0d-7f60797a74a0'
 export const USER = '7ac0853c-8182-42cc-b034-9e4804144f75'

@@ -203,7 +203,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   pointer-events: none;
 }
 
-.filter-popover .popover {
+.filter-popover.popover {
   max-width: 500px !important;
   min-width: 480px;
 }
@@ -263,11 +263,13 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   background: #fff;
   padding: 15px;
   border-bottom: 1px solid #ddd;
+  font-family: 'Roboto Condensed', sans-serif !important;
 }
 
 .policy-popover-bg {
   background: #f5f5f5;
   padding: 15px;
+  font-family: 'Roboto Condensed', sans-serif !important;
 }
 
 .po-plcy-name, .po-plcy-pltfm {
