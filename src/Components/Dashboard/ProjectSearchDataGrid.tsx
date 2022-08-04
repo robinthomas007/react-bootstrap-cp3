@@ -205,7 +205,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 {!hideColumns.includes('isrc') && <td>{track.isrc}</td>}
                 {!hideColumns.includes('label') && <td>{track.label}</td>}
                 {!hideColumns.includes('blockPolicyName') && <td> {track.policyDetails ?
-                  <OverlayTrigger trigger={['click', 'focus']} placement="top" overlay={
+                  <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={
                     <Popover id="popover-basic" className="policy-popover">
                       <Popover.Body className="plcy-bdy-pad">
                         <div className="policy-popover-bg">
