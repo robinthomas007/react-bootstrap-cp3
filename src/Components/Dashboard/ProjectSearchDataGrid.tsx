@@ -17,7 +17,7 @@ import Button from "./../Common/button";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CloseIcon from "@mui/icons-material/Close";
-import { capitalizeFirstLetter } from './../Common/Utils'
+import { capitalizeFirstLetter, FormatPlatforms } from './../Common/Utils'
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -211,7 +211,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                         <div className="policy-popover-bg">
                           <div className="d-flex mb-2">
                             <div className="po-plcy-name"><strong>Policy:</strong> {track.blockPolicyName}</div>
-                            <div className="po-plcy-pltfm"><strong>Platforms:</strong> {track.policyDetails.platform.replace(/,/g, ', ')}</div>
+                            <div className="po-plcy-pltfm"><strong>Platforms:</strong> {FormatPlatforms(track.policyDetails.platform)}</div>
                           </div>
                           <div className="d-flex">
                             <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(track.policyDetails.action)}</div>
@@ -225,7 +225,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                           return (<div className="po-exception" key={id}>
                             <div className="d-flex mb-2">
                               <div className="po-plcy-name"><span className="exe-label">Exception</span></div>
-                              <div className="po-plcy-pltfm"><strong>Platforms:</strong> {exec.platform.replace(/,/g, ', ')}</div>
+                              <div className="po-plcy-pltfm"><strong>Platforms:</strong> {FormatPlatforms(exec.platform)}</div>
                             </div>
                             <div className="d-flex">
                               <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(exec.action)}</div>

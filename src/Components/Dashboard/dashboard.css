@@ -281,7 +281,8 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
 }
 
 .plcy-bdy-pad {
-  padding: 0 !important;
+  padding: 7px !important;
+  background: #f5f5f5;
 }
 
 .exe-label {
