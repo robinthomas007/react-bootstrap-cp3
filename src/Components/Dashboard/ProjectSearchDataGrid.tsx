@@ -217,7 +217,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                             <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(track.policyDetails.action)}</div>
                             <div className="po-plcy-duration"><strong>Duration:</strong> {track.policyDetails.duration}</div>
                             <div className="po-plcy-when"><strong>When:</strong> {track.policyDetails.release}</div>
-                            <div className="po-plcy-until"><strong>Until:</strong> {track.policyDetails.date}</div>
+                            <div className="po-plcy-until"><strong>{track.policyDetails.release === 'Post-Release' ? 'After' : 'Until'}:</strong> {track.policyDetails.date}</div>
                           </div>
                         </div>
 
@@ -231,7 +231,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                               <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(exec.action)}</div>
                               <div className="po-plcy-duration"><strong>Duration:</strong> {exec.duration}</div>
                               <div className="po-plcy-when"><strong>When:</strong> {exec.release}</div>
-                              <div className="po-plcy-when"><strong>Until:</strong> {exec.date}</div>
+                              <div className="po-plcy-when"><strong>{exec.release === 'Post-Release' ? 'After' : 'Until'}:</strong> {exec.date}</div>
                             </div>
                           </div>)
                         })}
