@@ -35,7 +35,8 @@ export default function Header() {
     try {
       const token = getCookie('cp3_auth');
       let user: any = jwt_decode(token);
-      user.role = user.groups.includes(ADMIN) ? 'admin' : 'user'
+      console.log(user, "useruseruser")
+      user.role = user.groups && user.groups.includes(ADMIN) ? 'admin' : 'user'
       localStorage.setItem('user', user);
       auth.login(user)
       console.log("Logged in success --", user)

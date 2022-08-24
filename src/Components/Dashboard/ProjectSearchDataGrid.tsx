@@ -49,6 +49,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: 'title', name: 'Track Title' }]);
   const [filterSearch, setFilterSearch] = React.useState('');
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
+  const [active, setActive] = React.useState<any>('pre-release')
 
   const colorModeContext = useColor();
 
@@ -205,35 +206,43 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 {!hideColumns.includes('isrc') && <td>{track.isrc}</td>}
                 {!hideColumns.includes('label') && <td>{track.label}</td>}
                 {!hideColumns.includes('blockPolicyName') && <td> {track.policyDetails ?
-                  <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={
+                  <OverlayTrigger trigger={['click', 'focus']} placement="top" overlay={
                     <Popover id="popover-basic" className="policy-popover">
                       <Popover.Body className="plcy-bdy-pad">
-                        <div className="policy-popover-bg">
+                        <div className="policy-tl-nav">
+                          <span className={active === 'pre-release' ? 'active' : 'non-active'} onClick={() => setActive('pre-release')}>Pre-Release Policy</span>
+                          <span className={active === 'post-release' ? 'active' : 'non-active'} onClick={() => setActive('post-release')}>Post-Release Policy</span>
+                          <span className={active === 'always' ? 'active' : 'non-active'} onClick={() => setActive('always')}>Always</span>
+                          <span><strong>Release Date:</strong> {track.releaseDate}</span>
+                        </div>
+                        {track.policyDetails.release.toLowerCase() === active && <div className="policy-popover-bg">
                           <div className="d-flex mb-2">
-                            <div className="po-plcy-name"><strong>Policy:</strong> {track.blockPolicyName}</div>
+                            <div className="po-plcy-name"><strong>Policy Name: </strong> {track.blockPolicyName}</div>
                             <div className="po-plcy-pltfm"><strong>Platforms:</strong> {FormatPlatforms(track.policyDetails.platform)}</div>
                           </div>
                           <div className="d-flex">
                             <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(track.policyDetails.action)}</div>
                             <div className="po-plcy-duration"><strong>Duration:</strong> {track.policyDetails.duration}</div>
-                            <div className="po-plcy-when"><strong>When:</strong> {track.policyDetails.release}</div>
                             <div className="po-plcy-until"><strong>{track.policyDetails.release === 'Post-Release' ? 'After' : 'Until'}:</strong> {track.policyDetails.date}</div>
                           </div>
-                        </div>
+                        </div>}
 
                         {track.exceptionDetails && track.exceptionDetails.map((exec: any, id: any) => {
-                          return (<div className="po-exception" key={id}>
-                            <div className="d-flex mb-2">
-                              <div className="po-plcy-name"><span className="exe-label">Exception</span></div>
-                              <div className="po-plcy-pltfm"><strong>Platforms:</strong> {FormatPlatforms(exec.platform)}</div>
+                          return (
+                            <div>
+                              {exec.release.toLowerCase() === active && <div className="po-exception" key={id}>
+                                <div className="d-flex mb-2">
+                                  <div className="po-plcy-name"><span><strong>Policy Name: </strong> {track.blockPolicyName}</span></div>
+                                  <div className="po-plcy-pltfm"><strong>Platforms:</strong> {FormatPlatforms(exec.platform)}</div>
+                                </div>
+                                <div className="d-flex">
+                                  <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(exec.action)}</div>
+                                  <div className="po-plcy-duration"><strong>Duration:</strong> {exec.duration}</div>
+                                  <div className="po-plcy-when"><strong>{exec.release === 'Post-Release' ? 'After' : 'Until'}:</strong> {exec.date}</div>
+                                </div>
+                              </div>}
                             </div>
-                            <div className="d-flex">
-                              <div className="po-plcy-action"><strong>Action:</strong> {capitalizeFirstLetter(exec.action)}</div>
-                              <div className="po-plcy-duration"><strong>Duration:</strong> {exec.duration}</div>
-                              <div className="po-plcy-when"><strong>When:</strong> {exec.release}</div>
-                              <div className="po-plcy-when"><strong>{exec.release === 'Post-Release' ? 'After' : 'Until'}:</strong> {exec.date}</div>
-                            </div>
-                          </div>)
+                          )
                         })}
                       </Popover.Body>
                     </Popover>

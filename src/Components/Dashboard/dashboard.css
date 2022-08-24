@@ -267,7 +267,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
 }
 
 .policy-popover-bg {
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
   padding: 15px;
   font-family: 'Roboto Condensed', sans-serif !important;
 }
@@ -282,7 +282,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
 
 .plcy-bdy-pad {
   padding: 7px !important;
-  background: #f5f5f5;
+  background: #fff;
 }
 
 .exe-label {
@@ -290,4 +290,29 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   background: #FBC02D;
   padding: 4px 10px;
   border-radius: 4px;
+}
+
+.policy-tl-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.policy-tl-nav span.active{
+  background: #f67e15;
+  color: #fff;
+  border-radius: 100px;
+  padding: 6px 15px;
+  font-weight: bold;
+}
+
+.policy-tl-nav span.non-active{
+  background: #F5F5F5;
+  border-radius: 100px;
+  padding: 6px 15px;
+  display: inline-block;
+}
+
+.policy-tl-nav span{
+  padding: 6px;
 }
