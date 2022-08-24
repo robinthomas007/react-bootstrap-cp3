@@ -24,6 +24,9 @@ import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import { toast } from 'react-toastify';
 import { useAuth } from './../../Context/authContext'
+// @ts-ignore
+import { CSVLink } from 'react-csv';
+import { CSV_HEADERS } from '../Common/staticDatas'
 
 type notesPropTypes = {
   trackId?: number;
@@ -38,17 +41,18 @@ const Dashboard = () => {
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
   const [showCreate, setShowCreate] = React.useState(false);
   const [editParams, setEditParams] = React.useState({})
-
+  const [csvData, setcsvData] = React.useState([])
+  const csvLink = React.createRef<any>();
   const auth = useAuth();
 
-  const getSearchPageData = React.useCallback(() => {
+  const getSearchPageData = React.useCallback((isExport: any) => {
     const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter } = state.searchCriteria;
     axios
       .get(BASE_URL + "TrackSearch", {
         params: {
           searchTerm: searchTerm,
-          itemsPerPage: itemsPerPage,
-          pageNumber: pageNumber,
+          itemsPerPage: isExport ? '' : itemsPerPage,
+          pageNumber: isExport ? '' : pageNumber,
           sortColumn: sortColumn,
           sortOrder: sortOrder,
           searchWithins: filter.searchWithins
@@ -62,14 +66,19 @@ const Dashboard = () => {
           leakFrom: filter.leakFrom,
           leakTo: filter.leakTo,
           updatedTo: filter.updatedTo,
-          updatedFrom: filter.updatedFrom
+          updatedFrom: filter.updatedFrom,
+          isExport: isExport ? true : false
         },
         headers: {
           cp3_auth: getCookie("cp3_auth"),
         },
       })
       .then((res) => {
-        dispatch({ type: "FETCH_SUCCESS", payload: res.data });
+        if (res.data.isExport) {
+          setcsvData(res.data.tracks)
+        } else {
+          dispatch({ type: "FETCH_SUCCESS", payload: res.data });
+        }
       })
       .catch((err) => {
         dispatch({ type: "FETCH_FAILURE", payload: err.Message });
@@ -78,7 +87,8 @@ const Dashboard = () => {
   }, [state.searchCriteria]);
 
   React.useEffect(() => {
-    getSearchPageData()
+    const isExport = false
+    getSearchPageData(isExport)
   }, [getSearchPageData]);
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,6 +191,16 @@ const Dashboard = () => {
     setOpenNotes(true);
     setSelectedNotes(row);
   };
+
+  const exportData = () => {
+    getSearchPageData(true)
+  }
+
+  React.useEffect(() => {
+    if (csvData.length > 0 && csvLink) {
+      csvLink.current.link.click()
+    }
+  }, [csvData])
 
   const selectedFilterKeys = Object.keys(selectedFilters);
 
@@ -356,7 +376,15 @@ const Dashboard = () => {
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
               {auth.user.role === 'admin' && <Button handleClick={openCreateModal} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />}
-              <Button handleClick={() => { }} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
+              <Button handleClick={exportData} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
+              <CSVLink
+                data={csvData}
+                headers={CSV_HEADERS}
+                filename="projects.csv"
+                className="hidden"
+                ref={csvLink}
+                target="_blank"
+              />
             </Col>
           </Row>
         </Col>

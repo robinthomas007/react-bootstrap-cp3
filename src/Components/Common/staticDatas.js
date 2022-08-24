@@ -39,3 +39,16 @@ export const SOURCE_LIST = [
   { id: 'cp3', name: 'CP3' },
   { id: "grd", name: "GRD" },
 ]
+
+export const CSV_HEADERS = [
+  { key: 'title', label: 'Track Title', },
+  { key: 'artist', label: 'Artist' },
+  { key: 'album', label: 'Album' },
+  { key: 'isrc', label: 'ISRC' },
+  { key: 'label', label: 'Label' },
+  { key: 'blockPolicyName', label: 'Policy' },
+  { key: 'leakDate', label: 'Leak Date' },
+  { key: 'releaseDate', label: 'Release Date' },
+  { key: 'updatedDate', label: 'Last Updated' },
+  { key: 'source', label: 'Source' },
+]
