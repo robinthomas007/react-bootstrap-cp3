@@ -76,6 +76,7 @@ const Dashboard = () => {
       .then((res) => {
         if (res.data.isExport) {
           setcsvData(res.data.tracks)
+          dispatch({ type: "EXPORT_END", payload: '' });
         } else {
           dispatch({ type: "FETCH_SUCCESS", payload: res.data });
         }
@@ -194,6 +195,7 @@ const Dashboard = () => {
 
   const exportData = () => {
     getSearchPageData(true)
+    dispatch({ type: "EXPORT_START", payload: '' });
   }
 
   React.useEffect(() => {
@@ -376,7 +378,7 @@ const Dashboard = () => {
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
               {auth.user.role === 'admin' && <Button handleClick={openCreateModal} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />}
-              <Button handleClick={exportData} variant="light" startIcon={<FileDownloadIcon />} label="Export" className='' />
+              <Button handleClick={exportData} variant="light" startIcon={<FileDownloadIcon />} label={state.exportLoading ? 'Exporting' : 'Export'} className='' />
               <CSVLink
                 data={csvData}
                 headers={CSV_HEADERS}

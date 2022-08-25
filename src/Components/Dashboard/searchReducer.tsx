@@ -1,5 +1,6 @@
 type searchState = {
   loading: Boolean,
+  exportLoading: Boolean,
   error: string
   tracks: Array<object>,
   limit: number,
@@ -20,6 +21,7 @@ type searchActions = {
 
 export const initialState = {
   loading: true,
+  exportLoading: false,
   error: '',
   tracks: [],
   limit: 10,
@@ -97,6 +99,18 @@ export const reducer = (state: searchState, action: searchActions) => {
       return {
         ...state,
         tracks: state.tracks.filter((track: any) => !action.payload.includes(track.trackId))
+      }
+    case 'EXPORT_START':
+      return {
+        ...state,
+        exportLoading: true,
+        loading: true,
+      }
+    case 'EXPORT_END':
+      return {
+        ...state,
+        exportLoading: false,
+        loading: false,
       }
     default:
       return state
