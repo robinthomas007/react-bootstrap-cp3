@@ -15,8 +15,8 @@ type Authype = {
 
 const AuthContext = createContext<Authype | any>(null)
 export const AuthProvider = ({ children }: AuthContextProps) => {
-
-  const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem('user') || '') || { name: 'Guest' })
+  const localUser = localStorage.getItem('user')
+  const [user, setUser] = useState<any>(localUser ? JSON.parse(localStorage.getItem('user') || '') : '')
   const login = (user: any) => {
     setUser(user)
   }

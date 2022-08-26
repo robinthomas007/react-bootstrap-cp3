@@ -33,7 +33,8 @@ export default function Header() {
 
   useEffect(() => {
     try {
-      let userLoggedIn = JSON.parse(localStorage.getItem('user') || '');
+      const localUser = localStorage.getItem('user')
+      let userLoggedIn = localUser ? JSON.parse(localStorage.getItem('user') || '') : ''
       if (!userLoggedIn.name) {
         const token = getCookie('cp3_auth');
         let user: any = jwt_decode(token);
