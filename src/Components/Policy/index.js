@@ -228,7 +228,7 @@ export default function Policy() {
           <Row>
             <Col md={2}>
               <div className="bg-secondary-light exception-field">
-                <strong>Exception</strong>
+                <strong>Additional</strong>
               </div>
             </Col>
             <Col md={2}>
@@ -340,7 +340,7 @@ export default function Policy() {
           <Row className="align-items-center">
             <Col>
               <div className="bg-secondary-light exception-summary">
-                <strong>Exception</strong>
+                <strong>Additional</strong>
               </div>
             </Col>
             <Col>
@@ -535,7 +535,7 @@ export default function Policy() {
               handleClick={createExceptionRow}
               variant="secondary"
               startIcon={<AddCircleIcon />}
-              label="Create Exception"
+              label="Create Additional  "
               className="text-white"
             />
           </Col>
