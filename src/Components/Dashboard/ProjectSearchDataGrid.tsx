@@ -163,7 +163,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   }
 
   const getActiveTabToolTip = (releaseDate: string) => {
-    return moment(releaseDate).format('MM-DD-YYYY') > moment().format('MM-DD-YYYY') ? 'pre-release' : 'post-release'
+    const relDate = moment(releaseDate).format('MM-DD-YYYY')
+    const currentDate = moment().format('MM-DD-YYYY')
+    return moment(relDate) > moment(currentDate) ? 'pre-release' : 'post-release'
   }
 
   return (
