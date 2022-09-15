@@ -31,22 +31,6 @@ export default function Header() {
     }
   }, [colorModeContext.colorMode]);
 
-  useEffect(() => {
-    try {
-      const localUser = localStorage.getItem('user')
-      let userLoggedIn = localUser ? JSON.parse(localStorage.getItem('user') || '') : ''
-      if (!userLoggedIn.name) {
-        const token = getCookie('cp3_auth');
-        let user: any = jwt_decode(token);
-        user.role = user.groups && user.groups.includes(ADMIN) ? 'admin' : 'user'
-        localStorage.setItem('user', JSON.stringify(user));
-        auth.login(user)
-      }
-    } catch (err) {
-      console.log("Error getting Token", err)
-    }
-  }, [])
-
   const adminNavLinks = [
     {
       name: 'Policy',
