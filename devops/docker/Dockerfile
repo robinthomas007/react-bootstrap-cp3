@@ -21,6 +21,6 @@ FROM nginx:1.17 as web
 
 WORKDIR /usr/share/nginx/html
 
-COPY nginx.conf /nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=builder /src/build/ /usr/share/nginx/html/
