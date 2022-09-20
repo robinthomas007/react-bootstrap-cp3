@@ -372,22 +372,12 @@ export default function FilterModal(props) {
                       <Form.Label className="form-label-width">
                         Leak Date
                       </Form.Label>
-                      {/*<Form.Control
-                        required
-                        value={track.leakDate}
-                        name="leakDate"
-                        className="d-none"
-                        onChange={(e) => null}
-                      />*/}
                       <Datepicker
                         selected={track.leakDate}
                         handleDateChange={(date) => {
                           setTrack({ ...track, leakDate: date });
                         }}
                       />
-                      {/*<Form.Control.Feedback type="invalid">
-                        Leak date is required
-                      </Form.Control.Feedback>*/}
                     </Form.Group>
                   </Col>
                 </Row>

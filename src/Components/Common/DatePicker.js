@@ -24,7 +24,7 @@ const DateField = (props) => {
       placeholderText={placeholder}
       showTimeSelect={showTimeSelect}
       showYearDropdown
-      selected={selected ? new Date(selected) : null}
+      selected={selected && moment(selected).isValid() ? new Date(selected) : null}
     />
 
   );
