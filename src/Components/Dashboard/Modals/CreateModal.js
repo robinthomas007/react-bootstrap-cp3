@@ -374,9 +374,9 @@ export default function FilterModal(props) {
                       </Form.Label>
                       <Datepicker
                         selected={track.leakDate}
-                        handleDateChange={(date) => {
-                          setTrack({ ...track, leakDate: date });
-                        }}
+                        handleDateChange={(date) =>
+                          setTrack({ ...track, leakDate: moment(date).isValid() ? date : null })
+                        }
                       />
                     </Form.Group>
                   </Col>
@@ -392,9 +392,9 @@ export default function FilterModal(props) {
                       </Form.Label>
                       <Datepicker
                         selected={track.releaseDate}
-                        handleDateChange={(date) =>
-                          setTrack({ ...track, releaseDate: date })
-                        }
+                        handleDateChange={(date) => {
+                          setTrack({ ...track, releaseDate: moment(date).isValid() ? date : null })
+                        }}
                       />
                     </Form.Group>
                   </Col>
