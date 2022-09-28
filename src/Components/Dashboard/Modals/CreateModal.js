@@ -77,7 +77,7 @@ export default function CreateProjectModal(props) {
         artist: track.artist,
         isrc: track.isrc,
         album: track.album,
-        source: props.editParams.trackId ? props.editParams.source : '',
+        source: props.editParams && props.editParams.trackId ? props.editParams.source : '',
         leakDate: track.leakDate,
         releaseDate: track.releaseDate,
         blockPolicyId: track.blockPolicyId
