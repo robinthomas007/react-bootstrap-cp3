@@ -36,7 +36,7 @@ export const initialState = {
     searchTerm: "",
     itemsPerPage: "10",
     pageNumber: "1",
-    sortColumn: "",
+    sortColumn: "updatedDate",
     sortOrder: "",
     filter: {
       searchWithins: ['ALL']

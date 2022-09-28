@@ -45,7 +45,7 @@ type tableHeaderObj = {
 
 export default function ProjectSearchDataGrid(props: searchProps) {
   const [selectedRows, setSelectedRows] = React.useState<any>([]);
-  const [activeSort, setActiveSort] = React.useState('releaseDate');
+  const [activeSort, setActiveSort] = React.useState('updatedDate');
   const [sortOrder, setSortOrder] = React.useState('desc');
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: 'title', name: 'Track Title' }]);
   const [filterSearch, setFilterSearch] = React.useState('');
@@ -72,7 +72,11 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   };
 
   const editModal = (track: object) => {
-    props.openCreateModal(track)
+    if (selectedRows.length > 0) {
+      props.openCreateModal(props.tracks.filter((o: any) => selectedRows.includes(o.trackId)))
+    } else {
+      props.openCreateModal([track])
+    }
   };
 
   const deleteTrack = (track: any) => {

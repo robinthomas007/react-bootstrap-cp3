@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import moment from "moment";
 
-export default function FilterModal(props) {
+export default function CreateProjectModal(props) {
   const [altTitle, setAltTitle] = useState([]);
   const [track, setTrack] = useState({
     title: "",

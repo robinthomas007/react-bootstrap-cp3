@@ -16,6 +16,7 @@ import Form from "react-bootstrap/Form";
 import FilterModal from "./Modals/FilterModal";
 import NotesModal from "./Modals/NotesModal";
 import CreateModal from "./Modals/CreateModal"
+import EditBulkModal from "./Modals/EditBulkModal"
 import SearchIcon from "@mui/icons-material/Search";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
@@ -40,7 +41,7 @@ const Dashboard = () => {
   const [selectedFilters, setSelectedFilters] = React.useState<any>({});
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
   const [showCreate, setShowCreate] = React.useState(false);
-  const [editParams, setEditParams] = React.useState({})
+  const [editParams, setEditParams] = React.useState([])
   const [csvData, setcsvData] = React.useState([])
   const csvLink = React.createRef<any>();
   const auth = useAuth();
@@ -152,7 +153,7 @@ const Dashboard = () => {
   };
 
   const openCreateModal = (track: any) => {
-    if (track.trackId) {
+    if (track.length > 0) {
       setEditParams(track)
     }
     setShowCreate(true);
@@ -297,13 +298,27 @@ const Dashboard = () => {
           selectedNotes={selectedNotes}
         />
       )}
-      {showCreate && (
+      {showCreate && (editParams.length === 1 || editParams.length === 0) && (
         <CreateModal
           labelFacets={state.labelFacets}
           show={showCreate}
           handleClose={() => {
             setShowCreate(false);
-            setEditParams({})
+            setEditParams([])
+          }}
+          selectedNotes={selectedNotes}
+          editParams={editParams[0]}
+          getSearchPageData={getSearchPageData}
+          policyFacets={state.policyFacets}
+        />
+      )}
+      {showCreate && editParams.length > 1 && (
+        <EditBulkModal
+          labelFacets={state.labelFacets}
+          show={showCreate}
+          handleClose={() => {
+            setShowCreate(false);
+            setEditParams([])
           }}
           selectedNotes={selectedNotes}
           editParams={editParams}
@@ -311,7 +326,6 @@ const Dashboard = () => {
           policyFacets={state.policyFacets}
         />
       )}
-
       <Row className="justify-content-md-center min-row-ht-100 mt-5">
         <Col md={4} className="align-item-center align-items-center ">
           <InputGroup>
