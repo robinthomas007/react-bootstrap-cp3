@@ -9,3 +9,8 @@
 .justify-content-space-evenly {
   justify-content:space-evenly;  
 }
+
+
+form#create-resource-form .border-bottom:last-child{
+  border-bottom: none !important;
+}

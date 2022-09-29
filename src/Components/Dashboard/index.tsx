@@ -15,7 +15,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Form from "react-bootstrap/Form";
 import FilterModal from "./Modals/FilterModal";
 import NotesModal from "./Modals/NotesModal";
-import CreateModal from "./Modals/CreateModal"
+// import CreateModal from "./Modals/CreateModal"
 import EditBulkModal from "./Modals/EditBulkModal"
 import SearchIcon from "@mui/icons-material/Search";
 import Loader from "./../Common/loader";
@@ -298,21 +298,7 @@ const Dashboard = () => {
           selectedNotes={selectedNotes}
         />
       )}
-      {showCreate && (editParams.length === 1 || editParams.length === 0) && (
-        <CreateModal
-          labelFacets={state.labelFacets}
-          show={showCreate}
-          handleClose={() => {
-            setShowCreate(false);
-            setEditParams([])
-          }}
-          selectedNotes={selectedNotes}
-          editParams={editParams[0]}
-          getSearchPageData={getSearchPageData}
-          policyFacets={state.policyFacets}
-        />
-      )}
-      {showCreate && editParams.length > 1 && (
+      {showCreate &&
         <EditBulkModal
           labelFacets={state.labelFacets}
           show={showCreate}
@@ -320,12 +306,11 @@ const Dashboard = () => {
             setShowCreate(false);
             setEditParams([])
           }}
-          selectedNotes={selectedNotes}
           editParams={editParams}
           getSearchPageData={getSearchPageData}
           policyFacets={state.policyFacets}
         />
-      )}
+      }
       <Row className="justify-content-md-center min-row-ht-100 mt-5">
         <Col md={4} className="align-item-center align-items-center ">
           <InputGroup>

@@ -35,7 +35,7 @@ export default function EditBulkModal(props) {
   }
 
   useEffect(() => {
-    if (props.editParams && props.editParams.length > 1) {
+    if (props.editParams && props.editParams.length > 0) {
       let trackArray = []
       props.editParams.forEach(track => {
         const trackObj = {
@@ -50,9 +50,10 @@ export default function EditBulkModal(props) {
           )[0],
         }
         trackArray.push(trackObj)
-
       });
       setTrackList(trackArray)
+    } else {
+      setTrackList([...trackList, newTrack])
     }
   }, [props]);
 
@@ -93,7 +94,9 @@ export default function EditBulkModal(props) {
             closeOnClick: true,
           });
           props.handleClose();
-          props.getSearchPageData();
+          setTimeout(() => {
+            props.getSearchPageData();
+          }, 1000);
         })
         .catch((err) => {
           if (err.response && err.response.data) {
