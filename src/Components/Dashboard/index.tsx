@@ -16,18 +16,18 @@ import Form from "react-bootstrap/Form";
 import FilterModal from "./Modals/FilterModal";
 import NotesModal from "./Modals/NotesModal";
 // import CreateModal from "./Modals/CreateModal"
-import EditBulkModal from "./Modals/EditBulkModal"
+import EditBulkModal from "./Modals/EditBulkModal";
 import SearchIcon from "@mui/icons-material/Search";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
-import { toast } from 'react-toastify';
-import { useAuth } from './../../Context/authContext'
+import { toast } from "react-toastify";
+import { useAuth } from "./../../Context/authContext";
 // @ts-ignore
-import { CSVLink } from 'react-csv';
-import { CSV_HEADERS } from '../Common/staticDatas'
+import { CSVLink } from "react-csv";
+import { CSV_HEADERS } from "../Common/staticDatas";
 
 type notesPropTypes = {
   trackId?: number;
@@ -41,56 +41,66 @@ const Dashboard = () => {
   const [selectedFilters, setSelectedFilters] = React.useState<any>({});
   const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
   const [showCreate, setShowCreate] = React.useState(false);
-  const [editParams, setEditParams] = React.useState([])
-  const [csvData, setcsvData] = React.useState([])
+  const [editParams, setEditParams] = React.useState([]);
+  const [csvData, setcsvData] = React.useState([]);
   const csvLink = React.createRef<any>();
   const auth = useAuth();
 
-  const getSearchPageData = React.useCallback((isExport: any) => {
-    const { searchTerm, itemsPerPage, pageNumber, sortColumn, sortOrder, filter } = state.searchCriteria;
-    axios
-      .get(BASE_URL + "TrackSearch", {
-        params: {
-          searchTerm: searchTerm,
-          itemsPerPage: isExport ? '' : itemsPerPage,
-          pageNumber: isExport ? '' : pageNumber,
-          sortColumn: sortColumn,
-          sortOrder: sortOrder,
-          searchWithins: filter.searchWithins
-            ? filter.searchWithins.toString()
-            : "ALL",
-          labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
-          policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
-          source: filter.source ? getIds(filter.source) : "",
-          releaseFrom: filter.releaseFrom,
-          releaseTo: filter.releaseTo,
-          leakFrom: filter.leakFrom,
-          leakTo: filter.leakTo,
-          updatedTo: filter.updatedTo,
-          updatedFrom: filter.updatedFrom,
-          isExport: isExport ? true : false
-        },
-        headers: {
-          cp3_auth: getCookie("cp3_auth"),
-        },
-      })
-      .then((res) => {
-        if (res.data.isExport) {
-          setcsvData(res.data.tracks)
-          dispatch({ type: "EXPORT_END", payload: '' });
-        } else {
-          dispatch({ type: "FETCH_SUCCESS", payload: res.data });
-        }
-      })
-      .catch((err) => {
-        dispatch({ type: "FETCH_FAILURE", payload: err.Message });
-        console.log("error feching data", err);
-      });
-  }, [state.searchCriteria]);
+  const getSearchPageData = React.useCallback(
+    (isExport: any) => {
+      const {
+        searchTerm,
+        itemsPerPage,
+        pageNumber,
+        sortColumn,
+        sortOrder,
+        filter,
+      } = state.searchCriteria;
+      axios
+        .get(BASE_URL + "TrackSearch", {
+          params: {
+            searchTerm: searchTerm,
+            itemsPerPage: isExport ? "" : itemsPerPage,
+            pageNumber: isExport ? "" : pageNumber,
+            sortColumn: sortColumn,
+            sortOrder: sortOrder,
+            searchWithins: filter.searchWithins
+              ? filter.searchWithins.toString()
+              : "ALL",
+            labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
+            policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
+            source: filter.source ? getIds(filter.source) : "",
+            releaseFrom: filter.releaseFrom,
+            releaseTo: filter.releaseTo,
+            leakFrom: filter.leakFrom,
+            leakTo: filter.leakTo,
+            updatedTo: filter.updatedTo,
+            updatedFrom: filter.updatedFrom,
+            isExport: isExport ? true : false,
+          },
+          headers: {
+            cp3_auth: getCookie("cp3_auth"),
+          },
+        })
+        .then((res) => {
+          if (res.data.isExport) {
+            setcsvData(res.data.tracks);
+            dispatch({ type: "EXPORT_END", payload: "" });
+          } else {
+            dispatch({ type: "FETCH_SUCCESS", payload: res.data });
+          }
+        })
+        .catch((err) => {
+          dispatch({ type: "FETCH_FAILURE", payload: err.Message });
+          console.log("error feching data", err);
+        });
+    },
+    [state.searchCriteria]
+  );
 
   React.useEffect(() => {
-    const isExport = false
-    getSearchPageData(isExport)
+    const isExport = false;
+    getSearchPageData(isExport);
   }, [getSearchPageData]);
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,20 +120,29 @@ const Dashboard = () => {
   const setSearchTerm = (searchTerm: string) => {
     dispatch({
       type: "SET_SEARCH",
-      payload: { searchTerm: searchTerm, filter: { searchWithins: selectedFilters['searchWithins'] || ["ALL"] } },
+      payload: {
+        searchTerm: searchTerm,
+        filter: { searchWithins: selectedFilters["searchWithins"] || ["ALL"] },
+      },
     });
   };
 
   const onFilterColumnSearch = (searchTerm: string, searchWithins: string) => {
     dispatch({
       type: "SET_SEARCH",
-      payload: { searchTerm: searchTerm, filter: { searchWithins: [searchWithins] } },
+      payload: {
+        searchTerm: searchTerm,
+        filter: { searchWithins: [searchWithins] },
+      },
     });
-  }
+  };
 
   const handleFlterModalSubmit = (filterValues: any) => {
     setSelectedFilters(filterValues);
-    dispatch({ type: "SET_FILTER", payload: { filter: filterValues, searchTerm: search } });
+    dispatch({
+      type: "SET_FILTER",
+      payload: { filter: filterValues, searchTerm: search },
+    });
     setOpenFilter(false);
   };
 
@@ -154,7 +173,7 @@ const Dashboard = () => {
 
   const openCreateModal = (track: any) => {
     if (track.length > 0) {
-      setEditParams(track)
+      setEditParams(track);
     }
     setShowCreate(true);
   };
@@ -172,7 +191,7 @@ const Dashboard = () => {
         })
         .then((res: any) => {
           if (res) {
-            toast.success('Track details deleted successfully!', {
+            toast.success("Track details deleted successfully!", {
               autoClose: 3000,
               closeOnClick: true,
             });
@@ -187,7 +206,7 @@ const Dashboard = () => {
         .catch((err) => {
           console.log("error feching data", err);
         });
-  }
+  };
 
   const openNotesModal = (row: object) => {
     setOpenNotes(true);
@@ -195,15 +214,15 @@ const Dashboard = () => {
   };
 
   const exportData = () => {
-    getSearchPageData(true)
-    dispatch({ type: "EXPORT_START", payload: '' });
-  }
+    getSearchPageData(true);
+    dispatch({ type: "EXPORT_START", payload: "" });
+  };
 
   React.useEffect(() => {
     if (csvData.length > 0 && csvLink) {
-      csvLink.current.link.click()
+      csvLink.current.link.click();
     }
-  }, [csvData])
+  }, [csvData]);
 
   const selectedFilterKeys = Object.keys(selectedFilters);
 
@@ -216,7 +235,14 @@ const Dashboard = () => {
       updatedFrom: "Updated From",
       updatedTo: "Updated To",
     };
-    const dateLabelsArr = ["releaseFrom", "releaseTo", "leakFrom", "leakTo", "updatedFrom", "updatedTo"]
+    const dateLabelsArr = [
+      "releaseFrom",
+      "releaseTo",
+      "leakFrom",
+      "leakTo",
+      "updatedFrom",
+      "updatedTo",
+    ];
     return selectedFilterKeys.map((item, index) => {
       let content = null;
       if (dateLabelsArr.includes(item)) {
@@ -242,7 +268,10 @@ const Dashboard = () => {
         );
         if (selectedSource.length > 0)
           content = (
-            <span> Source : {selectedSource && selectedSource.toString()} </span>
+            <span>
+              {" "}
+              Source : {selectedSource && selectedSource.toString()}{" "}
+            </span>
           );
       }
       if (item === "policyIds") {
@@ -281,15 +310,17 @@ const Dashboard = () => {
   return (
     <Container fluid>
       {state.loading && <Loader />}
-      {openFilter && <FilterModal
-        labelFacets={state.labelFacets}
-        show={openFilter}
-        handleClose={() => setOpenFilter(false)}
-        handleSubmit={handleFlterModalSubmit}
-        selectedFilters={selectedFilters}
-        setSelectedFilters={setSelectedFilters}
-        policyFacets={state.policyFacets}
-      />}
+      {openFilter && (
+        <FilterModal
+          labelFacets={state.labelFacets}
+          show={openFilter}
+          handleClose={() => setOpenFilter(false)}
+          handleSubmit={handleFlterModalSubmit}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          policyFacets={state.policyFacets}
+        />
+      )}
       {openNotes && (
         <NotesModal
           labelFacets={state.labelFacets}
@@ -298,19 +329,19 @@ const Dashboard = () => {
           selectedNotes={selectedNotes}
         />
       )}
-      {showCreate &&
+      {showCreate && (
         <EditBulkModal
           labelFacets={state.labelFacets}
           show={showCreate}
           handleClose={() => {
             setShowCreate(false);
-            setEditParams([])
+            setEditParams([]);
           }}
           editParams={editParams}
           getSearchPageData={getSearchPageData}
           policyFacets={state.policyFacets}
         />
-      }
+      )}
       <Row className="justify-content-md-center min-row-ht-100 mt-5">
         <Col md={4} className="align-item-center align-items-center ">
           <InputGroup>
@@ -326,6 +357,11 @@ const Dashboard = () => {
               aria-label="search value"
               onChange={handleChange}
               className="txt-fld-search-main"
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  setSearchTerm(search);
+                }
+              }}
             />
             {search && (
               <ClearIcon className="close-icon" onClick={clearSearch} />
@@ -376,8 +412,22 @@ const Dashboard = () => {
               />
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
-              {auth.user.role === 'admin' && <Button handleClick={openCreateModal} variant="light" startIcon={<AddCircleIcon />} label="Create" className='' />}
-              <Button handleClick={exportData} variant="light" startIcon={<FileDownloadIcon />} label={state.exportLoading ? 'Exporting' : 'Export'} className='' />
+              {auth.user.role === "admin" && (
+                <Button
+                  handleClick={openCreateModal}
+                  variant="light"
+                  startIcon={<AddCircleIcon />}
+                  label="Create"
+                  className=""
+                />
+              )}
+              <Button
+                handleClick={exportData}
+                variant="light"
+                startIcon={<FileDownloadIcon />}
+                label={state.exportLoading ? "Exporting" : "Export"}
+                className=""
+              />
               <CSVLink
                 data={csvData}
                 headers={CSV_HEADERS}
