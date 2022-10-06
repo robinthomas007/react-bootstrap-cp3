@@ -1,5 +1,5 @@
 .policy-wrapper {
-    padding: 10px 142px;
+    padding: 100px 142px 10px;
 }
 
 @media (min-width: 780px) and (max-width: 1400px) {

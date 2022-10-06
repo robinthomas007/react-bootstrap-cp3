@@ -299,7 +299,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   padding: 10px;
 }
 
-.policy-tl-nav span.active{
+.policy-tl-nav span.active {
   background: #f67e15;
   color: #fff;
   border-radius: 100px;
@@ -307,13 +307,43 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-roo
   font-weight: bold;
 }
 
-.policy-tl-nav span.non-active{
+.policy-tl-nav span.non-active {
   background: #F5F5F5;
   border-radius: 100px;
   padding: 6px 15px;
   display: inline-block;
 }
 
-.policy-tl-nav span{
+.policy-tl-nav span {
   padding: 6px;
+}
+
+.dashboard-wrapper.container-fluid {
+  padding-top: 100px !important;
+}
+
+.search-table .table-responsive {
+  height:600px;
+  overflow:scroll;
+} 
+
+.search-table .table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.search-table .table-responsive thead tr{
+  background: white;
+  position: sticky;
+  top: -1px;
+  z-index: 10;
+}
+
+.search-table .table-responsive th::after {
+  position: absolute;
+  content: '';
+  bottom: -1px;
+  left: -1px;
+  width: calc( 100% + 1px);
+  height: 1px;
+  background-color: #dee2e6;
 }

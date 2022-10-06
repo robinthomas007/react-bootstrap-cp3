@@ -54,6 +54,10 @@ code {
 
 .cp3-header {
   height: 62px;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  top: 0;
 }
 
 .cp3-logo {

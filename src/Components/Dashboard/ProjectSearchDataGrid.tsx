@@ -19,6 +19,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CloseIcon from "@mui/icons-material/Close";
 import moment from 'moment';
 import { capitalizeFirstLetter, FormatPlatforms } from './../Common/Utils'
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -159,6 +161,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         <span className="sort-icons">{sortOrder === 'desc' && activeSort === active ?
           <KeyboardArrowUpIcon onClick={() => handleSortOrderChange('asc', active)} /> :
           <KeyboardArrowDownIcon onClick={() => handleSortOrderChange('desc', active)} />}
+          {/* <ArrowCircleLeftIcon onClick={() => handleColumnOrder(title, 'left')} /> */}
+          {/* <ArrowCircleRightIcon onClick={() => handleColumnOrder(title, 'right')} /> */}
           <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>
             <MoreVertIcon className="header-filter-icon" onClick={() => !filterSearch && setcolumnFilter([{ id: active, name: title }])} />
           </OverlayTrigger>
@@ -172,6 +176,12 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     return moment(relDate) > moment(currentDate) ? 'pre-release' : 'post-release'
   }
 
+
+  const handleColumnOrder = (title: string, position: string) => {
+    console.log("came")
+  }
+
+
   return (
     <Col md={11}>
       <Table responsive className={`${colorModeContext.colorMode === "light" ? "srch-dg-tbl" : "srch-dg-tbl text-white"}`}>
@@ -184,7 +194,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             <th className="text-center">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="tbale-bdy">
           {props.tracks.map((track: any, index: number) => {
             const tab = getActiveTabToolTip(track.releaseDate)
             const exData = track.exceptionDetails && track.exceptionDetails.map((item: any) => item.release.toLowerCase());

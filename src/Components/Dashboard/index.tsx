@@ -308,7 +308,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Container fluid>
+    <Container fluid className="dashboard-wrapper">
       {state.loading && <Loader />}
       {openFilter && (
         <FilterModal
@@ -342,124 +342,128 @@ const Dashboard = () => {
           policyFacets={state.policyFacets}
         />
       )}
-      <Row className="justify-content-md-center min-row-ht-100 mt-5">
-        <Col md={4} className="align-item-center align-items-center ">
-          <InputGroup>
-            <Button
-              handleClick={openFilterModal}
-              variant="light"
-              label={<SettingsIcon />}
-              className="mr-btn no-border-rd"
-            />
-            <SearchIcon className="txt-fld-search-icon" />
-            <FormControl
-              value={search}
-              aria-label="search value"
-              onChange={handleChange}
-              className="txt-fld-search-main"
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  setSearchTerm(search);
-                }
-              }}
-            />
-            {search && (
-              <ClearIcon className="close-icon" onClick={clearSearch} />
-            )}
-            <Button
-              handleClick={() => setSearchTerm(search)}
-              variant="secondary"
-              label="Search"
-              className="text-white"
-            />
-          </InputGroup>
-          {selectedFilterKeys.length > 0 && (
-            <div className="selected-filter-wrapper">
-              <label>Selected Filters: </label>
-              {renderSelectedFilters()}
-            </div>
-          )}
-        </Col>
-      </Row>
-      <Row className="pt-20 pb-20 justify-content-md-center">
-        <Col md={11}>
-          <Row>
-            <Col
-              md={4}
-              className="d-flex justify-content-start align-items-center"
-            >
-              <span>Viewing </span> &nbsp;
-              <Form.Control
-                as="select"
-                size="sm"
-                style={{ width: "40px" }}
-                onChange={handleLimitChange}
-              >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-              </Form.Control>
-              &nbsp;
-              <span> of {state.totalItems} Results</span>
-            </Col>
-            <Col md={4} className="d-flex justify-content-center">
-              <Pagination
-                count={state.totalPages ? Number(state.totalPages) : 0}
-                shape="rounded"
-                color="primary"
-                page={state.pageNumber}
-                onChange={handlePageChange}
+      <Container fluid className="fixed-search">
+        <Row className="justify-content-md-center min-row-ht-100 mt-5">
+          <Col md={4} className="align-item-center align-items-center ">
+            <InputGroup>
+              <Button
+                handleClick={openFilterModal}
+                variant="light"
+                label={<SettingsIcon />}
+                className="mr-btn no-border-rd"
               />
-            </Col>
-            <Col md={4} className=" d-flex footer-actions justify-content-end">
-              {auth.user.role === "admin" && (
-                <Button
-                  handleClick={openCreateModal}
-                  variant="light"
-                  startIcon={<AddCircleIcon />}
-                  label="Create"
-                  className=""
-                />
+              <SearchIcon className="txt-fld-search-icon" />
+              <FormControl
+                value={search}
+                aria-label="search value"
+                onChange={handleChange}
+                className="txt-fld-search-main"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    setSearchTerm(search);
+                  }
+                }}
+              />
+              {search && (
+                <ClearIcon className="close-icon" onClick={clearSearch} />
               )}
               <Button
-                handleClick={exportData}
-                variant="light"
-                startIcon={<FileDownloadIcon />}
-                label={state.exportLoading ? "Exporting" : "Export"}
-                className=""
+                handleClick={() => setSearchTerm(search)}
+                variant="secondary"
+                label="Search"
+                className="text-white"
               />
-              <CSVLink
-                data={csvData}
-                headers={CSV_HEADERS}
-                filename="projects.csv"
-                className="hidden"
-                ref={csvLink}
-                target="_blank"
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Row className="justify-content-md-center">
-        <ProjectSearchDataGrid
-          loading={state.loading}
-          tracks={state.tracks}
-          limit={state.limit}
-          height={state.height}
-          totalPages={state.totalPages}
-          totalItems={state.totalItems}
-          pageNumber={state.pageNumber}
-          onSortModelChange={onSortModelChange}
-          openNotesModal={openNotesModal}
-          dispatch={dispatch}
-          clearSearch={clearSearch}
-          openCreateModal={openCreateModal}
-          deleteTrack={deleteTrack}
-          onFilterColumnSearch={onFilterColumnSearch}
-          role={auth.user.role}
-        />
-      </Row>
+            </InputGroup>
+            {selectedFilterKeys.length > 0 && (
+              <div className="selected-filter-wrapper">
+                <label>Selected Filters: </label>
+                {renderSelectedFilters()}
+              </div>
+            )}
+          </Col>
+        </Row>
+        <Row className="pt-20 pb-20 justify-content-md-center">
+          <Col md={11}>
+            <Row>
+              <Col
+                md={4}
+                className="d-flex justify-content-start align-items-center"
+              >
+                <span>Viewing </span> &nbsp;
+                <Form.Control
+                  as="select"
+                  size="sm"
+                  style={{ width: "40px" }}
+                  onChange={handleLimitChange}
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </Form.Control>
+                &nbsp;
+                <span> of {state.totalItems} Results</span>
+              </Col>
+              <Col md={4} className="d-flex justify-content-center">
+                <Pagination
+                  count={state.totalPages ? Number(state.totalPages) : 0}
+                  shape="rounded"
+                  color="primary"
+                  page={state.pageNumber}
+                  onChange={handlePageChange}
+                />
+              </Col>
+              <Col md={4} className=" d-flex footer-actions justify-content-end">
+                {auth.user.role === "admin" && (
+                  <Button
+                    handleClick={openCreateModal}
+                    variant="light"
+                    startIcon={<AddCircleIcon />}
+                    label="Create"
+                    className=""
+                  />
+                )}
+                <Button
+                  handleClick={exportData}
+                  variant="light"
+                  startIcon={<FileDownloadIcon />}
+                  label={state.exportLoading ? "Exporting" : "Export"}
+                  className=""
+                />
+                <CSVLink
+                  data={csvData}
+                  headers={CSV_HEADERS}
+                  filename="projects.csv"
+                  className="hidden"
+                  ref={csvLink}
+                  target="_blank"
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+      <Container fluid className="search-table">
+        <Row className="justify-content-md-center">
+          <ProjectSearchDataGrid
+            loading={state.loading}
+            tracks={state.tracks}
+            limit={state.limit}
+            height={state.height}
+            totalPages={state.totalPages}
+            totalItems={state.totalItems}
+            pageNumber={state.pageNumber}
+            onSortModelChange={onSortModelChange}
+            openNotesModal={openNotesModal}
+            dispatch={dispatch}
+            clearSearch={clearSearch}
+            openCreateModal={openCreateModal}
+            deleteTrack={deleteTrack}
+            onFilterColumnSearch={onFilterColumnSearch}
+            role={auth.user.role}
+          />
+        </Row>
+      </Container>
     </Container>
   );
 };
