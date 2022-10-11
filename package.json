@@ -60,6 +60,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react-beautiful-dnd": "^13.1.2",
+    "react-beautiful-dnd": "^13.1.1",
     "sass": "^1.52.0"
   }
 }
