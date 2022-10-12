@@ -12,15 +12,15 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Popover from "react-bootstrap/Popover";
-import SelectField from "./../Common/select";
-import Button from "./../Common/button";
+import SelectField from "../Common/select";
+import Button from "../Common/button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import moment from "moment";
-import { capitalizeFirstLetter, FormatPlatforms } from "./../Common/Utils";
+import { capitalizeFirstLetter, FormatPlatforms } from "../Common/Utils";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import { TITLES } from './../Common/staticDatas';
+import { TITLES } from '../Common/staticDatas';
 
 type searchProps = {
   loading: boolean | Boolean;

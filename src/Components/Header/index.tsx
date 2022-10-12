@@ -7,14 +7,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useColor } from "../../Context/ColorModeContext";
-import jwt_decode from "jwt-decode";
-import getCookie from "./../Common/cookie";
 import { useAuth } from "./../../Context/authContext";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import ApprovalIcon from "@mui/icons-material/Approval";
-import { ADMIN } from "./../Common/Utils";
+import PolicyIcon from '@mui/icons-material/Policy';
 
 export default function Header() {
   const colorModeContext = useColor();
@@ -40,13 +38,19 @@ export default function Header() {
   return (
     <Container fluid>
       <Row className="bg-header-theme text-white cp3-header">
-        <Col xl={4} xxl={6}>
+        <Col xl={3} xxl={5}>
           <a href="/">
             <img className="cp3-logo" src={logo} alt="Logo" />
           </a>
         </Col>
-        <Col xl={8} xxl={6}>
+        <Col xl={9} xxl={7}>
           <Nav className="justify-content-around">
+            <Nav.Item className="nav-item-link">
+              <NavLink to="/first_seen">
+                <PolicyIcon /> First Seen
+                <div className="line"></div>
+              </NavLink>
+            </Nav.Item>
             <Nav.Item className="nav-item-link">
               <NavLink to="/">
                 <SearchIcon /> Search

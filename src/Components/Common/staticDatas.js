@@ -52,3 +52,16 @@ export const CSV_HEADERS = [
   { key: 'updatedDate', label: 'Last Updated' },
   { key: 'source', label: 'Source' },
 ]
+
+export const TITLES = [
+  { id: "title", name: "Track Title" },
+  { id: "artist", name: "Artist" },
+  { id: "album", name: "Album" },
+  { id: "isrc", name: "ISRC" },
+  { id: "label", name: "Label" },
+  { id: "blockPolicyName", name: "Policy" },
+  { id: "leakDate", name: "Leak Date" },
+  { id: "releaseDate", name: "Release Date" },
+  { id: "updatedDate", name: "Last Updated" },
+  { id: "source", name: "Source" },
+];
