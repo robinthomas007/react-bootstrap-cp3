@@ -60,6 +60,14 @@ export const reducer = (state: searchState, action: searchActions) => {
       return {
         ...state,
         loading: false,
+        tracks: [],
+        totalPages: 0,
+        totalItems: 0
+      }
+    case 'FETCH_REQUEST':
+      return {
+        ...state,
+        loading: true,
       }
     case 'CHANGE_LIMIT':
       return {

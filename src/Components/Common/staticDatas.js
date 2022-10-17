@@ -53,12 +53,26 @@ export const CSV_HEADERS = [
   { key: 'source', label: 'Source' },
 ]
 
-export const TITLES = [
+export const SEARCH_TITLES = [
   { id: "title", name: "Track Title" },
   { id: "artist", name: "Artist" },
   { id: "album", name: "Album" },
   { id: "isrc", name: "ISRC" },
   { id: "label", name: "Label" },
+  { id: "blockPolicyName", name: "Policy" },
+  { id: "leakDate", name: "Leak Date" },
+  { id: "releaseDate", name: "Release Date" },
+  { id: "updatedDate", name: "Last Updated" },
+  { id: "source", name: "Source" },
+];
+
+export const FIRST_SEEN_TITLES = [
+  { id: "title", name: "Track Title" },
+  { id: "artist", name: "Artist" },
+  { id: "album", name: "Album" },
+  { id: "isrc", name: "ISRC" },
+  { id: "label", name: "Label" },
+  { id: "team", name: "Team" },
   { id: "blockPolicyName", name: "Policy" },
   { id: "leakDate", name: "Leak Date" },
   { id: "releaseDate", name: "Release Date" },

@@ -4,7 +4,7 @@ import { useRoutes } from 'react-router-dom'
 import { ProtectedRoutes } from './ProtectedRoutes';
 import Policy from '../Components/Policy';
 import Dashboard from '../Components/Dashboard';
-import FirstSeenDashboard from '../Components/FirstSeenDashboard';
+// import FirstSeenDashboard from '../Components/FirstSeenDashboard';
 
 import { PublicRoutes } from './PublicRoutes';
 
@@ -20,7 +20,7 @@ function Routes() {
       element: <PublicRoutes />,
       children: [
         { path: '/', element: <Dashboard /> },
-        { path: '/first_seen', element: <FirstSeenDashboard /> },
+        { path: '/first_seen', element: <Dashboard /> },
       ],
     },
   ]);

@@ -25,6 +25,8 @@ import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
+import { useLocation } from 'react-router-dom';
+
 // @ts-ignore
 import { CSVLink } from "react-csv";
 import { CSV_HEADERS } from "../Common/staticDatas";
@@ -46,6 +48,10 @@ const Dashboard = () => {
   const csvLink = React.createRef<any>();
   const auth = useAuth();
 
+  const location = useLocation()
+
+  const PAGE_PATH = location.pathname === '/first_seen' ? 'FIRST_SEEN' : 'DASHBOARD'
+
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
       const {
@@ -56,8 +62,10 @@ const Dashboard = () => {
         sortOrder,
         filter,
       } = state.searchCriteria;
+      const SUB_URL = PAGE_PATH === 'DASHBOARD' ? 'TrackSearch' : 'TrackLeaksSearch'
+      dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
-        .get(BASE_URL + "TrackSearch", {
+        .get(BASE_URL + SUB_URL, {
           params: {
             searchTerm: searchTerm,
             itemsPerPage: isExport ? "" : itemsPerPage,
@@ -95,7 +103,7 @@ const Dashboard = () => {
           console.log("error feching data", err);
         });
     },
-    [state.searchCriteria]
+    [state.searchCriteria, PAGE_PATH]
   );
 
   React.useEffect(() => {
@@ -337,6 +345,7 @@ const Dashboard = () => {
             setShowCreate(false);
             setEditParams([]);
           }}
+          PAGE_PATH={PAGE_PATH}
           editParams={editParams}
           getSearchPageData={getSearchPageData}
           policyFacets={state.policyFacets}

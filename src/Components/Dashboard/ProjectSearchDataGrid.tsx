@@ -17,10 +17,11 @@ import Button from "./../Common/button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
+import { useLocation } from 'react-router-dom';
 import moment from "moment";
 import { capitalizeFirstLetter, FormatPlatforms } from "./../Common/Utils";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import { TITLES } from './../Common/staticDatas';
+import { SEARCH_TITLES, FIRST_SEEN_TITLES } from './../Common/staticDatas';
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -58,8 +59,17 @@ export default function ProjectSearchDataGrid(props: searchProps) {
 
   const colorModeContext = useColor();
 
+  const location = useLocation()
+
+  const PAGE_PATH = location.pathname === '/first_seen' ? 'FIRST_SEEN' : 'DASHBOARD'
+
+  const TITLES = PAGE_PATH === 'DASHBOARD' ? SEARCH_TITLES : FIRST_SEEN_TITLES
 
   const [headers, setHeaders] = React.useState(TITLES);
+
+  React.useEffect(() => {
+    setHeaders(TITLES)
+  }, [TITLES]);
 
   const NotesModal = (track: object) => {
     props.openNotesModal(track);
