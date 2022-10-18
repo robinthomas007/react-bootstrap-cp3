@@ -514,9 +514,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       )}
                       {props.role === "admin" && (
                         <ArchiveIcon
-                          className={track.source !== "CP3" ? "disabled" : ""}
+                          className={(track.source === "CP3" || track.source === "FS") ? "" : "disabled"}
                           onClick={() =>
-                            track.source === "CP3" && deleteTrack(track)
+                            (track.source === "CP3" || track.source === "FS") && deleteTrack(track)
                           }
                         />
                       )}

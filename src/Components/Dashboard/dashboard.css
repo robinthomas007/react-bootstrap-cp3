@@ -197,8 +197,11 @@ span.sort-icons svg:hover {
   background-color: rgba(245, 127, 23, 0.6);
 }
 
+.srch-dg-tbl .soruce-box.FS {
+  background-color: rgba(245, 250, 32, 0.6)
+}
 
-svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled.css-i4bv87-MuiSvgIcon-root {
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   color: #bcbaba;
   pointer-events: none;
 }

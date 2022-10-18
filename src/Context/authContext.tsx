@@ -1,7 +1,10 @@
+import React from 'react'
 import { createContext, useState, useContext } from "react";
 import jwt_decode from 'jwt-decode';
 import getCookie from './../Components/Common/cookie';
 import { ADMIN } from './../Components/Common/Utils';
+import { BASE_URL } from "./../App";
+import axios from "axios";
 
 type AuthContextProps = {
   children: React.ReactNode
@@ -26,6 +29,25 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     window.location.reload();
   }, LoggedInUser.exp);
   const [user, setUser] = useState<any>(LoggedInUser || {})
+  const IsValidFSUser = () => {
+    return axios
+      .get(BASE_URL + 'User/IsValidFSUser', {
+        headers: {
+          cp3_auth: token,
+        },
+      })
+      .then((res) => {
+        return res.data
+      })
+      .catch((err) => {
+        return false
+      });
+  }
+  React.useEffect(() => {
+    IsValidFSUser().then(res => {
+      setUser({ ...user, FS: res })
+    })
+  }, [])
   const login = (user: any) => {
     setUser(user)
   }

@@ -45,12 +45,12 @@ export default function Header() {
         </Col>
         <Col xl={9} xxl={7}>
           <Nav className="justify-content-around">
-            <Nav.Item className="nav-item-link">
+            {auth.user.FS && <Nav.Item className="nav-item-link">
               <NavLink to="/first_seen">
                 <PolicyIcon /> First Seen
                 <div className="line"></div>
               </NavLink>
-            </Nav.Item>
+            </Nav.Item>}
             <Nav.Item className="nav-item-link">
               <NavLink to="/">
                 <SearchIcon /> Search
