@@ -187,6 +187,7 @@ span.sort-icons svg:hover {
   max-width: 65px;
   display: block;
   text-align: center;
+  font-weight: bold;
 }
 
 .srch-dg-tbl .soruce-box.GRD {

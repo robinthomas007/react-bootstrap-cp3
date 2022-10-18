@@ -129,7 +129,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     }
     if (header === "source") {
       return (
-        <span className={`soruce-box ${track.source}`}>{track.source}</span>
+        <span className={`soruce-box ${track.source}`}>{track.source === 'FS' ? '1st' : track.source}</span>
       );
     }
     if (header === "blockPolicyName") {

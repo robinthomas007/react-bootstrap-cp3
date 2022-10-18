@@ -187,10 +187,9 @@ const Dashboard = () => {
   };
 
   const deleteTrack = (ids: Array<any>) => {
-    const SUB_URL = PAGE_PATH === 'DASHBOARD' ? 'Track/DeleteTrack' : 'TrackLeaks/DeleteTrackLeaks'
     if (window.confirm("Are you sure to delete this track?"))
       axios
-        .delete(BASE_URL + SUB_URL, {
+        .delete(BASE_URL + 'Track/DeleteTrack', {
           data: {
             trackIds: ids,
           },
