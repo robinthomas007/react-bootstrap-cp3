@@ -446,6 +446,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
+                              id={ele.id}
                             >
                               {getTableIcons(ele.id, ele.name)}
                             </th>
