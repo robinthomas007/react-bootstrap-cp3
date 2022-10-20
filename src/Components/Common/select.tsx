@@ -52,6 +52,11 @@ const LightStyles = {
     background: state.isFocused ? "#f5f5f5" : '#F5F5F5',
     color: state.isFocused ? "#333333" : undefined,
   }),
+  menu: (base: any) => ({
+    ...base,
+    width: "max-content",
+    minWidth: "100%",
+  }),
 };
 
 const DarkStyles = {
@@ -71,6 +76,11 @@ const DarkStyles = {
     ...base,
     background: state.isFocused ? "#f5f5f5" : undefined,
     color: state.isFocused ? "#333333" : undefined,
+  }),
+  menu: (base: any) => ({
+    ...base,
+    width: "max-content",
+    minWidth: "100%",
   }),
 };
 
