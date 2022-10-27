@@ -108,6 +108,7 @@ export default function Header() {
       .post(BASE_URL + "Notification/ReadNotification", { notificationId: id }, config)
       .then((response) => {
         if (response.status === 200) {
+          getAllNotifications();
           setLoading(false)
           navigate("/first_seen");
         }
@@ -126,7 +127,7 @@ export default function Header() {
         <div key={i} className="noti-item">
           <div className="alias"><span style={{ background: hexArray[i] }}> {getAlias(noti.userName)}</span></div>
           <div className="noti-content" onClick={() => markAsRead(noti.notificationId)}>
-            <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the first scene record <strong>"{noti.trackName}"</strong>
+            <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FirstSeen' ? 'First Seen' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
             <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
           </div>
         </div>

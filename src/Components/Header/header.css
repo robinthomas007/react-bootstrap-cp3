@@ -1,14 +1,14 @@
 .notification-wrapper {
   background: #f5f5f5;
   width: 350px;
-  padding: 8px;
+  padding: 10px;
   position: absolute;
   top: 55px;
   left: 30px;
   align-items: center;
   border-radius: 4px;
-  max-height: 325px;
-  overflow: auto;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .notification-wrapper::-webkit-scrollbar {
@@ -18,8 +18,7 @@
 .noti-item {
   display: flex;
   color: #000;
-  padding: 8px;
-  width: 350px;
+  padding: 10px;
   align-items: center;
   font-size: 14px;
 }
