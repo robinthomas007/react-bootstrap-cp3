@@ -4,7 +4,6 @@
   padding: 10px;
   position: absolute;
   top: 55px;
-  left: 30px;
   align-items: center;
   border-radius: 4px;
   max-height: 300px;
@@ -61,7 +60,7 @@ span.noti-count {
   font-size: 13px;
   background: red;
   border-radius: 100%;
-  padding: 0px 1px 0px 1px;
+  padding: 0px 1px 0px 4px;
   top: -4px;
   display: inline-block;
   min-width: 16px;

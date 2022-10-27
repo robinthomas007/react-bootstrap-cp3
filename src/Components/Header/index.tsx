@@ -12,9 +12,11 @@ import Nav from "react-bootstrap/Nav";
 import { NavLink, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import ApprovalIcon from "@mui/icons-material/Approval";
+import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import PolicyIcon from '@mui/icons-material/Policy';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Loader from "./../Common/loader";
+import getCookie from "./../Common/cookie";
 import axios from "axios";
 import { BASE_URL } from "./../../App";
 import { config } from "./../Common/Utils";
@@ -105,7 +107,12 @@ export default function Header() {
   const markAsRead = (id: number) => {
     setLoading(true)
     axios
-      .post(BASE_URL + "Notification/ReadNotification", { notificationId: id }, config)
+      .get(BASE_URL + "Notification/ReadNotification", {
+        params: { notificationId: id },
+        headers: {
+          cp3_auth: getCookie("cp3_auth"),
+        }
+      })
       .then((response) => {
         if (response.status === 200) {
           getAllNotifications();
@@ -147,19 +154,13 @@ export default function Header() {
     <Container fluid>
       {loading && <Loader />}
       <Row className="bg-header-theme text-white cp3-header">
-        <Col xl={3} xxl={5}>
+        <Col xl={2} xxl={4}>
           <a href="/">
             <img className="cp3-logo" src={logo} alt="Logo" />
           </a>
         </Col>
-        <Col xl={9} xxl={7}>
+        <Col xl={10} xxl={8}>
           <Nav className="justify-content-around">
-            {auth.user.FS && <Nav.Item className="nav-item-link">
-              <NavLink to="/first_seen">
-                <PolicyIcon /> First Seen
-                <div className="line"></div>
-              </NavLink>
-            </Nav.Item>}
             <Nav.Item className="nav-item-link">
               <NavLink to="/">
                 <SearchIcon /> Search
@@ -175,21 +176,31 @@ export default function Header() {
                   </NavLink>
                 </Nav.Item>
               ))}
-            <Nav.Item>
-              <Nav.Link>
-                <div>
-                  <div className="notify-wrapper" id="notify-wrapper">
-                    <NotificationsIcon id="notify-wrapper" onClick={openNotification} className="noti-icon" />
-                    {notifications.length > 0 && <span className="noti-count">{notifications.length}</span>}
-                  </div>
-                  <div className="notification-wrapper-div">
-                    {showNoti && <div className="notification-wrapper arrow-top">
-                      {renderNotifications()}
-                    </div>}
-                  </div>
-                </div>
-              </Nav.Link>
+            {auth.user.FS && <Nav.Item className="nav-item-link">
+              <NavLink to="/first_seen">
+                <PolicyIcon /> First Seen
+                <div className="line"></div>
+              </NavLink>
+            </Nav.Item>}
+            <Nav.Item className="nav-item-link">
+              <NavLink to="/first_seen">
+                <TrackChangesIcon /> Greenlist
+                <div className="line"></div>
+              </NavLink>
             </Nav.Item>
+            <Nav.Link>
+              <div>
+                <div className="notify-wrapper" id="notify-wrapper">
+                  <NotificationsIcon id="notify-wrapper" onClick={openNotification} className="noti-icon" />
+                  {notifications.length > 0 && <span className="noti-count">{notifications.length}</span>}
+                </div>
+                <div className="notification-wrapper-div">
+                  {showNoti && <div className="notification-wrapper arrow-top">
+                    {renderNotifications()}
+                  </div>}
+                </div>
+              </div>
+            </Nav.Link>
             <Nav.Item>
               <Nav.Link>
                 <span onClick={colorModeContext.toggleColorMode}>
