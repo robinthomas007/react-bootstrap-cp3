@@ -6,8 +6,9 @@
   top: 55px;
   align-items: center;
   border-radius: 4px;
-  max-height: 300px;
+  max-height: 350px;
   overflow-y: auto;
+  border: 1px solid #ccc;
 }
 
 .notification-wrapper::-webkit-scrollbar {
@@ -21,16 +22,6 @@
   align-items: center;
   font-size: 14px;
 }
-/* .notification-wrapper.arrow-top:after {
-  content: " ";
-  position: absolute;
-  left: 0;
-  top: -10px;
-  border-top: none;
-  border-right: 10px solid transparent;
-  border-left: 10px solid transparent;
-  border-bottom: 10px solid #f5f5f5;
-} */
 
 .alias span{
   padding: 10px;
@@ -60,8 +51,10 @@ span.noti-count {
   font-size: 13px;
   background: red;
   border-radius: 100%;
-  padding: 0px 1px 0px 4px;
-  top: -4px;
-  display: inline-block;
-  min-width: 16px;
+  top: 0px;
+  left: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
 }

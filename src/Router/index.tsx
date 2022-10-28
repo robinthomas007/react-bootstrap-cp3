@@ -6,6 +6,7 @@ import Policy from '../Components/Policy';
 import Dashboard from '../Components/Dashboard';
 import { PublicRoutes } from './PublicRoutes';
 import { FCUserRoutes } from './FCUserRoutes';
+import GreenList from '../Components/GreenList';
 
 function Routes() {
   let element = useRoutes([
@@ -19,6 +20,8 @@ function Routes() {
       element: <PublicRoutes />,
       children: [
         { path: '/', element: <Dashboard /> },
+        { path: '/green_list', element: <GreenList /> },
+
       ],
     },
     {

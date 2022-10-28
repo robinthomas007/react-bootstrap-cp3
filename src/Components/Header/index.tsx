@@ -85,6 +85,10 @@ export default function Header() {
         if (response.data && response.data.length > 0) {
           setNotifications(response.data)
         }
+        if (response.data && response.data.length === 0) {
+          setNotifications([])
+          setShowNoti(false)
+        }
       })
       .catch((err) => {
 
@@ -93,7 +97,8 @@ export default function Header() {
   }
 
   const openNotification = () => {
-    setShowNoti(!showNoti)
+    if (notifications.length > 0)
+      setShowNoti(!showNoti)
   }
 
   const getAlias = (name: any) => {
@@ -132,9 +137,9 @@ export default function Header() {
     return notifications.map((noti: any, i) => {
       return (
         <div key={i} className="noti-item">
-          <div className="alias"><span style={{ background: hexArray[i] }}> {getAlias(noti.userName)}</span></div>
+          <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
           <div className="noti-content" onClick={() => markAsRead(noti.notificationId)}>
-            <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FirstSeen' ? 'First Seen' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
+            <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FS' ? 'First Seen' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
             <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
           </div>
         </div>
@@ -182,12 +187,12 @@ export default function Header() {
                 <div className="line"></div>
               </NavLink>
             </Nav.Item>}
-            <Nav.Item className="nav-item-link">
-              <NavLink to="/first_seen">
+            {/* <Nav.Item className="nav-item-link">
+              <NavLink to="/green_list">
                 <TrackChangesIcon /> Greenlist
                 <div className="line"></div>
               </NavLink>
-            </Nav.Item>
+            </Nav.Item> */}
             <Nav.Link>
               <div>
                 <div className="notify-wrapper" id="notify-wrapper">

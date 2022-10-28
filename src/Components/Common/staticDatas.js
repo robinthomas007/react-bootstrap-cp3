@@ -79,3 +79,16 @@ export const FIRST_SEEN_TITLES = [
   { id: "updatedDate", name: "Last Updated" },
   { id: "source", name: "Source" },
 ];
+
+export const GREEN_LIST_TITLES = [
+  { id: "account", name: "Account" },
+  { id: "artist", name: "Artist" },
+  { id: "label", name: "Label" },
+  { id: "account_manager", name: "Account Manager" },
+  { id: "contact", name: "Contact" },
+  { id: "greenlisted_URL", name: "Greenlisted URL" },
+  { id: "added_by", name: "Added By" },
+  { id: "Llst_updated", name: "Last Updated" },
+  { id: "end_date", name: "End Date" },
+  { id: "type", name: "Type" },
+];
