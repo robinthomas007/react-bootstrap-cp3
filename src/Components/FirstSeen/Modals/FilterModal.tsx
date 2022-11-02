@@ -8,15 +8,19 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
-import { SOURCE_LIST } from './../../Common/staticDatas'
+import { SOURCE_LIST, CONFIGURATION_LIST } from './../../Common/staticDatas'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
   labelIds: Array<object>,
-  EndFrom: string,
-  EndTo: string,
+  policy: Array<object>,
+  leakFrom: string,
+  leakTo: string,
+  releaseFrom: string,
+  releaseTo: string,
   updatedFrom: string,
   updatedTo: string,
+  policyIds: Array<object>,
   source: Array<object>,
 }
 
@@ -25,22 +29,28 @@ type filterProps = {
   handleSubmit: any;
   handleClose: any;
   labelFacets: Array<any>;
+  policyFacets: Array<any>;
   selectedFilters: selectedFiltersProps;
   setSelectedFilters: any;
 }
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, EndFrom, EndTo, updatedFrom, updatedTo } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo } = props.selectedFilters
 
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
       searchWithins: searchWithins || ["ALL"],
       labelIds: labelIds || null,
-      EndFrom: EndFrom || null,
-      EndTo: EndTo || null,
+      policy: policy || null,
+      leakFrom: leakFrom || null,
+      leakTo: leakTo || null,
+      releaseFrom: releaseFrom || null,
+      releaseTo: releaseTo || null,
       updatedFrom: updatedFrom || null,
       updatedTo: updatedTo || null,
+      policyIds: policyIds || null,
+      source: source || null
     }
   );
 
@@ -99,26 +109,26 @@ export default function FilterModal(props: filterProps) {
         <Container>
           <Form>
             <Row className="pb-20">
-              <Col md={12} className="pb-20">
+              <Col md={2}>
                 <label>Search Within </label>
               </Col>
               <Col>
                 <Form.Check type='checkbox' disabled={searchFilter.searchWithins.includes('ALL')} checked={searchFilter.searchWithins.includes('ALL')} label="All" id="ALL" onChange={handleChange} />
               </Col>
               <Col>
-                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('account')} label="Account" id="account" onChange={handleChange} />
+                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('title')} label="Title" id="title" onChange={handleChange} />
               </Col>
               <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('artist')} label="Artist" id="artist" onChange={handleChange} />
               </Col>
-              <Col md={3}>
-                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('accountManager')} label="Account Manager" id="accountManager" onChange={handleChange} />
+              <Col>
+                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('isrc')} label="ISRC" id="isrc" onChange={handleChange} />
               </Col>
               <Col>
-                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('contact')} label="Contact" id="contact" onChange={handleChange} />
+                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('notes')} label="Notes" id="notes" onChange={handleChange} />
               </Col>
               <Col>
-                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('url')} label="URL" id="url" onChange={handleChange} />
+                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('album')} label="Album" id="album" onChange={handleChange} />
               </Col>
             </Row>
             <Row className="pb-20">
@@ -128,22 +138,62 @@ export default function FilterModal(props: filterProps) {
                   <SelectField value={searchFilter.labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
+              <Col md={6}>
+                <Form.Group controlId="policyIds" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Policy</Form.Label>
+                  <SelectField value={searchFilter.policyIds} options={props.policyFacets} isMulti={true} name="policyIds" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="pb-20">
+              <Col md={6}>
+                <Form.Group controlId="source" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Source</Form.Label>
+                  <SelectField value={searchFilter.source} options={SOURCE_LIST} isMulti={true} name="source" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="configuration" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Config</Form.Label>
+                  <SelectField value={searchFilter.configuration} options={CONFIGURATION_LIST} isMulti={true} name="configuration" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
             </Row>
             <Row className="pb-20">
               <Col md={10} className="d-flex">
                 <div>
-                  <Form.Group controlId="EndFrom" className="d-flex align-items-center">
-                    <Form.Label className="form-label-width">End Date</Form.Label>
-                    <Datepicker selected={searchFilter.EndFrom} handleDateChange={(date: string) => {
-                      setSearchFilter({ ...searchFilter, EndFrom: date })
+                  <Form.Group controlId="leakFrom" className="d-flex align-items-center">
+                    <Form.Label className="form-label-width">Leak Date</Form.Label>
+                    <Datepicker selected={searchFilter.leakFrom} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, leakFrom: date })
                     }} />
                   </Form.Group>
                 </div>
                 <div>
-                  <Form.Group controlId="EndTo" className="d-flex align-items-center">
+                  <Form.Group controlId="leakTo" className="d-flex align-items-center">
                     <Form.Label className="form-label-sm-width">to</Form.Label>
-                    <Datepicker selected={searchFilter.EndTo} handleDateChange={(date: string) => {
-                      setSearchFilter({ ...searchFilter, EndTo: date })
+                    <Datepicker selected={searchFilter.leakTo} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, leakTo: date })
+                    }} />
+                  </Form.Group>
+                </div>
+              </Col>
+            </Row>
+            <Row className="pb-20">
+              <Col md={10} className="d-flex">
+                <div>
+                  <Form.Group controlId="releaseFrom" className="d-flex align-items-center">
+                    <Form.Label className="form-label-width">Release Date</Form.Label>
+                    <Datepicker selected={searchFilter.releaseFrom} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, releaseFrom: date })
+                    }} />
+                  </Form.Group>
+                </div>
+                <div>
+                  <Form.Group controlId="releaseTo" className="d-flex align-items-center">
+                    <Form.Label className="form-label-sm-width">to</Form.Label>
+                    <Datepicker selected={searchFilter.releaseTo} handleDateChange={(date: string) => {
+                      setSearchFilter({ ...searchFilter, releaseTo: date })
                     }} />
                   </Form.Group>
                 </div>

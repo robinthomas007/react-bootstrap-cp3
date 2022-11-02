@@ -1,35 +1,22 @@
 import React from "react";
-import Button from "../Common/button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { InputGroup, FormControl } from "react-bootstrap";
-import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
-import { reducer, initialState } from "./searchReducer";
+import { reducer, initialState } from "./../Search/searchReducer";
 import ProjectSearchDataGrid from "./ProjectSearchDataGrid";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import Pagination from "@mui/material/Pagination";
 import ClearIcon from "@mui/icons-material/Clear";
-import Form from "react-bootstrap/Form";
 import FilterModal from "./Modals/FilterModal";
 import NotesModal from "./Modals/NotesModal";
-// import CreateModal from "./Modals/CreateModal"
 import EditBulkModal from "./Modals/EditBulkModal";
-import SearchIcon from "@mui/icons-material/Search";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
+import Search from './../Search/search'
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
-import { useLocation } from 'react-router-dom';
-
-// @ts-ignore
-import { CSVLink } from "react-csv";
-import { CSV_HEADERS } from "../Common/staticDatas";
+import { SEARCH_TITLES } from './../Common/staticDatas';
 
 type notesPropTypes = {
   trackId?: number;
@@ -48,10 +35,6 @@ const Dashboard = () => {
   const csvLink = React.createRef<any>();
   const auth = useAuth();
 
-  const location = useLocation()
-
-  const PAGE_PATH = location.pathname === '/first_seen' ? 'FIRST_SEEN' : 'DASHBOARD'
-
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
       const {
@@ -62,10 +45,9 @@ const Dashboard = () => {
         sortOrder,
         filter,
       } = state.searchCriteria;
-      const SUB_URL = PAGE_PATH === 'DASHBOARD' ? 'TrackSearch' : 'TrackLeaksSearch'
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
-        .get(BASE_URL + SUB_URL, {
+        .get(BASE_URL + 'TrackSearch', {
           params: {
             searchTerm: searchTerm,
             itemsPerPage: isExport ? "" : itemsPerPage,
@@ -103,7 +85,7 @@ const Dashboard = () => {
           console.log("error feching data", err);
         });
     },
-    [state.searchCriteria, PAGE_PATH]
+    [state.searchCriteria]
   );
 
   React.useEffect(() => {
@@ -111,19 +93,11 @@ const Dashboard = () => {
     getSearchPageData(isExport);
   }, [getSearchPageData]);
 
-  const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "CHANGE_LIMIT", payload: event.target.value });
-  };
+
   const onSortModelChange = (data: any[]) => {
     dispatch({ type: "SORT_CHANGE", payload: data });
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    pageNumber: number
-  ) => {
-    dispatch({ type: "PAGE_CHANGE", payload: { pageNumber: pageNumber } });
-  };
 
   const setSearchTerm = (searchTerm: string) => {
     dispatch({
@@ -345,113 +319,27 @@ const Dashboard = () => {
             setShowCreate(false);
             setEditParams([]);
           }}
-          PAGE_PATH={PAGE_PATH}
           editParams={editParams}
           getSearchPageData={getSearchPageData}
           policyFacets={state.policyFacets}
         />
       )}
-      <Container fluid className="fixed-search">
-        <Row className="justify-content-md-center min-row-ht-100 mt-5">
-          <Col md={4} className="align-item-center align-items-center ">
-            <InputGroup>
-              <Button
-                handleClick={openFilterModal}
-                variant="light"
-                label={<SettingsIcon />}
-                className="mr-btn no-border-rd"
-              />
-              <SearchIcon className="txt-fld-search-icon" />
-              <FormControl
-                value={search}
-                aria-label="search value"
-                onChange={handleChange}
-                className="txt-fld-search-main"
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    setSearchTerm(search);
-                  }
-                }}
-              />
-              {search && (
-                <ClearIcon className="close-icon" onClick={clearSearch} />
-              )}
-              <Button
-                handleClick={() => setSearchTerm(search)}
-                variant="secondary"
-                label="Search"
-                className="text-white"
-              />
-            </InputGroup>
-            {selectedFilterKeys.length > 0 && (
-              <div className="selected-filter-wrapper">
-                <label>Selected Filters: </label>
-                {renderSelectedFilters()}
-              </div>
-            )}
-          </Col>
-        </Row>
-        <Row className="pt-20 pb-20 justify-content-md-center">
-          <Col md={11}>
-            <Row>
-              <Col
-                md={4}
-                className="d-flex justify-content-start align-items-center"
-              >
-                <span>Viewing </span> &nbsp;
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  style={{ width: "40px" }}
-                  onChange={handleLimitChange}
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                </Form.Control>
-                &nbsp;
-                <span> of {state.totalItems} Results</span>
-              </Col>
-              <Col md={4} className="d-flex justify-content-center">
-                <Pagination
-                  count={state.totalPages ? Number(state.totalPages) : 0}
-                  shape="rounded"
-                  color="primary"
-                  page={state.pageNumber}
-                  onChange={handlePageChange}
-                />
-              </Col>
-              <Col md={4} className=" d-flex footer-actions justify-content-end">
-                {auth.user.role === "admin" && (
-                  <Button
-                    handleClick={openCreateModal}
-                    variant="light"
-                    startIcon={<AddCircleIcon />}
-                    label="Create"
-                    className=""
-                  />
-                )}
-                <Button
-                  handleClick={exportData}
-                  variant="light"
-                  startIcon={<FileDownloadIcon />}
-                  label={state.exportLoading ? "Exporting" : "Export"}
-                  className=""
-                />
-                <CSVLink
-                  data={csvData}
-                  headers={CSV_HEADERS}
-                  filename="projects.csv"
-                  className="hidden"
-                  ref={csvLink}
-                  target="_blank"
-                />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+      <Search
+        openFilterModal={openFilterModal}
+        selectedFilterKeys={selectedFilterKeys}
+        selectedFilters={selectedFilters}
+        renderSelectedFilters={renderSelectedFilters}
+        openCreateModal={openCreateModal}
+        exportData={exportData}
+        CSV_HEADERS={SEARCH_TITLES}
+        csvData={csvData}
+        state={state}
+        dispatch={dispatch}
+        handleChange={handleChange}
+        setSearchTerm={setSearchTerm}
+        clearSearch={clearSearch}
+        search={search}
+      />
       <Container fluid className="search-table">
         <Row className="justify-content-md-center">
           <ProjectSearchDataGrid

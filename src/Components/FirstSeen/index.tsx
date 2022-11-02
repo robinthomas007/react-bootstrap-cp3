@@ -2,11 +2,12 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
-import { reducer, initialState } from "./Reducer/greenListReducer";
-import GreenListDataGrid from "./GreenListDataGrid";
+import { reducer, initialState } from "./../Search/searchReducer";
+import FirstSeenDataGrid from "./FirstSeenDataGrid";
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterModal from "./Modals/FilterModal";
 import NotesModal from "./Modals/NotesModal";
+import EditBulkModal from "./Modals/EditBulkModal";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
 import { BASE_URL } from "../../App";
@@ -14,11 +15,10 @@ import getCookie from "../Common/cookie";
 import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
-import { GREEN_LIST_TITLES } from './../Common/staticDatas';
-import CreateModal from "./Modals/CreateModal"
+import { FIRST_SEEN_TITLES } from './../Common/staticDatas';
 
 type notesPropTypes = {
-  greenListId?: number;
+  trackId?: number;
 };
 
 const GreenList = () => {
@@ -45,7 +45,7 @@ const GreenList = () => {
       } = state.searchCriteria;
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
-        .get(BASE_URL + "GreenListSearch", {
+        .get(BASE_URL + 'TrackLeaksSearch', {
           params: {
             searchTerm: searchTerm,
             itemsPerPage: isExport ? "" : itemsPerPage,
@@ -56,9 +56,12 @@ const GreenList = () => {
               ? filter.searchWithins.toString()
               : "ALL",
             labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
+            policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
             source: filter.source ? getIds(filter.source) : "",
-            EndFrom: filter.EndFrom,
-            EndTo: filter.EndTo,
+            releaseFrom: filter.releaseFrom,
+            releaseTo: filter.releaseTo,
+            leakFrom: filter.leakFrom,
+            leakTo: filter.leakTo,
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
             isExport: isExport ? true : false,
@@ -69,7 +72,7 @@ const GreenList = () => {
         })
         .then((res) => {
           if (res.data.isExport) {
-            setcsvData(res.data.greenList);
+            setcsvData(res.data.tracks);
             dispatch({ type: "EXPORT_END", payload: "" });
           } else {
             dispatch({ type: "FETCH_SUCCESS", payload: res.data });
@@ -155,11 +158,11 @@ const GreenList = () => {
   };
 
   const deleteTrack = (ids: Array<any>) => {
-    if (window.confirm("Are you sure to delete this GreenList?"))
+    if (window.confirm("Are you sure to delete this track?"))
       axios
-        .delete(BASE_URL + 'GreenList/DeleteGreenList', {
+        .delete(BASE_URL + 'Track/DeleteTrack', {
           data: {
-            greenListIds: ids,
+            trackIds: ids,
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -167,13 +170,13 @@ const GreenList = () => {
         })
         .then((res: any) => {
           if (res) {
-            toast.success("GreenList details deleted successfully!", {
+            toast.success("Track details deleted successfully!", {
               autoClose: 3000,
               closeOnClick: true,
             });
             dispatch({ type: "DELETE_SUCCESS", payload: ids });
           } else {
-            toast.error("Error deleting GreenList details", {
+            toast.error("Error deleting Track details", {
               autoClose: 3000,
               closeOnClick: true,
             });
@@ -198,14 +201,18 @@ const GreenList = () => {
 
   const renderSelectedFilters = () => {
     const labelObj: any = {
-      EndFrom: "End From",
-      EndTo: "End To",
+      releaseFrom: "Release From",
+      releaseTo: "Release To",
+      leakFrom: "Leak From",
+      leakTo: "Leak To",
       updatedFrom: "Updated From",
       updatedTo: "Updated To",
     };
     const dateLabelsArr = [
-      "EndFrom",
-      "EndTo",
+      "releaseFrom",
+      "releaseTo",
+      "leakFrom",
+      "leakTo",
       "updatedFrom",
       "updatedTo",
     ];
@@ -226,6 +233,30 @@ const GreenList = () => {
         if (selectedLabel.length > 0)
           content = (
             <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
+          );
+      }
+      if (item === "source") {
+        const selectedSource = selectedFilters[item].map(
+          (label: any) => label.name
+        );
+        if (selectedSource.length > 0)
+          content = (
+            <span>
+              {" "}
+              Source : {selectedSource && selectedSource.toString()}{" "}
+            </span>
+          );
+      }
+      if (item === "policyIds") {
+        const selectedPolicy = selectedFilters[item].map(
+          (policy: any) => policy.name
+        );
+        if (selectedPolicy.length > 0)
+          content = (
+            <span>
+              {" "}
+              Policy : {selectedPolicy && selectedPolicy.toString()}{" "}
+            </span>
           );
       }
       if (item === "searchWithins") {
@@ -260,6 +291,7 @@ const GreenList = () => {
           handleSubmit={handleFlterModalSubmit}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
+          policyFacets={state.policyFacets}
         />
       )}
       {openNotes && (
@@ -271,7 +303,7 @@ const GreenList = () => {
         />
       )}
       {showCreate && (
-        <CreateModal
+        <EditBulkModal
           labelFacets={state.labelFacets}
           show={showCreate}
           handleClose={() => {
@@ -290,7 +322,7 @@ const GreenList = () => {
         renderSelectedFilters={renderSelectedFilters}
         openCreateModal={openCreateModal}
         exportData={exportData}
-        CSV_HEADERS={GREEN_LIST_TITLES}
+        CSV_HEADERS={FIRST_SEEN_TITLES}
         csvData={csvData}
         state={state}
         dispatch={dispatch}
@@ -301,9 +333,9 @@ const GreenList = () => {
       />
       <Container fluid className="search-table">
         <Row className="justify-content-md-center">
-          <GreenListDataGrid
+          <FirstSeenDataGrid
             loading={state.loading}
-            greenList={state.greenList}
+            tracks={state.tracks}
             limit={state.limit}
             height={state.height}
             totalPages={state.totalPages}
@@ -317,7 +349,7 @@ const GreenList = () => {
             deleteTrack={deleteTrack}
             onFilterColumnSearch={onFilterColumnSearch}
             role={auth.user.role}
-            TITLES={GREEN_LIST_TITLES}
+            TITLES={FIRST_SEEN_TITLES}
           />
         </Row>
       </Container>

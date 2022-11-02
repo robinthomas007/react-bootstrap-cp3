@@ -15,8 +15,8 @@ import { config } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
+import { CONFIGURATION_LIST } from './../../Common/staticDatas'
 import moment from "moment";
-import './editmodal.css'
 
 export default function EditBulkModal(props) {
   const [trackList, setTrackList] = useState([]);
@@ -48,6 +48,9 @@ export default function EditBulkModal(props) {
           blockPolicyId: props.policyFacets.filter(
             (p) => Number(track.blockPolicyId) === Number(p.id)
           )[0],
+          configuration: CONFIGURATION_LIST.filter(
+            (p) => track.configuration === p.id
+          )[0],
         }
         trackArray.push(trackObj)
       });
@@ -59,7 +62,6 @@ export default function EditBulkModal(props) {
 
   const handleSubmit = () => {
     const form = document.querySelector("#create-resource-form");
-    const SUB_URL = props.PAGE_PATH === 'DASHBOARD' ? 'Track/BulkUpdateTracks' : 'TrackLeaks/BulkUpdateTrackLeaks'
     if (form.checkValidity() === false) {
       setValidated(true);
     } else {
@@ -73,11 +75,12 @@ export default function EditBulkModal(props) {
           artist: track.artist,
           isrc: track.isrc,
           album: track.album,
-          source: track.source ? track.source : props.PAGE_PATH === 'DASHBOARD' ? '' : 'FS',
+          source: track.source ? track.source : 'FS',
           leakDate: track.leakDate,
           releaseDate: track.releaseDate,
           blockPolicyId: track.blockPolicyId ? Number(track.blockPolicyId.id) : 0,
           labelId: track.labelId ? Number(track.labelId.id) : "",
+          configuration: track.configuration ? track.configuration.id : "",
           subTitle: track.subTitle,
         };
         reqData.push(data)
@@ -85,7 +88,7 @@ export default function EditBulkModal(props) {
       console.log(reqData)
       axios
         .post(
-          BASE_URL + SUB_URL,
+          BASE_URL + 'TrackLeaks/BulkUpdateTrackLeaks',
           reqData,
           config
         )
@@ -203,20 +206,25 @@ export default function EditBulkModal(props) {
                 Artist
               </Form.Label>
             </Col>
-            <Col>
+            <Col md={1}>
               <Form.Label className="form-label">ISRC</Form.Label>
             </Col>
-            <Col md={2}>
+            <Col>
               <Form.Label className="form-label">Album</Form.Label>
             </Col>
-            <Col>
+            <Col md={1}>
               <Form.Label className="form-label">
                 Label
               </Form.Label>
             </Col>
-            <Col>
+            <Col md={1}>
               <Form.Label className="form-label">
                 Policy
+              </Form.Label>
+            </Col>
+            <Col md={1}>
+              <Form.Label className="form-label">
+                Config
               </Form.Label>
             </Col>
             <Col>
@@ -285,7 +293,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={1}>
                   <Form.Group
                     controlId="isrc"
                     className="d-flex align-items-start flex-direction-column">
@@ -300,7 +308,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col>
                   <Form.Group
                     controlId="album"
                     className="d-flex align-items-start flex-direction-column">
@@ -315,7 +323,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={1}>
                   <Form.Group
                     controlId="labelId"
                     className="d-flex align-items-start flex-direction-column">
@@ -341,7 +349,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={1}>
                   <Form.Group
                     controlId="blockPolicyId"
                     className="d-flex align-items-start flex-direction-column">
@@ -351,6 +359,20 @@ export default function EditBulkModal(props) {
                       name="blockPolicyId"
                       handleChange={(data) =>
                         handleOnchange({ ...track, blockPolicyId: data }, index)
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={1}>
+                  <Form.Group
+                    controlId="configurationID"
+                    className="d-flex align-items-start flex-direction-column">
+                    <SelectField
+                      value={track.configuration}
+                      options={CONFIGURATION_LIST}
+                      name="configuration"
+                      handleChange={(data) =>
+                        handleOnchange({ ...track, configuration: data }, index)
                       }
                     />
                   </Form.Group>

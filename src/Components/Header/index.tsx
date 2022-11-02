@@ -187,12 +187,12 @@ export default function Header() {
                 <div className="line"></div>
               </NavLink>
             </Nav.Item>}
-            {/* <Nav.Item className="nav-item-link">
+            <Nav.Item className="nav-item-link">
               <NavLink to="/green_list">
                 <TrackChangesIcon /> Greenlist
                 <div className="line"></div>
               </NavLink>
-            </Nav.Item> */}
+            </Nav.Item>
             <Nav.Link>
               <div>
                 <div className="notify-wrapper" id="notify-wrapper">

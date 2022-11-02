@@ -40,17 +40,10 @@ export const SOURCE_LIST = [
   { id: "grd", name: "GRD" },
 ]
 
-export const CSV_HEADERS = [
-  { key: 'title', label: 'Track Title', },
-  { key: 'artist', label: 'Artist' },
-  { key: 'album', label: 'Album' },
-  { key: 'isrc', label: 'ISRC' },
-  { key: 'label', label: 'Label' },
-  { key: 'blockPolicyName', label: 'Policy' },
-  { key: 'leakDate', label: 'Leak Date' },
-  { key: 'releaseDate', label: 'Release Date' },
-  { key: 'updatedDate', label: 'Last Updated' },
-  { key: 'source', label: 'Source' },
+export const CONFIGURATION_LIST = [
+  { id: 'album', name: 'Album' },
+  { id: 'multi-track', name: 'Multi-track' },
+  { id: 'single', name: 'Single' },
 ]
 
 export const SEARCH_TITLES = [
@@ -77,18 +70,19 @@ export const FIRST_SEEN_TITLES = [
   { id: "leakDate", name: "Leak Date" },
   { id: "releaseDate", name: "Release Date" },
   { id: "updatedDate", name: "Last Updated" },
+  { id: "configuration", name: "Configuration" },
   { id: "source", name: "Source" },
 ];
 
 export const GREEN_LIST_TITLES = [
   { id: "account", name: "Account" },
   { id: "artist", name: "Artist" },
-  { id: "label", name: "Label" },
-  { id: "account_manager", name: "Account Manager" },
+  { id: "labelName", name: "Label" },
+  { id: "accountManager", name: "Account Manager" },
   { id: "contact", name: "Contact" },
-  { id: "greenlisted_URL", name: "Greenlisted URL" },
-  { id: "added_by", name: "Added By" },
-  { id: "Llst_updated", name: "Last Updated" },
-  { id: "end_date", name: "End Date" },
+  { id: "url", name: "Greenlisted URL" },
+  { id: "addedBy", name: "Added By" },
+  { id: "updatedDate", name: "Last Updated" },
+  { id: "endDate", name: "End Date" },
   { id: "type", name: "Type" },
 ];

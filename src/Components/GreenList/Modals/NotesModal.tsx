@@ -32,10 +32,10 @@ export default function NotesrModal(props: filterProps) {
 
   useEffect(() => {
     axios
-      .get(BASE_URL + "Track/GetTrackNotes", {
+      .get(BASE_URL + "GreenList/GetGreenListNotes", {
         params: {
-          trackId: props.selectedNotes.trackId,
-          source: props.selectedNotes.source
+          sourceId: props.selectedNotes.greenListId,
+          source: props.selectedNotes.source || 'GL'
         },
         headers: {
           cp3_auth: getCookie("cp3_auth"),
@@ -47,12 +47,12 @@ export default function NotesrModal(props: filterProps) {
       .catch((err) => {
         console.log("error feching data", err);
       });
-  }, [props.selectedNotes.trackId, props.selectedNotes.source]);
+  }, [props.selectedNotes.greenListId, props.selectedNotes.source]);
 
   const handleSubmit = () => {
     axios
-      .put(BASE_URL + "Track/UpdateNotes", {
-        trackId: props.selectedNotes.trackId,
+      .put(BASE_URL + "GreenList/UpdateGreenListNotes", {
+        sourceId: props.selectedNotes.greenListId,
         comments: notes,
         source: props.selectedNotes.source,
         userName: auth.user.name || "Guest",
@@ -72,7 +72,7 @@ export default function NotesrModal(props: filterProps) {
           <span className="notes-name-date">
             {note.userName} - {moment(note.createdOn).format("DD/MM/YYYY")}
           </span>{" "}
-          <span> {note.notes}</span>
+          <span> {note.noteDescription}</span>
         </ListGroup.Item>
       );
     });

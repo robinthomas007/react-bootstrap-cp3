@@ -10,7 +10,6 @@ import Form from "react-bootstrap/Form";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 // @ts-ignore
 import { CSVLink } from "react-csv";
-import { CSV_HEADERS } from "../Common/staticDatas";
 import Pagination from "@mui/material/Pagination";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -130,7 +129,7 @@ export default function Search(props: any) {
               />
               <CSVLink
                 data={props.csvData}
-                headers={CSV_HEADERS}
+                headers={props.CSV_HEADERS}
                 filename="projects.csv"
                 className="hidden"
                 ref={csvLink}

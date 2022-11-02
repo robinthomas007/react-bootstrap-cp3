@@ -59,7 +59,6 @@ export default function EditBulkModal(props) {
 
   const handleSubmit = () => {
     const form = document.querySelector("#create-resource-form");
-    const SUB_URL = props.PAGE_PATH === 'DASHBOARD' ? 'Track/BulkUpdateTracks' : 'TrackLeaks/BulkUpdateTrackLeaks'
     if (form.checkValidity() === false) {
       setValidated(true);
     } else {
@@ -73,7 +72,7 @@ export default function EditBulkModal(props) {
           artist: track.artist,
           isrc: track.isrc,
           album: track.album,
-          source: track.source ? track.source : props.PAGE_PATH === 'DASHBOARD' ? '' : 'FS',
+          source: track.source ? track.source : '',
           leakDate: track.leakDate,
           releaseDate: track.releaseDate,
           blockPolicyId: track.blockPolicyId ? Number(track.blockPolicyId.id) : 0,
@@ -85,7 +84,7 @@ export default function EditBulkModal(props) {
       console.log(reqData)
       axios
         .post(
-          BASE_URL + SUB_URL,
+          BASE_URL + 'Track/BulkUpdateTracks',
           reqData,
           config
         )

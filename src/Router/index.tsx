@@ -7,6 +7,7 @@ import Dashboard from '../Components/Dashboard';
 import { PublicRoutes } from './PublicRoutes';
 import { FCUserRoutes } from './FCUserRoutes';
 import GreenList from '../Components/GreenList';
+import FirstSeen from '../Components/FirstSeen';
 
 function Routes() {
   let element = useRoutes([
@@ -27,7 +28,7 @@ function Routes() {
     {
       element: <FCUserRoutes />,
       children: [
-        { path: '/first_seen', element: <Dashboard /> },
+        { path: '/first_seen', element: <FirstSeen /> },
       ],
     },
   ]);

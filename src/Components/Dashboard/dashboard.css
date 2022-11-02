@@ -169,6 +169,12 @@ span.sort-icons svg:hover {
   text-align: center;
 }
 
+.srch-dg-tbl tbody td#url {
+    width: 180px;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
 .selected-row {
   background-color: rgba(25, 118, 210, 0.08) !important;
 }

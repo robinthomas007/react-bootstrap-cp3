@@ -9,8 +9,6 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import SelectField from "./../../Common/select";
 import Datepicker from "./../../Common/DatePicker";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { getUsername, config } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
@@ -18,41 +16,28 @@ import Loader from "./../../Common/loader";
 import moment from "moment";
 
 export default function CreateProjectModal(props) {
-  const [altTitle, setAltTitle] = useState([]);
-  const [track, setTrack] = useState({
-    title: "",
+  const [greenlist, setGreenlist] = useState({
+    account: "",
     artist: "",
-    isrc: "",
-    album: "",
+    accountManager: "",
+    contact: "",
     labelId: "",
-    leakDate: "",
-    releaseDate: "",
-    blockPolicyId: "",
+    endDate: "",
+    url: "",
+    notes: ""
   });
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
 
   useEffect(() => {
-    if (props.editParams && props.editParams.trackId) {
+    if (props.editParams && props.editParams.length > 0) {
+      const editParams = props.editParams[0]
       const obj = {};
-      if (props.editParams.subTitle) {
-        const subTitle = props.editParams.subTitle.split(",");
-        const temp = [];
-        subTitle.forEach((el, index) => {
-          temp.push(index + 1);
-          obj["altTitile" + (index + 1)] = el;
-        });
-        setAltTitle(temp);
-      }
-      setTrack({
-        ...props.editParams,
-        leakDate: props.editParams.leakDate ? moment(props.editParams.leakDate).format("MM-DD-YYYY") : '',
-        releaseDate: props.editParams.releaseDate ? moment(props.editParams.releaseDate).format("MM-DD-YYYY") : '',
+      setGreenlist({
+        ...editParams,
+        releaseDate: editParams.endDate ? moment(editParams.endDate).format("MM-DD-YYYY") : '',
         labelId: props.labelFacets.filter(
-          (label) => Number(props.editParams.labelId) === Number(label.id)
-        )[0],
-        blockPolicyId: props.policyFacets.filter(
-          (p) => Number(props.editParams.blockPolicyId) === Number(p.id)
+          (label) => Number(editParams.labelId) === Number(label.id)
         )[0],
         ...obj,
       });
@@ -66,36 +51,28 @@ export default function CreateProjectModal(props) {
     } else {
       setValidated(false);
       setLoading(true);
-      const subTitle = [];
-      Object.keys(track).forEach(function (k, i) {
-        if (k.includes("altTitile")) {
-          subTitle.push(track[k]);
-        }
-      });
+
       const data = {
-        title: track.title,
-        artist: track.artist,
-        isrc: track.isrc,
-        album: track.album,
-        source: props.editParams && props.editParams.trackId ? props.editParams.source : '',
-        leakDate: track.leakDate,
-        releaseDate: track.releaseDate,
-        blockPolicyId: track.blockPolicyId
-          ? Number(track.blockPolicyId.id)
-          : 0,
-        labelId: track.labelId ? Number(track.labelId.id) : "",
-        subTitle: subTitle.length > 0 ? subTitle.join(",") : "",
+        account: greenlist.account,
+        artist: greenlist.artist,
+        accountManager: greenlist.accountManager,
+        contact: greenlist.contact,
+        url: greenlist.url,
+        notes: greenlist.notes,
+        source: 'GL',
+        endDate: greenlist.endDate,
+        labelId: greenlist.labelId ? Number(greenlist.labelId.id) : "",
         username: getUsername(),
       };
-      if (track.trackId) {
+      if (greenlist.greenListId) {
         axios
           .put(
-            BASE_URL + "Track/UpdateTracks",
-            { ...data, trackId: track.trackId },
+            BASE_URL + "GreenList/UpdateGreenList",
+            { ...data, greenListId: greenlist.greenListId },
             config
           )
           .then(() => {
-            toast.success("Track details updated successfully!", {
+            toast.success("GreenList details updated successfully!", {
               autoClose: 3000,
               closeOnClick: true,
             });
@@ -113,13 +90,13 @@ export default function CreateProjectModal(props) {
           .finally(() => setLoading(false));
       } else {
         axios
-          .post(BASE_URL + "Track/AddTracks", data, config)
+          .post(BASE_URL + "GreenList/AddGreenList", data, config)
           .then((response) => {
-            toast.success("Track Created successfully!", {
+            toast.success("GreenList Created successfully!", {
               autoClose: 3000,
               closeOnClick: true,
             });
-            setTrack({ ...track, trackId: response.data.trackId });
+            setGreenlist({ ...greenlist, greenListId: response.data.greenListId });
             props.handleClose();
             props.getSearchPageData();
           })
@@ -136,44 +113,6 @@ export default function CreateProjectModal(props) {
     }
   };
 
-  const removeAltTitle = (ele, index) => {
-    const subTitle = "altTitile" + ele;
-    const modifiedTrackobj = track;
-    delete modifiedTrackobj[subTitle];
-    setTrack(modifiedTrackobj);
-    let newArr = [...altTitle];
-    newArr.splice(index, 1);
-    setAltTitle(newArr);
-  };
-
-  const getAlterNativeTitle = () => {
-    return altTitle.map((ele, index) => {
-      const altTitle = "altTitile" + ele;
-      return (
-        <Row className="pb-20" key={index}>
-          <Col md={12}>
-            <Form.Group controlId="title" className="d-flex align-items-center">
-              <Form.Label className="form-label-width">
-                Alt Title {index + 1}
-              </Form.Label>
-              <Form.Control
-                value={track[altTitle] ? track[altTitle] : ""}
-                type="text"
-                name="title"
-                placeholder="Enter Title"
-                onChange={(e) =>
-                  setTrack({ ...track, [altTitle]: e.target.value })
-                }
-              />
-              <span className="alt-title-icon">
-                <RemoveCircleIcon onClick={() => removeAltTitle(ele, index)} />
-              </span>
-            </Form.Group>
-          </Col>
-        </Row>
-      );
-    });
-  };
 
   return (
     <Modal
@@ -187,7 +126,7 @@ export default function CreateProjectModal(props) {
       {loading && <Loader />}
 
       <Modal.Header>
-        <Modal.Title>Create Record</Modal.Title>
+        <Modal.Title>Add Greenlist URL</Modal.Title>
         <CloseIcon
           fontSize="inherit"
           className="modal-cls-btn"
@@ -203,7 +142,7 @@ export default function CreateProjectModal(props) {
             onSubmit={handleSubmit}
           >
             <Row className="pb-20">
-              <Col md={6}>
+              <Col md={8}>
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group
@@ -211,39 +150,26 @@ export default function CreateProjectModal(props) {
                       className="d-flex align-items-start"
                     >
                       <Form.Label className="form-label-width">
-                        Title
+                        Account
                       </Form.Label>
                       <div className="f-width">
                         <Form.Control
                           required
-                          value={track.title}
+                          value={greenlist.account}
                           type="text"
-                          name="track_title"
+                          name="account"
                           placeholder="Enter Title"
                           onChange={(e) =>
-                            setTrack({ ...track, title: e.target.value })
+                            setGreenlist({ ...greenlist, account: e.target.value })
                           }
                         />
                         <Form.Control.Feedback type="invalid">
-                          Title is required
+                          Account is required
                         </Form.Control.Feedback>
                       </div>
-                      <span className="alt-title-icon">
-                        <AddCircleIcon
-                          onClick={() =>
-                            setAltTitle([
-                              ...altTitle,
-                              altTitle.length > 0
-                                ? altTitle[altTitle.length - 1] + 1
-                                : 0,
-                            ])
-                          }
-                        />
-                      </span>
                     </Form.Group>
                   </Col>
                 </Row>
-                {getAlterNativeTitle()}
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group
@@ -256,56 +182,18 @@ export default function CreateProjectModal(props) {
                       <div className="f-width">
                         <Form.Control
                           required
-                          value={track.artist}
+                          value={greenlist.artist}
                           type="text"
                           name="artist"
                           placeholder="Enter Artist"
                           onChange={(e) =>
-                            setTrack({ ...track, artist: e.target.value })
+                            setGreenlist({ ...greenlist, artist: e.target.value })
                           }
                         />
                         <Form.Control.Feedback type="invalid">
                           Artist is required
                         </Form.Control.Feedback>
                       </div>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row className="pb-20">
-                  <Col md={12}>
-                    <Form.Group
-                      controlId="isrc"
-                      className="d-flex align-items-center"
-                    >
-                      <Form.Label className="form-label-width">ISRC</Form.Label>
-                      <Form.Control
-                        value={track.isrc}
-                        type="text"
-                        name="isrc"
-                        placeholder="Enter ISRC"
-                        onChange={(e) =>
-                          setTrack({ ...track, isrc: e.target.value })
-                        }
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row className="pb-20">
-                  <Col md={12}>
-                    <Form.Group
-                      controlId="album"
-                      className="d-flex align-items-center"
-                    >
-                      <Form.Label className="form-label-width">Album</Form.Label>
-                      <Form.Control
-                        value={track.album}
-                        type="text"
-                        name="album"
-                        placeholder="Enter Album"
-                        onChange={(e) =>
-                          setTrack({ ...track, album: e.target.value })
-                        }
-                      />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -321,17 +209,17 @@ export default function CreateProjectModal(props) {
                       <div className="f-width">
                         <Form.Control
                           required
-                          value={track.labelId}
+                          value={greenlist.labelId}
                           name="labelId"
                           className="d-none"
                           onChange={(e) => null}
                         />
                         <SelectField
-                          value={track.labelId}
+                          value={greenlist.labelId}
                           options={props.labelFacets}
                           name="labelId"
                           handleChange={(data) =>
-                            setTrack({ ...track, labelId: data })
+                            setGreenlist({ ...greenlist, labelId: data })
                           }
                         />
                         <Form.Control.Feedback type="invalid">
@@ -344,57 +232,96 @@ export default function CreateProjectModal(props) {
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group
-                      controlId="blockPolicyId"
+                      controlId="accountManager"
+                      className="d-flex align-items-center"
+                    >
+                      <Form.Label className="form-label-width">Account Manager</Form.Label>
+                      <Form.Control
+                        value={greenlist.accountManager}
+                        type="text"
+                        name="accountManager"
+                        placeholder="Enter Account Manager"
+                        onChange={(e) =>
+                          setGreenlist({ ...greenlist, accountManager: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="pb-20">
+                  <Col md={12}>
+                    <Form.Group
+                      controlId="contact"
+                      className="d-flex align-items-center"
+                    >
+                      <Form.Label className="form-label-width">Contact</Form.Label>
+                      <Form.Control
+                        value={greenlist.contact}
+                        type="text"
+                        name="contact"
+                        placeholder="Enter contact"
+                        onChange={(e) =>
+                          setGreenlist({ ...greenlist, contact: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="pb-20">
+                  <Col md={12}>
+                    <Form.Group
+                      controlId="url"
+                      className="d-flex align-items-center"
+                    >
+                      <Form.Label className="form-label-width">Greenlisted URL</Form.Label>
+                      <Form.Control
+                        value={greenlist.url}
+                        type="text"
+                        name="url"
+                        placeholder="Enter url"
+                        onChange={(e) =>
+                          setGreenlist({ ...greenlist, url: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="pb-20">
+                  <Col md={12}>
+                    <Form.Group
+                      controlId="endDate"
                       className="d-flex align-items-center"
                     >
                       <Form.Label className="form-label-width">
-                        Policy
+                        End Date
                       </Form.Label>
-                      <SelectField
-                        value={track.blockPolicyId}
-                        options={props.policyFacets}
-                        name="blockPolicyId"
-                        handleChange={(data) =>
-                          setTrack({ ...track, blockPolicyId: data })
+                      <Datepicker
+                        selected={greenlist.endDate}
+                        handleDateChange={(date) =>
+                          setGreenlist({ ...greenlist, endDate: moment(date).isValid() ? date : null })
                         }
                       />
                     </Form.Group>
                   </Col>
                 </Row>
               </Col>
-              <Col md={6}>
+              <Col md={10}>
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group
-                      controlId="leakDate"
+                      controlId="url"
                       className="d-flex align-items-center"
                     >
-                      <Form.Label className="form-label-width">
-                        Leak Date
-                      </Form.Label>
-                      <Datepicker
-                        selected={track.leakDate}
-                        handleDateChange={(date) =>
-                          setTrack({ ...track, leakDate: moment(date).isValid() ? date : null })
+                      <Form.Label className="form-label-width">Notes</Form.Label>
+                      <Form.Control
+                        value={greenlist.notes}
+                        onChange={(e) =>
+                          setGreenlist({ ...greenlist, notes: e.target.value })
                         }
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row className="pb-20">
-                  <Col md={12}>
-                    <Form.Group
-                      controlId="releaseDate"
-                      className="d-flex align-items-center"
-                    >
-                      <Form.Label className="form-label-width">
-                        Release Date
-                      </Form.Label>
-                      <Datepicker
-                        selected={track.releaseDate}
-                        handleDateChange={(date) => {
-                          setTrack({ ...track, releaseDate: moment(date).isValid() ? date : null })
-                        }}
+                        name="notes"
+                        as="textarea"
+                        rows={3}
+                        placeholder="Create a New Note..."
                       />
                     </Form.Group>
                   </Col>

@@ -2,7 +2,7 @@ type searchState = {
   loading: Boolean,
   exportLoading: Boolean,
   error: string
-  tracks: Array<object>,
+  greenList: Array<object>,
   limit: number,
   height: number,
   totalPages: number,
@@ -23,7 +23,7 @@ export const initialState = {
   loading: true,
   exportLoading: false,
   error: '',
-  tracks: [],
+  greenList: [],
   limit: 10,
   height: 578,
   totalPages: 0,
@@ -50,7 +50,7 @@ export const reducer = (state: searchState, action: searchActions) => {
       return {
         ...state,
         loading: false,
-        tracks: action.payload.tracks,
+        greenList: action.payload.greenList,
         totalPages: Number(action.payload.totalPages),
         totalItems: Number(action.payload.totalItems),
         labelFacets: action.payload.labelFacets,
@@ -60,7 +60,7 @@ export const reducer = (state: searchState, action: searchActions) => {
       return {
         ...state,
         loading: false,
-        tracks: [],
+        greenList: [],
         totalPages: 0,
         totalItems: 0
       }
@@ -106,7 +106,7 @@ export const reducer = (state: searchState, action: searchActions) => {
     case 'DELETE_SUCCESS':
       return {
         ...state,
-        tracks: state.tracks.filter((track: any) => !action.payload.includes(track.trackId))
+        greenList: state.greenList.filter((track: any) => !action.payload.includes(track.trackId))
       }
     case 'EXPORT_START':
       return {
