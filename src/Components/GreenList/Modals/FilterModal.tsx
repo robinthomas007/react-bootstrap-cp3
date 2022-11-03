@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
-import { SOURCE_LIST } from './../../Common/staticDatas'
+import { GREEN_LIST_TYPES } from './../../Common/staticDatas'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -17,6 +17,7 @@ type selectedFiltersProps = {
   EndTo: string,
   updatedFrom: string,
   updatedTo: string,
+  type: string,
   source: Array<object>,
 }
 
@@ -31,7 +32,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, EndFrom, EndTo, updatedFrom, updatedTo } = props.selectedFilters
+  const { searchWithins, labelIds, EndFrom, EndTo, updatedFrom, updatedTo, type } = props.selectedFilters
 
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
@@ -41,6 +42,7 @@ export default function FilterModal(props: filterProps) {
       EndTo: EndTo || null,
       updatedFrom: updatedFrom || null,
       updatedTo: updatedTo || null,
+      type: type || null
     }
   );
 
@@ -126,6 +128,14 @@ export default function FilterModal(props: filterProps) {
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Label</Form.Label>
                   <SelectField value={searchFilter.labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="pb-20">
+              <Col md={6}>
+                <Form.Group controlId="type" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Type</Form.Label>
+                  <SelectField value={searchFilter.type} options={GREEN_LIST_TYPES} isMulti={true} name="type" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>

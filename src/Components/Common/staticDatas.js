@@ -86,3 +86,8 @@ export const GREEN_LIST_TITLES = [
   { id: "endDate", name: "End Date" },
   { id: "type", name: "Type" },
 ];
+
+export const GREEN_LIST_TYPES = [
+  { id: "UMG", name: "UMG" },
+  { id: "3rd Party", name: "3rd Party" },
+];

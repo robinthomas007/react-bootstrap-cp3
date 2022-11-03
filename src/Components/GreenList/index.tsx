@@ -56,6 +56,7 @@ const GreenList = () => {
               ? filter.searchWithins.toString()
               : "ALL",
             labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
+            types: filter.type ? getIds(filter.type) : "",
             source: filter.source ? getIds(filter.source) : "",
             EndFrom: filter.EndFrom,
             EndTo: filter.EndTo,
@@ -228,6 +229,15 @@ const GreenList = () => {
             <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
           );
       }
+      if (item === "type") {
+        const selectedType = selectedFilters[item].map(
+          (type: any) => type.name
+        );
+        if (selectedType.length > 0)
+          content = (
+            <span> Type : {selectedType && selectedType.toString()} </span>
+          );
+      }
       if (item === "searchWithins") {
         if (selectedFilters[item].length > 0)
           content = (
@@ -298,7 +308,7 @@ const GreenList = () => {
         setSearchTerm={setSearchTerm}
         clearSearch={clearSearch}
         search={search}
-        placeholder="Searh on Artist, Account, Label or URL"
+        placeholder="Search on Artist, Account, Label or URL"
       />
       <Container fluid className="search-table">
         <Row className="justify-content-md-center">

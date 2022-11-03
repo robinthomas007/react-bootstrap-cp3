@@ -147,12 +147,6 @@ export default function FilterModal(props: filterProps) {
             </Row>
             <Row className="pb-20">
               <Col md={6}>
-                <Form.Group controlId="source" className="d-flex align-items-center">
-                  <Form.Label className="form-label-width">Source</Form.Label>
-                  <SelectField value={searchFilter.source} options={SOURCE_LIST} isMulti={true} name="source" handleChange={handleSelectChange} />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
                 <Form.Group controlId="configuration" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Config</Form.Label>
                   <SelectField value={searchFilter.configuration} options={CONFIGURATION_LIST} isMulti={true} name="configuration" handleChange={handleSelectChange} />
