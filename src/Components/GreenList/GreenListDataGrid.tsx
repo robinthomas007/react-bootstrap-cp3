@@ -50,7 +50,6 @@ export default function GreenListDataGrid(props: searchProps) {
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: '', name: '' }]);
   const [filterSearch, setFilterSearch] = React.useState("");
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
-  const [active, setActive] = React.useState<any>("");
 
   const colorModeContext = useColor();
 
@@ -61,31 +60,31 @@ export default function GreenListDataGrid(props: searchProps) {
     setcolumnFilter([props.TITLES[0]])
   }, [props.TITLES]);
 
-  const NotesModal = (track: object) => {
-    props.openNotesModal(track);
+  const NotesModal = (greenList: object) => {
+    props.openNotesModal(greenList);
   };
 
-  const editModal = (track: object) => {
+  const editModal = (greenList: object) => {
     if (selectedRows.length > 0) {
       props.openCreateModal(
-        props.greenList.filter((o: any) => selectedRows.includes(o.trackId))
+        props.greenList.filter((o: any) => selectedRows.includes(o.greenListId))
       );
     } else {
-      props.openCreateModal([track]);
+      props.openCreateModal([greenList]);
     }
   };
 
-  const deleteTrack = (track: any) => {
+  const deleteGreenList = (greenList: any) => {
     if (selectedRows.length > 0) {
       props.deleteTrack(selectedRows);
     } else {
-      props.deleteTrack([track.trackId]);
+      props.deleteTrack([greenList.greenListId]);
     }
   };
 
   const handleCheckboxAll = (e: any) => {
     if (e.target.checked) {
-      setSelectedRows(props.greenList.map((t: any) => t.trackId));
+      setSelectedRows(props.greenList.map((t: any) => t.greenListId));
     } else {
       setSelectedRows([]);
     }
@@ -102,21 +101,26 @@ export default function GreenListDataGrid(props: searchProps) {
 
   const getHeaderCell = (
     header: string,
-    track: any,
+    greenList: any,
   ) => {
     if (header === "url") {
       return (
-        <a href={track.url} rel="noreferrer" target="_blank">{track.url}</a>
+        <a href={greenList.url} rel="noreferrer" target="_blank">{greenList.url}</a>
       )
     }
-    return track[header];
+    if (header === "type") {
+      return (
+        <span className={`soruce-box ${greenList.type === '3rd Party' ? 'third_party' : greenList.type}`}>{greenList.type}</span>
+      )
+    }
+    return greenList[header];
   };
 
-  const handleCheckboxChange = (e: any, trackId: Number) => {
+  const handleCheckboxChange = (e: any, greenListId: Number) => {
     if (e.target.checked) {
-      setSelectedRows([...selectedRows, trackId]);
+      setSelectedRows([...selectedRows, greenListId]);
     } else {
-      setSelectedRows(selectedRows.filter((id: any) => id !== trackId));
+      setSelectedRows(selectedRows.filter((id: any) => id !== greenListId));
     }
   };
 
@@ -241,14 +245,6 @@ export default function GreenListDataGrid(props: searchProps) {
     );
   };
 
-  const getActiveTabToolTip = (releaseDate: string) => {
-    const relDate = moment(releaseDate).format("MM-DD-YYYY");
-    const currentDate = moment().format("MM-DD-YYYY");
-    return moment(relDate) > moment(currentDate)
-      ? "pre-release"
-      : "post-release";
-  };
-
   return (
     <Col md={11}>
       <Table
@@ -302,19 +298,19 @@ export default function GreenListDataGrid(props: searchProps) {
           </DragDropContext>
         </thead>
         <tbody className="tbale-bdy">
-          {props.greenList.map((track: any, index: number) => {
+          {props.greenList.map((greenList: any, index: number) => {
             return (
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`${selectedRows.includes(track.trackId) ? "selected-row" : ""
+                  className={`${selectedRows.includes(greenList.greenListId) ? "selected-row" : ""
                     }`}
                 >
                   <td>
                     <input
                       type="checkbox"
-                      checked={selectedRows.includes(track.trackId)}
-                      onChange={(e) => handleCheckboxChange(e, track.trackId)}
+                      checked={selectedRows.includes(greenList.greenListId)}
+                      onChange={(e) => handleCheckboxChange(e, greenList.greenListId)}
                       className="form-check-input"
                     />
                   </td>
@@ -322,24 +318,23 @@ export default function GreenListDataGrid(props: searchProps) {
                     (header: any) =>
                       !hideColumns.includes(header.name) && (
                         <td key={header.id} id={header.id}>
-                          {getHeaderCell(header.id, track)}
+                          {getHeaderCell(header.id, greenList)}
                         </td>
                       )
                   )}
                   <td>
                     <div className="action-icons justify-content-space-between">
-                      <QuestionAnswerIcon onClick={() => NotesModal(track)} />
+                      <QuestionAnswerIcon onClick={() => NotesModal(greenList)} />
                       {props.role === "admin" && (
                         <EditIcon
                           className="icon editIcon"
-                          onClick={() => editModal(track)}
+                          onClick={() => editModal(greenList)}
                         />
                       )}
                       {props.role === "admin" && (
                         <ArchiveIcon
-                          className={(track.source === "CP3" || track.source === "FS") ? "" : "disabled"}
-                          onClick={() =>
-                            (track.source === "CP3" || track.source === "FS") && deleteTrack(track)
+                          className=""
+                          onClick={() => deleteGreenList(greenList)
                           }
                         />
                       )}

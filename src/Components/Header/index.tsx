@@ -60,7 +60,7 @@ export default function Header() {
     getAllNotifications();
     const interval = setInterval(() => {
       getAllNotifications();
-    }, 50000);
+    }, 60000);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -109,7 +109,7 @@ export default function Header() {
     return 'UK';
   };
 
-  const markAsRead = (id: number) => {
+  const markAsRead = (id: number, source: string) => {
     setLoading(true)
     axios
       .get(BASE_URL + "Notification/ReadNotification", {
@@ -122,7 +122,10 @@ export default function Header() {
         if (response.status === 200) {
           getAllNotifications();
           setLoading(false)
-          navigate("/first_seen");
+          if (source === 'FS')
+            navigate("/first_seen");
+          if (source === 'GL')
+            navigate("/green_list");
         }
       })
       .catch((err) => {
@@ -138,7 +141,7 @@ export default function Header() {
       return (
         <div key={i} className="noti-item">
           <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
-          <div className="noti-content" onClick={() => markAsRead(noti.notificationId)}>
+          <div className="noti-content" onClick={() => markAsRead(noti.notificationId, noti.source)}>
             <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FS' ? 'First Seen' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
             <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
           </div>

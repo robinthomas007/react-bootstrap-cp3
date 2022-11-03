@@ -88,7 +88,7 @@ export default function NotesrModal(props: filterProps) {
       className="notes-modal"
     >
       <Modal.Header>
-        <Modal.Title>Notes for {props.selectedNotes.title}</Modal.Title>
+        <Modal.Title>Notes for {props.selectedNotes.account}</Modal.Title>
         <CloseIcon
           fontSize="inherit"
           className="modal-cls-btn"

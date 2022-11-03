@@ -159,7 +159,7 @@ const GreenList = () => {
       axios
         .delete(BASE_URL + 'GreenList/DeleteGreenList', {
           data: {
-            greenListIds: ids,
+            trackIds: ids,
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -298,6 +298,7 @@ const GreenList = () => {
         setSearchTerm={setSearchTerm}
         clearSearch={clearSearch}
         search={search}
+        placeholder="Searh on Artist, Account, Label or URL"
       />
       <Container fluid className="search-table">
         <Row className="justify-content-md-center">

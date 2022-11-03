@@ -339,6 +339,7 @@ const Dashboard = () => {
         setSearchTerm={setSearchTerm}
         clearSearch={clearSearch}
         search={search}
+        placeholder="Searh on Artist, Album, ISRC or Label"
       />
       <Container fluid className="search-table">
         <Row className="justify-content-md-center">

@@ -53,6 +53,7 @@ export default function Search(props: any) {
             <FormControl
               value={props.search}
               aria-label="search value"
+              placeholder={props.placeholder}
               onChange={props.handleChange}
               className="txt-fld-search-main"
               onKeyDown={(event) => {
@@ -129,7 +130,7 @@ export default function Search(props: any) {
               />
               <CSVLink
                 data={props.csvData}
-                headers={props.CSV_HEADERS}
+                headers={props.CSV_HEADERS.map((elm: any) => ({ key: elm.id, label: elm.name }))}
                 filename="projects.csv"
                 className="hidden"
                 ref={csvLink}

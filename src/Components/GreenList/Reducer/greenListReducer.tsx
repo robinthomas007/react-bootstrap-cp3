@@ -106,7 +106,7 @@ export const reducer = (state: searchState, action: searchActions) => {
     case 'DELETE_SUCCESS':
       return {
         ...state,
-        greenList: state.greenList.filter((track: any) => !action.payload.includes(track.trackId))
+        greenList: state.greenList.filter((greenList: any) => !action.payload.includes(greenList.greenListId))
       }
     case 'EXPORT_START':
       return {

@@ -120,7 +120,7 @@ export default function CreateProjectModal(props) {
       onHide={props.handleClose}
       backdrop="static"
       keyboard={false}
-      size="lg"
+      size="md"
       className="filter-modal-wrapper"
     >
       {loading && <Loader />}
@@ -142,7 +142,7 @@ export default function CreateProjectModal(props) {
             onSubmit={handleSubmit}
           >
             <Row className="pb-20">
-              <Col md={8}>
+              <Col md={11}>
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group
@@ -305,12 +305,13 @@ export default function CreateProjectModal(props) {
                   </Col>
                 </Row>
               </Col>
-              <Col md={10}>
+              <Col></Col>
+              <Col md={11}>
                 <Row className="pb-20">
                   <Col md={12}>
                     <Form.Group
                       controlId="url"
-                      className="d-flex align-items-center"
+                      className="d-flex align-items-start"
                     >
                       <Form.Label className="form-label-width">Notes</Form.Label>
                       <Form.Control

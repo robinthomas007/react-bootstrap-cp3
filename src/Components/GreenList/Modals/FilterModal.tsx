@@ -99,7 +99,7 @@ export default function FilterModal(props: filterProps) {
         <Container>
           <Form>
             <Row className="pb-20">
-              <Col md={12} className="pb-20">
+              <Col>
                 <label>Search Within </label>
               </Col>
               <Col>
@@ -111,8 +111,8 @@ export default function FilterModal(props: filterProps) {
               <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('artist')} label="Artist" id="artist" onChange={handleChange} />
               </Col>
-              <Col md={3}>
-                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('accountManager')} label="Account Manager" id="accountManager" onChange={handleChange} />
+              <Col>
+                <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('accountManager')} label="Manager" id="accountManager" onChange={handleChange} />
               </Col>
               <Col>
                 <Form.Check type='checkbox' checked={searchFilter.searchWithins.includes('contact')} label="Contact" id="contact" onChange={handleChange} />

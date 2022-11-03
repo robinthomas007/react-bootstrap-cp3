@@ -169,7 +169,12 @@ span.sort-icons svg:hover {
   text-align: center;
 }
 
-.srch-dg-tbl tbody td#url {
+.srch-dg-tbl thead th#accountManager {
+  min-width: 160px !important;
+  /* text-align: center; */
+}
+
+.srch-dg-tbl tbody td#url, .srch-dg-tbl tbody td#contact  {
     width: 180px;
     overflow: hidden !important;
     text-overflow: ellipsis;
@@ -197,11 +202,11 @@ span.sort-icons svg:hover {
   font-weight: bold;
 }
 
-.srch-dg-tbl .soruce-box.GRD {
+.srch-dg-tbl .soruce-box.GRD , .srch-dg-tbl .soruce-box.third_party {
   background-color: rgb(244, 67, 54, 0.6);
 }
 
-.srch-dg-tbl .soruce-box.CP3 {
+.srch-dg-tbl .soruce-box.CP3, .srch-dg-tbl .soruce-box.UMG {
   background-color: rgba(245, 127, 23, 0.6);
 }
 
