@@ -57,6 +57,7 @@ const GreenList = () => {
               : "ALL",
             labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
             policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
+            configuration: filter.configuration ? getIds(filter.configuration) : "",
             source: filter.source ? getIds(filter.source) : "",
             releaseFrom: filter.releaseFrom,
             releaseTo: filter.releaseTo,
