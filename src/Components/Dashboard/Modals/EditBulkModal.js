@@ -131,6 +131,7 @@ export default function EditBulkModal(props) {
     const modifiedTrackList = [...trackList]
     modifiedTrackList[trackList.length] = { ...modifiedTrackList[index] }
     modifiedTrackList[trackList.length].trackId = '';
+    modifiedTrackList[trackList.length].source = 'CP3';
     setTrackList(modifiedTrackList)
   }
 
