@@ -6,6 +6,7 @@ import twitter from './../../Static/Images/twitter.png'
 import vimeo from './../../Static/Images/vimeo.png'
 import dailymotion from './../../Static/Images/dailymotion.png'
 import audiomack from './../../Static/Images/audiomack.png'
+import tiktok from './../../Static/Images/tiktok.png'
 
 export const PLATFORM_LIST = [
   { id: 'ALL', name: 'ALL' },
@@ -16,7 +17,8 @@ export const PLATFORM_LIST = [
   { id: 'twitter', name: <div className="select-platform-images"><img alt="twitter" src={twitter} /></div> },
   { id: 'vimeo', name: <div className="select-platform-images"><img alt="vimeo" src={vimeo} /></div> },
   { id: 'dailymotion', name: <div className="select-platform-images"><img alt="dailymotion" src={dailymotion} /></div> },
-  { id: 'audiomack', name: <div className="select-platform-images"><img alt="audiomack" src={audiomack} /></div> }
+  { id: 'audiomack', name: <div className="select-platform-images"><img alt="audiomack" src={audiomack} /></div> },
+  { id: 'tiktok', name: <div className="select-platform-images"><img alt="tiktok" src={tiktok} /></div> }
 ];
 
 export const DURATIONS_LIST = [
