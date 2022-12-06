@@ -38,11 +38,12 @@ export default function EditBulkModal(props) {
     if (props.editParams && props.editParams.length > 0) {
       let trackArray = []
       props.editParams.forEach(track => {
+        const labelFacets = track.source !== 'REP' ? props.labelFacets : [{ id: track.labelId, name: track.label }]
         const trackObj = {
           ...track,
           leakDate: track.leakDate ? moment(track.leakDate).format("MM-DD-YYYY") : '',
           releaseDate: track.releaseDate ? moment(track.releaseDate).format("MM-DD-YYYY") : '',
-          labelId: props.labelFacets.filter(
+          labelId: labelFacets.filter(
             (label) => Number(track.labelId) === Number(label.id)
           )[0],
           blockPolicyId: props.policyFacets.filter(
@@ -81,7 +82,6 @@ export default function EditBulkModal(props) {
         };
         reqData.push(data)
       });
-      console.log(reqData)
       axios
         .post(
           BASE_URL + 'Track/BulkUpdateTracks',
@@ -245,6 +245,7 @@ export default function EditBulkModal(props) {
                         value={track.title}
                         type="text"
                         name="track_title"
+                        disabled={track.source === 'REP'}
                         placeholder="Enter Title"
                         onChange={(e) =>
                           handleOnchange({ ...track, title: e.target.value }, index)
@@ -256,7 +257,7 @@ export default function EditBulkModal(props) {
                       <span className="alt-title-icon">
                         <AddCircleIcon
                           onClick={() => {
-                            handleOnchange({ ...track, subTitle: track.subTitle ? track.subTitle + ',' : ' ' }, index)
+                            track.source !== 'REP' && handleOnchange({ ...track, subTitle: track.subTitle ? track.subTitle + ',' : ' ' }, index)
                           }
                           }
                         />
@@ -273,6 +274,7 @@ export default function EditBulkModal(props) {
                         required
                         value={track.artist}
                         type="text"
+                        disabled={track.source === 'REP'}
                         name="artist"
                         placeholder="Enter Artist"
                         onChange={(e) =>
@@ -294,6 +296,7 @@ export default function EditBulkModal(props) {
                       type="text"
                       name="isrc"
                       placeholder="Enter ISRC"
+                      disabled={track.source === 'REP'}
                       onChange={(e) =>
                         handleOnchange({ ...track, isrc: e.target.value }, index)
                       }
@@ -308,6 +311,7 @@ export default function EditBulkModal(props) {
                       value={track.album}
                       type="text"
                       name="album"
+                      disabled={track.source === 'REP'}
                       placeholder="Enter Album"
                       onChange={(e) =>
                         handleOnchange({ ...track, album: e.target.value }, index)
@@ -329,8 +333,9 @@ export default function EditBulkModal(props) {
                       />
                       <SelectField
                         value={track.labelId}
-                        options={props.labelFacets}
+                        options={track.source !== 'REP' ? props.labelFacets : [{ id: track.labelId, name: track.label }]}
                         name="labelId"
+                        isDisabled={track.source === 'REP'}
                         handleChange={(data) =>
                           handleOnchange({ ...track, labelId: data }, index)
                         }
@@ -372,6 +377,7 @@ export default function EditBulkModal(props) {
                     controlId="releaseDate"
                     className="d-flex align-items-start flex-direction-column">
                     <Datepicker
+                      disabled={track.source === 'REP'}
                       selected={track.releaseDate}
                       handleDateChange={(date) => {
                         handleOnchange({ ...track, releaseDate: moment(date).isValid() ? date : null }, index)
@@ -380,9 +386,9 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
                 <Col className="d-flex align-items-end justify-content-space-evenly">
-                  <AddCircleIcon onClick={() => { setTrackList([...trackList, newTrack]) }} />
-                  <LibraryAddIcon onClick={() => copyTrackList(index)} />
-                  <RemoveCircleIcon onClick={() => removeTrackList(index)} />
+                  <AddCircleIcon onClick={() => { track.source !== 'REP' && setTrackList([...trackList, newTrack]) }} />
+                  <LibraryAddIcon onClick={() => track.source !== 'REP' && copyTrackList(index)} />
+                  <RemoveCircleIcon onClick={() => track.source !== 'REP' && removeTrackList(index)} />
                 </Col>
                 <Col md={12}>
                   <Row className="pb-20">

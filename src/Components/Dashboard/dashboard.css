@@ -210,6 +210,10 @@ span.sort-icons svg:hover {
   background-color: rgba(245, 127, 23, 0.6);
 }
 
+.srch-dg-tbl .soruce-box.REP {
+  background-color: rgba(251, 192, 45, 0.6);
+}
+
 .srch-dg-tbl .soruce-box.FS {
   background-color: rgba(245, 250, 32, 0.6)
 }
@@ -366,4 +370,8 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   width: calc( 100% + 1px);
   height: 1px;
   background-color: #dee2e6;
+}
+
+.form-control:disabled, .form-control[readonly] {
+  color: #999;
 }

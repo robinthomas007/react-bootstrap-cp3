@@ -40,6 +40,7 @@ export const WHEN_LIST = [
 export const SOURCE_LIST = [
   { id: 'cp3', name: 'CP3' },
   { id: "grd", name: "GRD" },
+  { id: "rep", name: "REP" },
 ]
 
 export const CONFIGURATION_LIST = [

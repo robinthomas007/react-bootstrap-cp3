@@ -8,6 +8,7 @@ type selectProps = {
   handleChange?: any;
   name: string;
   value: Array<object>;
+  isDisabled?: any;
 };
 
 export const handleSelectAll = (data: any, e: any, options: any) => {
@@ -116,6 +117,7 @@ const SelectField = (props: selectProps) => {
     options={props.options}
     isMulti={props.isMulti}
     hideSelectedOptions={false}
+    isDisabled={props.isDisabled}
     placeholder="Select.."
     name={props.name}
     closeMenuOnSelect={!props.isMulti}
