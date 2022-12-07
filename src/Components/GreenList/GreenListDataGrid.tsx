@@ -316,7 +316,7 @@ export default function GreenListDataGrid(props: searchProps) {
                   </td>
                   {headers.map(
                     (header: any) =>
-                      !hideColumns.includes(header.name) && (
+                      !hideColumns.includes(header.id) && (
                         <td key={header.id} id={header.id}>
                           {getHeaderCell(header.id, greenList)}
                         </td>

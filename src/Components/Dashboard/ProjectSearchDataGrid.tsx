@@ -493,7 +493,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   </td>
                   {headers.map(
                     (header) =>
-                      !hideColumns.includes(header.name) && (
+                      !hideColumns.includes(header.id) && (
                         <td key={header.id}>
                           {getHeaderCell(header.id, track, {
                             tab,

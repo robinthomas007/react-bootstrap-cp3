@@ -485,7 +485,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   </td>
                   {headers.map(
                     (header: any) =>
-                      !hideColumns.includes(header.name) && (
+                      !hideColumns.includes(header.id) && (
                         <td key={header.id}>
                           {getHeaderCell(header.id, track, {
                             tab,
@@ -517,34 +517,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                     </div>
                   </td>
                 </tr>
-                {track.extended_tracks && (
-                  <tr className="extended-list">
-                    <td></td>
-                    <td>Some Track Title 2</td>
-                    <td>Some Artist Name</td>
-                    <td>0123499999990</td>
-                    <td>Universal Music</td>
-                    <td>Block</td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <span className="soruce-box cp3">CP3</span>
-                    </td>
-                    <td className="text-center">
-                      <QuestionAnswerIcon onClick={() => NotesModal(track)} />
-                    </td>
-                    <td>
-                      <div className="action-icons">
-                        <EditIcon
-                          className="icon editIcon"
-                          onClick={() => editModal(track)}
-                        />
-                        <ArchiveIcon />
-                        <DeleteIcon onClick={() => deleteTrack(track)} />
-                      </div>
-                    </td>
-                  </tr>
-                )}
               </React.Fragment>
             );
           })}
