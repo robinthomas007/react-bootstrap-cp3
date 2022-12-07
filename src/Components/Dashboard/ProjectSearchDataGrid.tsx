@@ -183,7 +183,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                     </p>
                   </div>
                 )}
-                {track.policyDetails.release.toLowerCase() ===
+                {track.policyDetails && track.policyDetails.release && track.policyDetails.release.toLowerCase() ===
                   (active === "" ? options.tab : active) && (
                     <div className="policy-popover-bg">
                       <div className="d-flex mb-2">

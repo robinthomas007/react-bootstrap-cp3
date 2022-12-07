@@ -386,9 +386,9 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
                 <Col className="d-flex align-items-end justify-content-space-evenly">
-                  <AddCircleIcon onClick={() => { track.source !== 'REP' && setTrackList([...trackList, newTrack]) }} />
-                  <LibraryAddIcon onClick={() => track.source !== 'REP' && copyTrackList(index)} />
-                  <RemoveCircleIcon onClick={() => track.source !== 'REP' && removeTrackList(index)} />
+                  <AddCircleIcon onClick={() => { setTrackList([...trackList, newTrack]) }} />
+                  <LibraryAddIcon onClick={() => copyTrackList(index)} />
+                  <RemoveCircleIcon onClick={() => removeTrackList(index)} />
                 </Col>
                 <Col md={12}>
                   <Row className="pb-20">
