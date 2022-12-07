@@ -473,7 +473,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             const emptyEx =
               exData && exData.includes(active === "" ? tab : active);
             const activeTabData =
-              track.policyDetails &&
+              track.policyDetails && track.policyDetails.release &&
               track.policyDetails.release.toLowerCase() ===
               (active === "" ? tab : active);
             return (
