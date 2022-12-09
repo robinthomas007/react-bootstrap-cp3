@@ -277,8 +277,21 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 
 .policy-popover {
   min-width: 40%;
+  cursor: pointer;
 }
-
+.albumList-popover {
+  max-width: 100% !important;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+.albumList-popover .popover-body{
+  background: #f5f5f5;
+}
+.albumList-popover ul {
+  margin-bottom: 0;
+  list-style: none;
+  padding: 5px;
+}
 .po-exception {
   background: #f5f5f5;
   margin-top: 3px;

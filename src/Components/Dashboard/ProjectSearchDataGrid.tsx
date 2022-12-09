@@ -270,6 +270,35 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         <span>{track.blockPolicyName}</span>
       );
     }
+    if (header === 'album') {
+      const albumList = track.albumList ? track.albumList.split(',') : []
+      return track.albumList ? (
+        <OverlayTrigger
+          trigger={["hover", "focus"]}
+          placement="top"
+          overlay={
+            <Popover id="popover-basic" className="albumList-popover">
+              <Popover.Body className="plcy-bdy-pad">
+                <div>
+                  <ul>
+                    {albumList.map((list: any, id: any) => {
+                      return (
+                        <li key={id}>{list}</li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </Popover.Body>
+            </Popover>
+          }
+          rootClose
+        >
+          <span>{track.album}</span>
+        </OverlayTrigger>
+      ) : (
+        <span>{track.album}</span>
+      )
+    }
     return track[header];
   };
 
