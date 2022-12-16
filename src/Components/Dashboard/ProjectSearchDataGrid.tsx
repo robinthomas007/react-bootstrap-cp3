@@ -19,9 +19,10 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from 'react-router-dom';
 import moment from "moment";
-import { capitalizeFirstLetter, FormatPlatforms } from "./../Common/Utils";
+import { capitalizeFirstLetter, FormatPlatforms, getApi } from "./../Common/Utils";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { SEARCH_TITLES, FIRST_SEEN_TITLES } from './../Common/staticDatas';
+import CircularProgress from '@mui/material/CircularProgress';
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -56,6 +57,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [filterSearch, setFilterSearch] = React.useState("");
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
   const [active, setActive] = React.useState<any>("");
+  const [notes, setNotes] = React.useState<any>([]);
+  const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
 
   const colorModeContext = useColor();
 
@@ -74,6 +77,20 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const NotesModal = (track: object) => {
     props.openNotesModal(track);
   };
+
+  const getNotes = (trackId: number, source: string) => {
+    setLoadingNotes(true)
+    setNotes([]);
+    getApi({ sourceId: trackId, source: source }, 'Track/GetTrackNotes')
+      .then((res: any) => {
+        setNotes(res);
+        setLoadingNotes(false)
+      })
+      .catch((error: any) => {
+        console.log("error feching data", error);
+        setLoadingNotes(false)
+      });
+  }
 
   const editModal = (track: object) => {
     if (selectedRows.length > 0) {
@@ -338,6 +355,29 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     });
   };
 
+  const notePopover = (
+    <Popover id="popover-basic" className="albumList-popover">
+      <Popover.Body className="plcy-bdy-pad">
+        <div>
+          <ul>
+            {notes.length === 0 && loadingNotes && <span><CircularProgress size='25px' style={{ 'color': '#F57F17' }} /></span>}
+            {notes.length === 0 && !loadingNotes && <span>No Notes Available</span>}
+            {notes.map((note: any, id: any) => {
+              return (
+                <li key={id}>
+                  <span className="notes-name-date">
+                    {note.userName} - {moment(note.createdOn).format("DD/MM/YYYY")}
+                  </span>{" "}
+                  <span> {note.noteDescription}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </Popover.Body>
+    </Popover>
+  )
+
   const popover = (
     <Popover id="popover-basic" className="filter-popover">
       <Popover.Body>
@@ -535,7 +575,14 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   )}
                   <td>
                     <div className="action-icons justify-content-space-between">
-                      <QuestionAnswerIcon onClick={() => NotesModal(track)} />
+                      <OverlayTrigger
+                        trigger={["hover", "focus"]}
+                        placement="left"
+                        overlay={notePopover}
+                        rootClose
+                      >
+                        <QuestionAnswerIcon onClick={() => NotesModal(track)} onMouseEnter={() => getNotes(track.trackId, track.source)} />
+                      </OverlayTrigger>
                       {props.role === "admin" && (
                         <EditIcon
                           className="icon editIcon"

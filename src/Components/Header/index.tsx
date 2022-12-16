@@ -24,18 +24,10 @@ import moment from 'moment';
 import './header.css'
 
 const hexArray = [
-  '#FF26A8',
-  '#26A4FF',
-  '#CE53FA',
-  '#609491',
-  '#26A4FF',
-  '#FF26A8',
-  '#26A4FF',
-  '#CE53FA',
-  '#d4953c',
-  '#609491',
-  '#26A4FF',
-  '#CE53FA',
+  '#FDD981',
+  '#F88E86',
+  '#F57F17',
+  '#FBC02D'
 ];
 
 export default function Header() {
@@ -110,7 +102,7 @@ export default function Header() {
   };
 
   const markAsRead = (id: number, source: string) => {
-    setLoading(true)
+    // setLoading(true)
     axios
       .get(BASE_URL + "Notification/ReadNotification", {
         params: { notificationId: id },
@@ -120,12 +112,14 @@ export default function Header() {
       })
       .then((response) => {
         if (response.status === 200) {
-          getAllNotifications();
+          const updatedNotification: any = notifications.map((noti: any) => {
+            if (noti.notificationId === id) {
+              return { ...noti, isRead: true };
+            }
+            return noti
+          })
+          setNotifications(updatedNotification)
           setLoading(false)
-          if (source === 'FS')
-            navigate("/first_seen");
-          if (source === 'GL')
-            navigate("/green_list");
         }
       })
       .catch((err) => {
@@ -136,12 +130,20 @@ export default function Header() {
       });
   }
 
+  const naviagetNotificationPage = (source: string) => {
+    if (source === 'FS')
+      navigate("/first_seen");
+    if (source === 'GL')
+      navigate("/green_list");
+    setShowNoti(false)
+  }
+
   const renderNotifications = () => {
     return notifications.map((noti: any, i) => {
       return (
-        <div key={i} className="noti-item">
+        <div key={i} className={`${noti.isRead ? 'read' : ''} noti-item`}>
           <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
-          <div className="noti-content" onClick={() => markAsRead(noti.notificationId, noti.source)}>
+          <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
             <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FS' ? 'First Seen' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
             <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
           </div>

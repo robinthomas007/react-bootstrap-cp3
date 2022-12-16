@@ -12,7 +12,7 @@ import moment from "moment";
 import { useAuth } from "./../../../Context/authContext";
 import { BASE_URL } from "../../../App";
 import getCookie from "./../../Common/cookie";
-import { config } from "./../../Common/Utils";
+import { config, getApi } from "./../../Common/Utils";
 
 type filterProps = {
   show: boolean;
@@ -31,21 +31,12 @@ export default function NotesrModal(props: filterProps) {
   };
 
   useEffect(() => {
-    axios
-      .get(BASE_URL + "Track/GetTrackNotes", {
-        params: {
-          sourceId: props.selectedNotes.trackId,
-          source: props.selectedNotes.source
-        },
-        headers: {
-          cp3_auth: getCookie("cp3_auth"),
-        },
-      })
+    getApi({ sourceId: props.selectedNotes.trackId, source: props.selectedNotes.source }, 'Track/GetTrackNotes')
       .then((res: any) => {
-        setNotesData(res.data);
+        setNotesData(res);
       })
-      .catch((err) => {
-        console.log("error feching data", err);
+      .catch(error => {
+        console.log("error feching data", error);
       });
   }, [props.selectedNotes.trackId, props.selectedNotes.source]);
 

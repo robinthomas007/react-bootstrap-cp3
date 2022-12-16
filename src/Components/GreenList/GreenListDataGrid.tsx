@@ -16,8 +16,10 @@ import Button from "./../Common/button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
+import { getApi } from "./../Common/Utils";
 import moment from "moment";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
+import CircularProgress from '@mui/material/CircularProgress';
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -50,6 +52,8 @@ export default function GreenListDataGrid(props: searchProps) {
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: '', name: '' }]);
   const [filterSearch, setFilterSearch] = React.useState("");
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
+  const [notes, setNotes] = React.useState<any>([]);
+  const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
 
   const colorModeContext = useColor();
 
@@ -89,6 +93,43 @@ export default function GreenListDataGrid(props: searchProps) {
       setSelectedRows([]);
     }
   };
+
+  const getNotes = (greenListId: number, source: string) => {
+    setLoadingNotes(true)
+    setNotes([]);
+    getApi({ sourceId: greenListId, source: source }, 'Track/GetTrackNotes')
+      .then((res: any) => {
+        setNotes(res);
+        setLoadingNotes(false)
+      })
+      .catch((error: any) => {
+        console.log("error feching data", error);
+        setLoadingNotes(false)
+      });
+  }
+
+  const notePopover = (
+    <Popover id="popover-basic" className="albumList-popover">
+      <Popover.Body className="plcy-bdy-pad">
+        <div>
+          <ul>
+            {notes.length === 0 && loadingNotes && <span><CircularProgress size='25px' style={{ 'color': '#F57F17' }} /></span>}
+            {notes.length === 0 && !loadingNotes && <span>No Notes Available</span>}
+            {notes.map((note: any, id: any) => {
+              return (
+                <li key={id}>
+                  <span className="notes-name-date">
+                    {note.userName} - {moment(note.createdOn).format("DD/MM/YYYY")}
+                  </span>{" "}
+                  <span> {note.noteDescription}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </Popover.Body>
+    </Popover>
+  )
 
   const reorderColumns = (options: DropResult) => {
     if (options?.destination?.index) {
@@ -324,7 +365,14 @@ export default function GreenListDataGrid(props: searchProps) {
                   )}
                   <td>
                     <div className="action-icons justify-content-space-between">
-                      <QuestionAnswerIcon onClick={() => NotesModal(greenList)} />
+                      <OverlayTrigger
+                        trigger={["hover", "focus"]}
+                        placement="left"
+                        overlay={notePopover}
+                        rootClose
+                      >
+                        <QuestionAnswerIcon onClick={() => NotesModal(greenList)} onMouseEnter={() => getNotes(greenList.greenListId, 'GL')} />
+                      </OverlayTrigger>
                       {props.role === "admin" && (
                         <EditIcon
                           className="icon editIcon"

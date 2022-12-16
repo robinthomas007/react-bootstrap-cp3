@@ -1,7 +1,6 @@
 .notification-wrapper {
-  background: #f5f5f5;
+  background: #fff;
   width: 350px;
-  padding: 10px;
   position: absolute;
   top: 55px;
   align-items: center;
@@ -18,9 +17,14 @@
 .noti-item {
   display: flex;
   color: #000;
-  padding: 10px;
+  padding: 12px 20px;
   align-items: center;
   font-size: 14px;
+  background: #f5f5f5;
+}
+
+.noti-item.read {
+  background: #fff;
 }
 
 .alias span{
