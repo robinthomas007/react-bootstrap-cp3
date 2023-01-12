@@ -45,6 +45,7 @@ const Dashboard = () => {
         sortOrder,
         filter,
       } = state.searchCriteria;
+      console.log(filter, "filter")
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
         .get(BASE_URL + 'TrackSearch', {
@@ -66,6 +67,7 @@ const Dashboard = () => {
             leakTo: filter.leakTo,
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
+            pre_releasese: filter.pre_releasese ? true : false,
             isExport: isExport ? true : false,
           },
           headers: {
@@ -210,6 +212,7 @@ const Dashboard = () => {
       leakTo: "Leak To",
       updatedFrom: "Updated From",
       updatedTo: "Updated To",
+      pre_releasese: "Release"
     };
     const dateLabelsArr = [
       "releaseFrom",
@@ -218,6 +221,7 @@ const Dashboard = () => {
       "leakTo",
       "updatedFrom",
       "updatedTo",
+      "pre_releasese"
     ];
     return selectedFilterKeys.map((item, index) => {
       let content = null;
@@ -226,6 +230,14 @@ const Dashboard = () => {
           <span>
             {" "}
             {labelObj[item]} : {selectedFilters[item]}{" "}
+          </span>
+        );
+      }
+      if (item === "pre_releasese") {
+        content = (
+          <span>
+            {" "}
+            {labelObj[item]} : {selectedFilters[item] ? 'Pre Release Only' : ''}{" "}
           </span>
         );
       }

@@ -390,3 +390,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 .form-control:disabled, .form-control[readonly] {
   color: #999;
 }
+
+.margin-auto {
+  margin: auto;
+}

@@ -22,6 +22,7 @@ type selectedFiltersProps = {
   updatedTo: string,
   policyIds: Array<object>,
   source: Array<object>,
+  pre_releasese: boolean
 }
 
 type filterProps = {
@@ -36,7 +37,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo, pre_releasese } = props.selectedFilters
 
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
@@ -50,7 +51,8 @@ export default function FilterModal(props: filterProps) {
       updatedFrom: updatedFrom || null,
       updatedTo: updatedTo || null,
       policyIds: policyIds || null,
-      source: source || null
+      source: source || null,
+      pre_releasese: pre_releasese || false
     }
   );
 
@@ -132,14 +134,15 @@ export default function FilterModal(props: filterProps) {
               </Col>
             </Row>
             <Row className="pb-20">
+
+            </Row>
+            <Row className="pb-20">
               <Col md={6}>
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Label</Form.Label>
                   <SelectField value={searchFilter.labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
-            </Row>
-            <Row className="pb-20">
               <Col md={6}>
                 <Form.Group controlId="policyIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Policy</Form.Label>
@@ -152,6 +155,14 @@ export default function FilterModal(props: filterProps) {
                 <Form.Group controlId="source" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Source</Form.Label>
                   <SelectField value={searchFilter.source} options={SOURCE_LIST} isMulti={true} name="source" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+              <Col md={6} className='margin-auto'>
+                <Form.Group controlId="labelIds" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width"></Form.Label>
+                  <Form.Check type='checkbox' checked={searchFilter.pre_releasese} label="Pre Release Only" id="pre_release" onChange={(e) => {
+                    setSearchFilter({ ...searchFilter, pre_releasese: e.target.checked })
+                  }} />
                 </Form.Group>
               </Col>
             </Row>
@@ -176,7 +187,7 @@ export default function FilterModal(props: filterProps) {
               </Col>
             </Row>
             <Row className="pb-20">
-              <Col md={10} className="d-flex">
+              <Col md={12} className="d-flex align-items-center">
                 <div>
                   <Form.Group controlId="releaseFrom" className="d-flex align-items-center">
                     <Form.Label className="form-label-width">Release Date</Form.Label>
