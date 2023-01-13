@@ -116,7 +116,7 @@ const Dashboard = () => {
       type: "SET_SEARCH",
       payload: {
         searchTerm: searchTerm,
-        filter: state.searchCriteria.filter,
+        filter: { ...state.searchCriteria.filter, searchWithins: [searchWithins] },
       },
     });
   };
