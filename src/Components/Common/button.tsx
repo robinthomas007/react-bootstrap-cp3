@@ -8,10 +8,11 @@ type buttonProps = {
     startIcon?: any
     handleClick?: any
     type?: any
+    disabled?: any
 }
 const button = (props: buttonProps) => {
     return (
-        <Button type={props.type || 'button'} onClick={props.handleClick} className={props.className} variant={props.variant}>{props.startIcon ? props.startIcon : ''} {props.label}</Button>
+        <Button type={props.type || 'button'} disabled={props.disabled} onClick={props.handleClick} className={props.className} variant={props.variant}>{props.startIcon ? props.startIcon : ''} {props.label}</Button>
     )
 }
 

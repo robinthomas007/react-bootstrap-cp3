@@ -2,18 +2,20 @@ import React from 'react'
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { InputGroup, FormControl } from "react-bootstrap";
+import { InputGroup, FormControl, DropdownButton, Dropdown } from "react-bootstrap";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "../Common/button";
 import Form from "react-bootstrap/Form";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import SummarizeIcon from '@mui/icons-material/Summarize';
 // @ts-ignore
 import { CSVLink } from "react-csv";
 import Pagination from "@mui/material/Pagination";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useAuth } from "./../../Context/authContext";
+import { getByTitle } from '@testing-library/react';
 
 export default function Search(props: any) {
   const auth = useAuth();
@@ -37,6 +39,7 @@ export default function Search(props: any) {
     }
   }, [props.csvData]);
 
+  const getByTitle = () => <span><SummarizeIcon /> Quick Reports</span>
 
   return (
     <Container fluid className="fixed-search">
@@ -121,6 +124,12 @@ export default function Search(props: any) {
                   className=""
                 />
               )}
+              {props.quickReport && <DropdownButton variant="light" id="dropdown-item-button" title={getByTitle()}>
+                <Dropdown.Item as="button" onClick={() => props.quickReport('upcoming')}>Upcoming Releases (30 Days)</Dropdown.Item>
+                <Dropdown.Item as="button" onClick={() => props.quickReport('release')}>Releases (Prior 12 Months)</Dropdown.Item>
+                <Dropdown.Item as="button" onClick={() => props.quickReport('noRelease')}>No Release Date (Prior 12 Months)</Dropdown.Item>
+                <Dropdown.Item as="button" onClick={() => props.quickReport('allLeaks')}>All Leaks (Prior 12 Months)</Dropdown.Item>
+              </DropdownButton>}
               <Button
                 handleClick={props.exportData}
                 variant="light"

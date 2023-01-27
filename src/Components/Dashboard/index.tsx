@@ -32,11 +32,11 @@ const Dashboard = () => {
   const [showCreate, setShowCreate] = React.useState(false);
   const [editParams, setEditParams] = React.useState([]);
   const [csvData, setcsvData] = React.useState([]);
-  const csvLink = React.createRef<any>();
+  // const csvLink = React.createRef<any>();
   const auth = useAuth();
 
   const getSearchPageData = React.useCallback(
-    (isExport: any) => {
+    (isExport: any, isReport: any) => {
       const {
         searchTerm,
         itemsPerPage,
@@ -51,8 +51,8 @@ const Dashboard = () => {
         .get(BASE_URL + 'TrackSearch', {
           params: {
             searchTerm: searchTerm,
-            itemsPerPage: isExport ? "" : itemsPerPage,
-            pageNumber: isExport ? "" : pageNumber,
+            itemsPerPage: (isExport || isReport) ? "" : itemsPerPage,
+            pageNumber: (isExport || isReport) ? "" : pageNumber,
             sortColumn: sortColumn,
             sortOrder: sortOrder,
             searchWithins: filter.searchWithins
@@ -69,6 +69,7 @@ const Dashboard = () => {
             updatedFrom: filter.updatedFrom,
             pre_releasese: filter.pre_releasese ? true : false,
             isExport: isExport ? true : false,
+            report: isReport,
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -91,8 +92,7 @@ const Dashboard = () => {
   );
 
   React.useEffect(() => {
-    const isExport = false;
-    getSearchPageData(isExport);
+    getSearchPageData(false, '');
   }, [getSearchPageData]);
 
 
@@ -198,8 +198,12 @@ const Dashboard = () => {
   };
 
   const exportData = () => {
-    getSearchPageData(true);
+    getSearchPageData(true, '');
     dispatch({ type: "EXPORT_START", payload: "" });
+  };
+
+  const quickReport = (type: string) => {
+    getSearchPageData(false, type);
   };
 
   const selectedFilterKeys = Object.keys(selectedFilters);
@@ -337,6 +341,7 @@ const Dashboard = () => {
         renderSelectedFilters={renderSelectedFilters}
         openCreateModal={openCreateModal}
         exportData={exportData}
+        quickReport={quickReport}
         CSV_HEADERS={SEARCH_TITLES}
         csvData={csvData}
         state={state}

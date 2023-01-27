@@ -394,3 +394,26 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 .margin-auto {
   margin: auto;
 }
+
+.duplicate-isrc-warn {
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  background: #FBC02D;
+  border-radius: 21px;
+  width: 100% !important;
+  color: #716f6f;
+}
+
+.dup-warn{
+  border: 2px solid #F88E86 !important;
+}
+
+#dropdown-item-button.dropdown-toggle::after{
+  display: none !important;
+}
+
+#dropdown-item-button.dropdown-toggle:focus{
+  outline: none !important;
+  box-shadow:none;
+}

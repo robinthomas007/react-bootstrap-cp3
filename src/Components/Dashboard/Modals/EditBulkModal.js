@@ -15,6 +15,7 @@ import { config } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
+import getCookie from "./../../Common/cookie";
 import moment from "moment";
 import './editmodal.css'
 
@@ -22,6 +23,8 @@ export default function EditBulkModal(props) {
   const [trackList, setTrackList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [duplicateIsrc, SetDuplicateIsrc] = useState(false);
+  const [duplicateIsrcList, setDuplicateIsrcList] = useState([]);
 
   const newTrack = {
     title: "",
@@ -166,6 +169,38 @@ export default function EditBulkModal(props) {
     });
   };
 
+  const checkDuplicateIsrc = (e) => {
+    if (e.target.value && e.target.value.length === 12) {
+      axios
+        .get(
+          BASE_URL + 'Track/CheckIsrc', {
+          params: {
+            isrc: e.target.value
+          },
+          headers: {
+            cp3_auth: getCookie("cp3_auth"),
+          },
+        })
+        .then((res) => {
+          if (res.data) {
+            SetDuplicateIsrc(true)
+            setDuplicateIsrcList([...duplicateIsrcList, e.target.value]);
+          } else {
+            const isrcList = trackList.map((item) => item.isrc)
+            const hasDuplicate = isrcList.some(item => duplicateIsrcList.includes(item))
+            if (!hasDuplicate) {
+              SetDuplicateIsrc(false)
+              setDuplicateIsrcList([]);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(() => setLoading(false));
+    }
+  }
+
   return (
     <Modal
       show={props.show}
@@ -292,11 +327,13 @@ export default function EditBulkModal(props) {
                     controlId="isrc"
                     className="d-flex align-items-start flex-direction-column">
                     <Form.Control
+                      className={duplicateIsrcList.includes(track.isrc) ? 'dup-warn' : ''}
                       value={track.isrc}
                       type="text"
                       name="isrc"
                       placeholder="Enter ISRC"
                       disabled={track.source === 'REP'}
+                      onBlur={(e) => checkDuplicateIsrc(e)}
                       onChange={(e) =>
                         handleOnchange({ ...track, isrc: e.target.value }, index)
                       }
@@ -401,8 +438,11 @@ export default function EditBulkModal(props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
+        {duplicateIsrc && <div className="d-flex justify-content-center align-items-center">
+          <p className="duplicate-isrc-warn">A CP3 record with this ISRC already exists. You can proceed to create the duplicate record by hitting the ‘Create Duplicate Record’ button below or you can click cancel to return to the search screen.</p>
+        </div>}
         <Button
-          label="Submit"
+          label={duplicateIsrc ? 'Create Duplicate' : 'Submit'}
           handleClick={handleSubmit}
           className="text-white"
           variant="secondary"
