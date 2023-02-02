@@ -40,7 +40,8 @@ export const initialState = {
     sortOrder: "",
     filter: {
       searchWithins: ['ALL']
-    }
+    },
+    tableSearch: {}
   }
 }
 
@@ -94,6 +95,13 @@ export const reducer = (state: searchState, action: searchActions) => {
         ...state,
         loading: true,
         searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm, filter: action.payload.filter, pageNumber: "1" },
+        pageNumber: 1
+      }
+    case 'SET_SEARCH_TABLE':
+      return {
+        ...state,
+        loading: true,
+        searchCriteria: { ...state.searchCriteria, tableSearch: action.payload.tableSearch, searchTerm: action.payload.searchTerm, filter: action.payload.filter, pageNumber: "1" },
         pageNumber: 1
       }
     case 'SET_FILTER':

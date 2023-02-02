@@ -44,8 +44,8 @@ const Dashboard = () => {
         sortColumn,
         sortOrder,
         filter,
+        tableSearch
       } = state.searchCriteria;
-      console.log(filter, "filter")
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
         .get(BASE_URL + 'TrackSearch', {
@@ -70,6 +70,7 @@ const Dashboard = () => {
             pre_releasese: filter.pre_releasese ? true : false,
             isExport: isExport ? true : false,
             report: isReport,
+            tableSearch: tableSearch
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -111,12 +112,13 @@ const Dashboard = () => {
     });
   };
 
-  const onFilterColumnSearch = (searchTerm: string, searchWithins: string) => {
+  const onFilterColumnSearch = (searchTerm: string) => {
     dispatch({
-      type: "SET_SEARCH",
+      type: "SET_SEARCH_TABLE",
       payload: {
-        searchTerm: searchTerm,
-        filter: { ...state.searchCriteria.filter, searchWithins: [searchWithins] },
+        tableSearch: searchTerm,
+        searchTerm: state.searchCriteria.searchTerm,
+        filter: state.searchCriteria.filter
       },
     });
   };
@@ -365,7 +367,7 @@ const Dashboard = () => {
             onSortModelChange={onSortModelChange}
             openNotesModal={openNotesModal}
             dispatch={dispatch}
-            clearSearch={clearSearch}
+            // clearSearch={clearSearch}
             openCreateModal={openCreateModal}
             deleteTrack={deleteTrack}
             onFilterColumnSearch={onFilterColumnSearch}
