@@ -34,7 +34,7 @@ const DateField = (props) => {
 const CustomInput = forwardRef((props, ref) => {
   return (
     <div className="custom-date-picker">
-      <input ref={ref} placeholder="mm-dd-yyyy" disabled={props.disabled} onClick={props.onClick} onChange={props.onChange} value={props.value} type="text" readOnly={props.isreadOnly} />
+      <input ref={ref} placeholder="mm-dd-yyyy" disabled={props.disabled} onClick={props.onClick} onChange={props.onChange} value={props.selected || ''} type="text" readOnly={props.isreadOnly} />
       <CalendarTodayIcon onClick={props.onClick} />
     </div>
   );
