@@ -7,7 +7,7 @@ echo "USER_DATA=$USER_DATA"
 VAULT_KV_PATH=${VAULT_KV_PATH:-"`echo $USER_DATA | jq -r '.VAULT_KV_PATH'`"}
 
 VAULT_ROLE=${VAULT_ROLE:-"cp3-cicd-reader"}
-CLUSTER_NAME=${CLUSTER_NAME:-"aws44-devops-eks-prod-v3"}
+CLUSTER_NAME=${CLUSTER_NAME:-"aws44-devops-eks-prod-v4"}
 
 # connect to vault and create token
 export VAULT_ADDR=${VAULT_ADDR:-"https://vault.umusic.net"}
