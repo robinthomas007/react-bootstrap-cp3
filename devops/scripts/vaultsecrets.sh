@@ -15,6 +15,8 @@ if [[ -f ~/.vault-token && -z $VAULT_TOKEN ]]; then
     VAULT_TOKEN=$(<~/.vault-token)
 elif [[ -z "$VAULT_TOKEN" ]]; then
     echo auth to vault...
+    ls -al /var/run/secrets/kubernetes.io/serviceaccount
+    ls -al /var/run
     KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
     export VAULT_TOKEN=`curl --request POST \
         --data '{"jwt": "'"$KUBE_TOKEN"'", "role": "'"$VAULT_ROLE"'"}' \

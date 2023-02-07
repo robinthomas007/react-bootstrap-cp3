@@ -15,7 +15,8 @@ COPY yarn.lock yarn.lock
 
 RUN yarn install --immutable
 COPY . .
-RUN bash ./devops/scripts/buildwithvault.sh
+RUN --mount=type=secret,id=serviceaccount_token,target=/var/run/secrets/kubernetes.io/serviceaccount/token \
+    bash ./devops/scripts/buildwithvault.sh
 
 FROM nginx:1.17 as web
 
