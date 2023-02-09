@@ -42,6 +42,7 @@ const GreenList = () => {
         sortColumn,
         sortOrder,
         filter,
+        tableSearch
       } = state.searchCriteria;
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
@@ -63,6 +64,7 @@ const GreenList = () => {
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
             isExport: isExport ? true : false,
+            tableSearch: tableSearch
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -104,12 +106,13 @@ const GreenList = () => {
     });
   };
 
-  const onFilterColumnSearch = (searchTerm: string, searchWithins: string) => {
+  const onFilterColumnSearch = (searchTerm: string) => {
     dispatch({
-      type: "SET_SEARCH",
+      type: "SET_SEARCH_TABLE",
       payload: {
-        searchTerm: searchTerm,
-        filter: { searchWithins: [searchWithins] },
+        tableSearch: searchTerm,
+        searchTerm: state.searchCriteria.searchTerm,
+        filter: state.searchCriteria.filter
       },
     });
   };
@@ -323,7 +326,7 @@ const GreenList = () => {
             onSortModelChange={onSortModelChange}
             openNotesModal={openNotesModal}
             dispatch={dispatch}
-            clearSearch={clearSearch}
+            // clearSearch={clearSearch}
             openCreateModal={openCreateModal}
             deleteTrack={deleteTrack}
             onFilterColumnSearch={onFilterColumnSearch}

@@ -31,7 +31,7 @@ type searchProps = {
   pageNumber: number;
   onSortModelChange: any;
   onFilterColumnSearch: any;
-  clearSearch: any;
+  // clearSearch: any;
   openNotesModal: any;
   dispatch: any;
   openCreateModal: any;
@@ -50,7 +50,7 @@ export default function GreenListDataGrid(props: searchProps) {
   const [activeSort, setActiveSort] = React.useState("updatedDate");
   const [sortOrder, setSortOrder] = React.useState("desc");
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: '', name: '' }]);
-  const [filterSearch, setFilterSearch] = React.useState("");
+  const [filterSearch, setFilterSearch] = React.useState<any>({});
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
   const [notes, setNotes] = React.useState<any>([]);
   const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
@@ -171,9 +171,14 @@ export default function GreenListDataGrid(props: searchProps) {
     props.onSortModelChange({ sortColumn: column, sortOrder: order });
   };
 
-  const clearColumnFilter = () => {
-    setFilterSearch("");
-    props.clearSearch();
+  const clearColumnFilter = (key: string, callApi: boolean) => {
+    setFilterSearch((current: any) => {
+      // remove the key from an object
+      const copy = { ...current };
+      delete copy[key];
+      callApi && props.onFilterColumnSearch(copy);
+      return copy;
+    });
   };
 
   const getHiddenTitles = () => {
@@ -222,14 +227,14 @@ export default function GreenListDataGrid(props: searchProps) {
             handleChange={(data: any) => setcolumnFilter([data])}
           />
           <input
-            value={filterSearch}
+            value={filterSearch[columnFilter[0].id] || ''}
             type="text"
-            onChange={(e: any) => setFilterSearch(e.target.value)}
+            onChange={(e: any) => e.target.value === '' ? clearColumnFilter(columnFilter[0].id, false) : setFilterSearch({ ...filterSearch, [columnFilter[0].id]: e.target.value })}
           />
-          {filterSearch && (
+          {filterSearch[columnFilter[0].id] && (
             <CloseIcon
               className="filter-close"
-              onClick={() => clearColumnFilter()}
+              onClick={() => clearColumnFilter(columnFilter[0].id, true)}
             />
           )}
           <Button
@@ -251,7 +256,7 @@ export default function GreenListDataGrid(props: searchProps) {
   );
 
   const handleFilterSearch = () => {
-    props.onFilterColumnSearch(filterSearch, columnFilter[0].id);
+    props.onFilterColumnSearch(filterSearch);
   };
 
   const getTableIcons = (active: string, title: string) => {
@@ -277,7 +282,7 @@ export default function GreenListDataGrid(props: searchProps) {
             <MoreVertIcon
               className="header-filter-icon"
               onClick={() =>
-                !filterSearch && setcolumnFilter([{ id: active, name: title }])
+                setcolumnFilter([{ id: active, name: title }])
               }
             />
           </OverlayTrigger>
