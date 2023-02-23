@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
 import { FIRST_SEEN_TITLES } from './../Common/staticDatas';
+import { isSessionExpired } from "./../Common/Utils";
 
 type notesPropTypes = {
   trackId?: number;
@@ -74,10 +75,6 @@ const GreenList = () => {
           },
         })
         .then((res) => {
-          if (res.status === 403 || res.status === 401) {
-            alert("Session Expired..!")
-            window.location.reload()
-          }
           if (res.data.isExport) {
             setcsvData(res.data.tracks);
             dispatch({ type: "EXPORT_END", payload: "" });
@@ -87,6 +84,7 @@ const GreenList = () => {
         })
         .catch((err) => {
           dispatch({ type: "FETCH_FAILURE", payload: err.Message });
+          isSessionExpired(err)
           console.log("error feching data", err);
         });
     },

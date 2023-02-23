@@ -2,7 +2,7 @@ import React from 'react'
 import { createContext, useState, useContext } from "react";
 import jwt_decode from 'jwt-decode';
 import getCookie from './../Components/Common/cookie';
-import { ADMIN } from './../Components/Common/Utils';
+import { ADMIN, isSessionExpired } from './../Components/Common/Utils';
 import { BASE_URL } from "./../App";
 import axios from "axios";
 
@@ -23,7 +23,6 @@ const AuthContext = createContext<Authype | any>(null)
 export const AuthProvider = ({ children }: AuthContextProps) => {
   const token = getCookie('cp3_auth');
   let LoggedInUser: any = jwt_decode(token);
-  console.log(LoggedInUser, "LoggedInUserLoggedInUser")
   LoggedInUser.role = LoggedInUser.groups && LoggedInUser.groups.includes(ADMIN) ? 'admin' : 'user'
   const [user, setUser] = useState<any>(LoggedInUser || {})
   const IsValidFSUser = () => {
@@ -34,13 +33,10 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
         },
       })
       .then((res) => {
-        if (res.status === 403 || res.status === 401) {
-          alert("Session Expired..!")
-          window.location.reload()
-        }
         return res.data
       })
       .catch((err) => {
+        isSessionExpired(err)
         return false
       });
   }

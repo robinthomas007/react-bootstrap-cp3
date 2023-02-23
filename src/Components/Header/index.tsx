@@ -19,7 +19,7 @@ import Loader from "./../Common/loader";
 import getCookie from "./../Common/cookie";
 import axios from "axios";
 import { BASE_URL } from "./../../App";
-import { config } from "./../Common/Utils";
+import { config, isSessionExpired } from "./../Common/Utils";
 import moment from 'moment';
 import './header.css'
 
@@ -74,10 +74,6 @@ export default function Header() {
     axios
       .post(BASE_URL + "Notification/GetUnReadNotification", {}, config)
       .then((response) => {
-        if (response.status === 403 || response.status === 401) {
-          alert("Session Expired..!")
-          window.location.reload()
-        }
         if (response.data && response.data.length > 0) {
           setNotifications(response.data)
         }
@@ -87,7 +83,7 @@ export default function Header() {
         }
       })
       .catch((err) => {
-
+        isSessionExpired(err)
       })
       .finally(() => { });
   }

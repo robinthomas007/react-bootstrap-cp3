@@ -16,6 +16,7 @@ import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
 import { GREEN_LIST_TITLES } from './../Common/staticDatas';
 import CreateModal from "./Modals/CreateModal"
+import { isSessionExpired } from "./../Common/Utils";
 
 type notesPropTypes = {
   greenListId?: number;
@@ -71,10 +72,6 @@ const GreenList = () => {
           },
         })
         .then((res) => {
-          if (res.status === 403 || res.status === 401) {
-            alert("Session Expired..!")
-            window.location.reload()
-          }
           if (res.data.isExport) {
             setcsvData(res.data.greenList);
             dispatch({ type: "EXPORT_END", payload: "" });
@@ -85,6 +82,7 @@ const GreenList = () => {
         .catch((err) => {
           dispatch({ type: "FETCH_FAILURE", payload: err.Message });
           console.log("error feching data", err);
+          isSessionExpired(err)
         });
     },
     [state.searchCriteria]

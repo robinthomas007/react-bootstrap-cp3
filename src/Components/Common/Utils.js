@@ -55,3 +55,14 @@ export const getApi = (params, url) => {
 };
 
 
+export const isSessionExpired = (err) => {
+  try {
+    const ErrStatus = JSON.parse(JSON.stringify(err))
+    if (ErrStatus.status === 403 || ErrStatus.status === 401) {
+      alert("Session Expired..!")
+      window.location.reload()
+    }
+  } catch {
+    console.log("Error in isSessionExpired method")
+  }
+}
