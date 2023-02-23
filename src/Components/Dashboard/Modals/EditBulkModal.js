@@ -10,6 +10,7 @@ import SelectField from "./../../Common/select";
 import Datepicker from "./../../Common/DatePicker";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import SearchIcon from '@mui/icons-material/Search';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { config } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
@@ -233,7 +234,7 @@ export default function EditBulkModal(props) {
                 Title
               </Form.Label>
             </Col>
-            <Col>
+            <Col md={2}>
               <Form.Label className="form-label">
                 Artist
               </Form.Label>
@@ -241,7 +242,7 @@ export default function EditBulkModal(props) {
             <Col>
               <Form.Label className="form-label">ISRC</Form.Label>
             </Col>
-            <Col md={2}>
+            <Col>
               <Form.Label className="form-label">Album</Form.Label>
             </Col>
             <Col>
@@ -300,11 +301,11 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={2}>
                   <Form.Group
                     controlId="artist"
                     className="d-flex align-items-start flex-direction-column">
-                    <div className="f-width">
+                    <div className="f-width d-flex">
                       <Form.Control
                         required
                         value={track.artist}
@@ -319,6 +320,12 @@ export default function EditBulkModal(props) {
                       <Form.Control.Feedback type="invalid">
                         Artist is required
                       </Form.Control.Feedback>
+                      <span className="alt-title-icon">
+                        <SearchIcon
+                          onClick={() => { console.log("") }
+                          }
+                        />
+                      </span>
                     </div>
                   </Form.Group>
                 </Col>
@@ -340,7 +347,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col>
                   <Form.Group
                     controlId="album"
                     className="d-flex align-items-start flex-direction-column">

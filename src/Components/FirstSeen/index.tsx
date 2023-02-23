@@ -74,6 +74,10 @@ const GreenList = () => {
           },
         })
         .then((res) => {
+          if (res.status === 403 || res.status === 401) {
+            alert("Session Expired..!")
+            window.location.reload()
+          }
           if (res.data.isExport) {
             setcsvData(res.data.tracks);
             dispatch({ type: "EXPORT_END", payload: "" });

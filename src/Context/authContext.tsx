@@ -23,11 +23,8 @@ const AuthContext = createContext<Authype | any>(null)
 export const AuthProvider = ({ children }: AuthContextProps) => {
   const token = getCookie('cp3_auth');
   let LoggedInUser: any = jwt_decode(token);
+  console.log(LoggedInUser, "LoggedInUserLoggedInUser")
   LoggedInUser.role = LoggedInUser.groups && LoggedInUser.groups.includes(ADMIN) ? 'admin' : 'user'
-  setTimeout(() => {
-    alert("Session timed out!")
-    window.location.reload();
-  }, LoggedInUser.exp);
   const [user, setUser] = useState<any>(LoggedInUser || {})
   const IsValidFSUser = () => {
     return axios
@@ -37,6 +34,10 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
         },
       })
       .then((res) => {
+        if (res.status === 403 || res.status === 401) {
+          alert("Session Expired..!")
+          window.location.reload()
+        }
         return res.data
       })
       .catch((err) => {

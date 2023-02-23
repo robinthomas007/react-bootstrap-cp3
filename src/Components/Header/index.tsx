@@ -74,6 +74,10 @@ export default function Header() {
     axios
       .post(BASE_URL + "Notification/GetUnReadNotification", {}, config)
       .then((response) => {
+        if (response.status === 403 || response.status === 401) {
+          alert("Session Expired..!")
+          window.location.reload()
+        }
         if (response.data && response.data.length > 0) {
           setNotifications(response.data)
         }
