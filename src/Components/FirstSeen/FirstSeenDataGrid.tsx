@@ -10,6 +10,7 @@ import Table from "react-bootstrap/Table";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArchiveIcon from "@mui/icons-material/Archive";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Popover from "react-bootstrap/Popover";
 import SelectField from "./../Common/select";
@@ -405,7 +406,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             overlay={popover}
             rootClose
           >
-            <MoreVertIcon
+            <FilterAltIcon
               className="header-filter-icon"
               onClick={() =>
                 setcolumnFilter([{ id: active, name: title }])
