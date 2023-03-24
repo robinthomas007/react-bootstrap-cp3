@@ -137,8 +137,9 @@ const Dashboard = () => {
   const clearFilter = (name: string) => {
     let filterValues = selectedFilters;
     delete filterValues[name];
+
     setSelectedFilters(filterValues);
-    dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
+    dispatch({ type: "SET_FILTER", payload: { filter: filterValues, searchTerm: state.searchCriteria.searchTerm, } });
   };
 
   const getIds = (data: any) => {

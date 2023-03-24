@@ -38,6 +38,28 @@ export default function EditBulkModal(props) {
     blockPolicyId: "",
   }
 
+  const launchIt = () => {
+    window.launchWidget({
+      "width": "20%",
+      "height": "94%",
+      "widgetUrl": "https://party-qa.gr4o-nonprod.umusic.net/party-workspace/search",
+      "auth": "oidc",
+      "apiUrl": "https://party-qa.gr4o-nonprod.umusic.net/party-api",
+      "tokenUrl": null,
+      "r2Auth": null,
+      "searchTerm": "Richard",
+      "mode": "widgetSearchSelect",
+      "sourceSystem": "R2Party-Widget",
+      "toggles": "",
+      "userName": "",
+      "callback": function (parties) {
+        alert("Came")
+        console.log(parties, "parties")
+      }
+    });
+  }
+
+
   useEffect(() => {
     if (props.editParams && props.editParams.length > 0) {
       let trackArray = []
@@ -155,7 +177,7 @@ export default function EditBulkModal(props) {
                 placeholder="Enter Title"
                 onChange={(e) => {
                   let newSubArr = track.subTitle.split(",")
-                  newSubArr[i] = e.target.value
+                  newSubArr[i] = e.target.value.replaceAll(',', '')
                   handleOnchange({ ...track, subTitle: newSubArr.toLocaleString() }, index)
                 }
                 }
@@ -212,7 +234,6 @@ export default function EditBulkModal(props) {
       className="filter-modal-wrapper"
     >
       {loading && <Loader />}
-
       <Modal.Header>
         <Modal.Title>Create Record</Modal.Title>
         <CloseIcon
@@ -322,7 +343,7 @@ export default function EditBulkModal(props) {
                       </Form.Control.Feedback>
                       <span className="alt-title-icon">
                         <SearchIcon
-                          onClick={() => { console.log("") }
+                          onClick={() => { launchIt() }
                           }
                         />
                       </span>
