@@ -10,19 +10,28 @@ import Table from "react-bootstrap/Table";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArchiveIcon from "@mui/icons-material/Archive";
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Popover from "react-bootstrap/Popover";
 import SelectField from "./../Common/select";
 import Button from "./../Common/button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import moment from "moment";
-import { capitalizeFirstLetter, FormatPlatforms, getApi } from "./../Common/Utils";
-import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import { SEARCH_TITLES, FIRST_SEEN_TITLES } from './../Common/staticDatas';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  capitalizeFirstLetter,
+  FormatPlatforms,
+  getApi,
+} from "./../Common/Utils";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { SEARCH_TITLES, FIRST_SEEN_TITLES } from "./../Common/staticDatas";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -62,16 +71,17 @@ export default function ProjectSearchDataGrid(props: searchProps) {
 
   const colorModeContext = useColor();
 
-  const location = useLocation()
+  const location = useLocation();
 
-  const PAGE_PATH = location.pathname === '/first_seen' ? 'FIRST_SEEN' : 'DASHBOARD'
+  const PAGE_PATH =
+    location.pathname === "/first_seen" ? "FIRST_SEEN" : "DASHBOARD";
 
-  const TITLES = PAGE_PATH === 'DASHBOARD' ? SEARCH_TITLES : FIRST_SEEN_TITLES
+  const TITLES = PAGE_PATH === "DASHBOARD" ? SEARCH_TITLES : FIRST_SEEN_TITLES;
 
   const [headers, setHeaders] = React.useState(TITLES);
 
   React.useEffect(() => {
-    setHeaders(TITLES)
+    setHeaders(TITLES);
   }, [TITLES]);
 
   const NotesModal = (track: object) => {
@@ -79,18 +89,18 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   };
 
   const getNotes = (trackId: number, source: string) => {
-    setLoadingNotes(true)
+    setLoadingNotes(true);
     setNotes([]);
-    getApi({ sourceId: trackId, source: source }, 'Track/GetTrackNotes')
+    getApi({ sourceId: trackId, source: source }, "Track/GetTrackNotes")
       .then((res: any) => {
         setNotes(res);
-        setLoadingNotes(false)
+        setLoadingNotes(false);
       })
       .catch((error: any) => {
         console.log("error feching data", error);
-        setLoadingNotes(false)
+        setLoadingNotes(false);
       });
-  }
+  };
 
   const editModal = (track: object) => {
     if (selectedRows.length > 0) {
@@ -146,7 +156,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     }
     if (header === "source") {
       return (
-        <span className={`soruce-box ${track.source}`}>{track.source === 'FS' ? '1st' : track.source}</span>
+        <span className={`soruce-box ${track.source}`}>
+          {track.source === "FS" ? "1st" : track.source}
+        </span>
       );
     }
     if (header === "blockPolicyName") {
@@ -164,8 +176,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       active === "pre-release"
                         ? "active"
                         : active === "" && options.tab === "pre-release"
-                          ? "active"
-                          : "non-active"
+                        ? "active"
+                        : "non-active"
                     }
                     onClick={() => setActive("pre-release")}
                   >
@@ -176,8 +188,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       active === "post-release"
                         ? "active"
                         : active === "" && options.tab === "post-release"
-                          ? "active"
-                          : "non-active"
+                        ? "active"
+                        : "non-active"
                     }
                     onClick={() => setActive("post-release")}
                   >
@@ -200,8 +212,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                     </p>
                   </div>
                 )}
-                {track.policyDetails && track.policyDetails.release && track.policyDetails.release.toLowerCase() ===
-                  (active === "" ? options.tab : active) && (
+                {track.policyDetails &&
+                  track.policyDetails.release &&
+                  track.policyDetails.release.toLowerCase() ===
+                    (active === "" ? options.tab : active) && (
                     <div className="policy-popover-bg">
                       <div className="d-flex mb-2">
                         <div className="po-plcy-name">
@@ -240,39 +254,39 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       <div key={id}>
                         {exec.release.toLowerCase() ===
                           (active === "" ? options.tab : active) && (
-                            <div className="po-exception" key={id}>
-                              <div className="d-flex mb-2">
-                                <div className="po-plcy-name">
-                                  <span>
-                                    <strong>Policy Name: </strong>{" "}
-                                    {track.blockPolicyName}
-                                  </span>
-                                </div>
-                                <div className="po-plcy-pltfm">
-                                  <strong>Platforms:</strong>{" "}
-                                  {FormatPlatforms(exec.platform)}
-                                </div>
+                          <div className="po-exception" key={id}>
+                            <div className="d-flex mb-2">
+                              <div className="po-plcy-name">
+                                <span>
+                                  <strong>Policy Name: </strong>{" "}
+                                  {track.blockPolicyName}
+                                </span>
                               </div>
-                              <div className="d-flex">
-                                <div className="po-plcy-action">
-                                  <strong>Action:</strong>{" "}
-                                  {capitalizeFirstLetter(exec.action)}
-                                </div>
-                                <div className="po-plcy-duration">
-                                  <strong>Duration:</strong> {exec.duration}
-                                </div>
-                                <div className="po-plcy-when">
-                                  <strong>
-                                    {exec.release === "Post-Release"
-                                      ? "After"
-                                      : "Until"}
-                                    :
-                                  </strong>{" "}
-                                  {exec.date}
-                                </div>
+                              <div className="po-plcy-pltfm">
+                                <strong>Platforms:</strong>{" "}
+                                {FormatPlatforms(exec.platform)}
                               </div>
                             </div>
-                          )}
+                            <div className="d-flex">
+                              <div className="po-plcy-action">
+                                <strong>Action:</strong>{" "}
+                                {capitalizeFirstLetter(exec.action)}
+                              </div>
+                              <div className="po-plcy-duration">
+                                <strong>Duration:</strong> {exec.duration}
+                              </div>
+                              <div className="po-plcy-when">
+                                <strong>
+                                  {exec.release === "Post-Release"
+                                    ? "After"
+                                    : "Until"}
+                                  :
+                                </strong>{" "}
+                                {exec.date}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -287,8 +301,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         <span>{track.blockPolicyName}</span>
       );
     }
-    if (header === 'album') {
-      const albumList = track.albumList ? track.albumList.split(',') : []
+    if (header === "album") {
+      const albumList = track.albumList ? track.albumList.split(",,") : [];
       return track.albumList ? (
         <OverlayTrigger
           trigger={["hover", "focus"]}
@@ -299,9 +313,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 <div>
                   <ul>
                     {albumList.map((list: any, id: any) => {
-                      return (
-                        <li key={id}>{list}</li>
-                      )
+                      return <li key={id}>{list}</li>;
                     })}
                   </ul>
                 </div>
@@ -314,7 +326,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         </OverlayTrigger>
       ) : (
         <span>{track.album}</span>
-      )
+      );
     }
     return track[header];
   };
@@ -365,23 +377,30 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       <Popover.Body className="plcy-bdy-pad">
         <div>
           <ul>
-            {notes.length === 0 && loadingNotes && <span><CircularProgress size='25px' style={{ 'color': '#F57F17' }} /></span>}
-            {notes.length === 0 && !loadingNotes && <span>No Notes Available</span>}
+            {notes.length === 0 && loadingNotes && (
+              <span>
+                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
+              </span>
+            )}
+            {notes.length === 0 && !loadingNotes && (
+              <span>No Notes Available</span>
+            )}
             {notes.map((note: any, id: any) => {
               return (
                 <li key={id}>
                   <span className="notes-name-date">
-                    {note.userName} - {moment(note.createdOn).format("DD/MM/YYYY")}
+                    {note.userName} -{" "}
+                    {moment(note.createdOn).format("DD/MM/YYYY")}
                   </span>{" "}
                   <span> {note.noteDescription}</span>
                 </li>
-              )
+              );
             })}
           </ul>
         </div>
       </Popover.Body>
     </Popover>
-  )
+  );
 
   const popover = (
     <Popover id="popover-basic" className="filter-popover">
@@ -412,9 +431,16 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             handleChange={(data: any) => setcolumnFilter([data])}
           />
           <input
-            value={filterSearch[columnFilter[0].id] || ''}
+            value={filterSearch[columnFilter[0].id] || ""}
             type="text"
-            onChange={(e: any) => e.target.value === '' ? clearColumnFilter(columnFilter[0].id, false) : setFilterSearch({ ...filterSearch, [columnFilter[0].id]: e.target.value })}
+            onChange={(e: any) =>
+              e.target.value === ""
+                ? clearColumnFilter(columnFilter[0].id, false)
+                : setFilterSearch({
+                    ...filterSearch,
+                    [columnFilter[0].id]: e.target.value,
+                  })
+            }
           />
           {filterSearch[columnFilter[0].id] && (
             <CloseIcon
@@ -466,9 +492,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           >
             <FilterAltIcon
               className="header-filter-icon"
-              onClick={() =>
-                setcolumnFilter([{ id: active, name: title }])
-              }
+              onClick={() => setcolumnFilter([{ id: active, name: title }])}
             />
           </OverlayTrigger>
         </span>
@@ -488,10 +512,11 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     <Col md={11}>
       <Table
         responsive
-        className={`${colorModeContext.colorMode === "light"
-          ? "srch-dg-tbl"
-          : "srch-dg-tbl text-white"
-          }`}
+        className={`${
+          colorModeContext.colorMode === "light"
+            ? "srch-dg-tbl"
+            : "srch-dg-tbl text-white"
+        }`}
       >
         <thead>
           <DragDropContext onDragEnd={reorderColumns}>
@@ -547,15 +572,17 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             const emptyEx =
               exData && exData.includes(active === "" ? tab : active);
             const activeTabData =
-              track.policyDetails && track.policyDetails.release &&
+              track.policyDetails &&
+              track.policyDetails.release &&
               track.policyDetails.release.toLowerCase() ===
-              (active === "" ? tab : active);
+                (active === "" ? tab : active);
             return (
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`${selectedRows.includes(track.trackId) ? "selected-row" : ""
-                    }`}
+                  className={`${
+                    selectedRows.includes(track.trackId) ? "selected-row" : ""
+                  }`}
                 >
                   <td>
                     <input
@@ -586,7 +613,12 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                         overlay={notePopover}
                         rootClose
                       >
-                        <QuestionAnswerIcon onClick={() => NotesModal(track)} onMouseEnter={() => getNotes(track.trackId, track.source)} />
+                        <QuestionAnswerIcon
+                          onClick={() => NotesModal(track)}
+                          onMouseEnter={() =>
+                            getNotes(track.trackId, track.source)
+                          }
+                        />
                       </OverlayTrigger>
                       {props.role === "admin" && (
                         <EditIcon
@@ -596,9 +628,14 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       )}
                       {props.role === "admin" && (
                         <ArchiveIcon
-                          className={(track.source === "CP3" || track.source === "FS") ? "" : "disabled"}
+                          className={
+                            track.source === "CP3" || track.source === "FS"
+                              ? ""
+                              : "disabled"
+                          }
                           onClick={() =>
-                            (track.source === "CP3" || track.source === "FS") && deleteTrack(track)
+                            (track.source === "CP3" || track.source === "FS") &&
+                            deleteTrack(track)
                           }
                         />
                       )}
