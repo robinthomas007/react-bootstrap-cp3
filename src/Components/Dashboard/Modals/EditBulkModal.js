@@ -38,23 +38,22 @@ export default function EditBulkModal(props) {
     blockPolicyId: "",
   }
 
-  const launchIt = () => {
+  const launchIt = (track, index) => {
     window.launchWidget({
-      "width": "20%",
-      "height": "94%",
+      "width": "100%",
+      "height": "100%",
       "widgetUrl": "https://party-qa.gr4o-nonprod.umusic.net/party-workspace/search",
       "auth": "oidc",
       "apiUrl": "https://party-qa.gr4o-nonprod.umusic.net/party-api",
       "tokenUrl": 'ausne49kx1HIUS6iz0h7',
       "r2Auth": 'ausne49kx1HIUS6iz0h7',
-      "searchTerm": "Richard",
+      "searchTerm": track.artist,
       "mode": "widgetSearchSelect",
       "sourceSystem": "R2Party-Widget",
       "toggles": "",
       "userName": "",
       "callback": function (parties) {
-        alert("Came")
-        console.log(parties, "parties")
+        handleOnchange({ ...track, artist: parties[0].name }, index)
       }
     });
   }
@@ -343,7 +342,7 @@ export default function EditBulkModal(props) {
                       </Form.Control.Feedback>
                       <span className="alt-title-icon">
                         <SearchIcon
-                          onClick={() => { launchIt() }
+                          onClick={() => { launchIt(track, index) }
                           }
                         />
                       </span>

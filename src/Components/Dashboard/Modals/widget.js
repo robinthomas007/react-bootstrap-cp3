@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 var partyServiceWidget = null;
 var partyServiceWidgetFrame = null;
 
@@ -143,7 +144,6 @@ function launchWidget(opts) {
 
   function getAppEventHandler() {
     return function (event) {
-      console.log(event);
       switch (event.data.action) {
         case 'close':
           if (opts.callback) {
