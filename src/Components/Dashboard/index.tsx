@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
 import { SEARCH_TITLES } from './../Common/staticDatas';
 import { isSessionExpired } from "./../Common/Utils";
+import { useParams } from "react-router-dom";
 
 type notesPropTypes = {
   trackId?: number;
@@ -35,6 +36,7 @@ const Dashboard = () => {
   const [csvData, setcsvData] = React.useState([]);
   // const csvLink = React.createRef<any>();
   const auth = useAuth();
+  let { notiId } = useParams();
 
   const getSearchPageData = React.useCallback(
     (isExport: any, isReport: any) => {
@@ -71,7 +73,8 @@ const Dashboard = () => {
             pre_releasese: filter.pre_releasese ? true : false,
             isExport: isExport ? true : false,
             report: isReport,
-            tableSearch: tableSearch
+            tableSearch: tableSearch,
+            notificationId: notiId
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -91,7 +94,7 @@ const Dashboard = () => {
           console.log("error feching data", err);
         });
     },
-    [state.searchCriteria]
+    [state.searchCriteria, notiId]
   );
 
   React.useEffect(() => {

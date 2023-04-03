@@ -17,6 +17,7 @@ import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
 import { FIRST_SEEN_TITLES } from './../Common/staticDatas';
 import { isSessionExpired } from "./../Common/Utils";
+import { useParams } from "react-router-dom";
 
 type notesPropTypes = {
   trackId?: number;
@@ -33,6 +34,7 @@ const GreenList = () => {
   const [editParams, setEditParams] = React.useState([]);
   const [csvData, setcsvData] = React.useState([]);
   const auth = useAuth();
+  let { notiId } = useParams();
 
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
@@ -68,7 +70,8 @@ const GreenList = () => {
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
             isExport: isExport ? true : false,
-            tableSearch: tableSearch
+            tableSearch: tableSearch,
+            notiId: notiId
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -88,7 +91,7 @@ const GreenList = () => {
           console.log("error feching data", err);
         });
     },
-    [state.searchCriteria]
+    [state.searchCriteria, notiId]
   );
 
   React.useEffect(() => {
@@ -205,6 +208,7 @@ const GreenList = () => {
 
   const selectedFilterKeys = Object.keys(selectedFilters);
 
+
   const renderSelectedFilters = () => {
     const labelObj: any = {
       releaseFrom: "Release From",
@@ -213,6 +217,7 @@ const GreenList = () => {
       leakTo: "Leak To",
       updatedFrom: "Updated From",
       updatedTo: "Updated To",
+      // configuration: "Config"
     };
     const dateLabelsArr = [
       "releaseFrom",
@@ -221,6 +226,7 @@ const GreenList = () => {
       "leakTo",
       "updatedFrom",
       "updatedTo",
+      // "configuration"
     ];
     return selectedFilterKeys.map((item, index) => {
       let content = null;
@@ -250,6 +256,18 @@ const GreenList = () => {
             <span>
               {" "}
               Source : {selectedSource && selectedSource.toString()}{" "}
+            </span>
+          );
+      }
+      if (item === "configuration") {
+        const selectedConfig = selectedFilters[item].map(
+          (label: any) => label.name
+        );
+        if (selectedConfig.length > 0)
+          content = (
+            <span>
+              {" "}
+              Config : {selectedConfig && selectedConfig.toString()}{" "}
             </span>
           );
       }

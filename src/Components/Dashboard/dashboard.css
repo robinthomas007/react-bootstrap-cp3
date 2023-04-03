@@ -359,7 +359,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 
 .search-table .table-responsive {
   height:600px;
-  overflow:scroll;
+  overflow-y:scroll;
 } 
 
 .search-table .table-responsive::-webkit-scrollbar {
@@ -370,6 +370,11 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   background-color: #ccc;    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
 }
+
+.search-table .table-responsive {
+  overflow-x: hidden;
+}
+
 .search-table .table-responsive thead tr{
   background: white;
   position: sticky;

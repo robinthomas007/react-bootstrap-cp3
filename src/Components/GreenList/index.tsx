@@ -17,6 +17,7 @@ import Search from './../Search/search'
 import { GREEN_LIST_TITLES } from './../Common/staticDatas';
 import CreateModal from "./Modals/CreateModal"
 import { isSessionExpired } from "./../Common/Utils";
+import { useParams } from "react-router-dom";
 
 type notesPropTypes = {
   greenListId?: number;
@@ -33,6 +34,7 @@ const GreenList = () => {
   const [editParams, setEditParams] = React.useState([]);
   const [csvData, setcsvData] = React.useState([]);
   const auth = useAuth();
+  let { notiId } = useParams();
 
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
@@ -65,7 +67,8 @@ const GreenList = () => {
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
             isExport: isExport ? true : false,
-            tableSearch: tableSearch
+            tableSearch: tableSearch,
+            notiId: notiId
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -85,7 +88,7 @@ const GreenList = () => {
           isSessionExpired(err)
         });
     },
-    [state.searchCriteria]
+    [state.searchCriteria, notiId]
   );
 
   React.useEffect(() => {

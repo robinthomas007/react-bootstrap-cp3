@@ -81,6 +81,7 @@ export default function Header() {
           setNotifications([])
           setShowNoti(false)
         }
+        setLoading(false)
       })
       .catch((err) => {
         isSessionExpired(err)
@@ -101,8 +102,30 @@ export default function Header() {
     return 'UK';
   };
 
+  const clearNotification = () => {
+    setLoading(true)
+    axios
+      .get(BASE_URL + "Notification/ClearNotification", {
+        headers: {
+          cp3_auth: getCookie("cp3_auth"),
+        }
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          getAllNotifications()
+        }
+      })
+      .catch((err) => {
+        setLoading(false)
+      })
+      .finally(() => {
+        setLoading(false)
+      });
+  }
+
   const markAsRead = (id: number, source: string) => {
     // setLoading(true)
+    // return false;
     axios
       .get(BASE_URL + "Notification/ReadNotification", {
         params: { notificationId: id },
@@ -130,21 +153,45 @@ export default function Header() {
       });
   }
 
-  const naviagetNotificationPage = (source: string) => {
+  const naviagetNotificationPage = (source: string, notificationId: string) => {
     if (source === 'FS')
-      navigate("/first_seen");
+      navigate(`/first_seen/${notificationId}`);
     if (source === 'GL')
-      navigate("/green_list");
+      navigate(`/green_list/${notificationId}`);
+    if (source === 'CP3')
+      navigate(`/${notificationId}`);
     setShowNoti(false)
   }
 
   const renderNotifications = () => {
     return notifications.map((noti: any, i) => {
+      if (noti.groupValueCount > 0 && noti.groupType === "") {
+        return (
+          <div key={i} className={`${noti.isRead ? 'read' : ''} noti-item`}>
+            <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
+            <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source, noti.notificationId)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
+              <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : 'Greenlist'} records.
+              <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
+            </div>
+          </div>
+        )
+      }
+      if (noti.groupValueCount > 0 && noti.groupType !== "") {
+        return (
+          <div key={i} className={`${noti.isRead ? 'read' : ''} noti-item`}>
+            <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
+            <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source, noti.notificationId)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
+              <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : 'Greenlist'} records for {noti.groupType}  <strong>"{noti.trackName}"</strong>
+              <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
+            </div>
+          </div>
+        )
+      }
       return (
         <div key={i} className={`${noti.isRead ? 'read' : ''} noti-item`}>
           <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
-          <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
-            <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FS' ? 'First Seen' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
+          <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source, noti.notificationId)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
+            <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} the {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : 'Greenlist'} record for <strong>"{noti.trackName}"</strong>
             <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
           </div>
         </div>
@@ -206,6 +253,9 @@ export default function Header() {
                 </div>
                 <div className="notification-wrapper-div">
                   {showNoti && <div className="notification-wrapper arrow-top">
+                    <div className="clr-noti">
+                      <span onClick={clearNotification}>Clear</span>
+                    </div>
                     {renderNotifications()}
                   </div>}
                 </div>
