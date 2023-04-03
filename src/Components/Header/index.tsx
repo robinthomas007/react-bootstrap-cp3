@@ -125,7 +125,7 @@ export default function Header() {
 
   const markAsRead = (id: number, source: string) => {
     // setLoading(true)
-    // return false;
+    return false;
     axios
       .get(BASE_URL + "Notification/ReadNotification", {
         params: { notificationId: id },
@@ -155,11 +155,11 @@ export default function Header() {
 
   const naviagetNotificationPage = (source: string, notificationId: string) => {
     if (source === 'FS')
-      navigate(`/first_seen/${notificationId}`);
+      navigate('/first_seen', { state: { notificationId: notificationId }, replace: true },);
     if (source === 'GL')
-      navigate(`/green_list/${notificationId}`);
+      navigate("/green_list", { state: { notificationId: notificationId } });
     if (source === 'CP3')
-      navigate(`/${notificationId}`);
+      navigate("/", { state: { notificationId: notificationId }, replace: false });
     setShowNoti(false)
   }
 

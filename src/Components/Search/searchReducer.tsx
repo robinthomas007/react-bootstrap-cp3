@@ -19,7 +19,7 @@ type searchActions = {
   payload: any
 }
 
-export const initialState = {
+export const searchInitialState = {
   loading: true,
   exportLoading: false,
   error: '',
@@ -41,11 +41,11 @@ export const initialState = {
     filter: {
       searchWithins: ['ALL']
     },
-    tableSearch: {}
+    tableSearch: {},
   }
 }
 
-export const reducer = (state: searchState, action: searchActions) => {
+export const searchReducer = (state: searchState, action: searchActions) => {
   switch (action.type) {
     case 'FETCH_SUCCESS':
       return {
@@ -55,7 +55,7 @@ export const reducer = (state: searchState, action: searchActions) => {
         totalPages: Number(action.payload.totalPages),
         totalItems: Number(action.payload.totalItems),
         labelFacets: action.payload.labelFacets,
-        policyFacets: action.payload.policyFacets
+        policyFacets: action.payload.policyFacets,
       }
     case 'FETCH_FAILURE':
       return {

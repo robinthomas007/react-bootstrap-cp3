@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
-import { reducer, initialState } from "./../Search/searchReducer";
+import { searchReducer, searchInitialState } from "./../Search/searchReducer";
 import ProjectSearchDataGrid from "./ProjectSearchDataGrid";
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterModal from "./Modals/FilterModal";
@@ -18,14 +18,18 @@ import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
 import { SEARCH_TITLES } from './../Common/staticDatas';
 import { isSessionExpired } from "./../Common/Utils";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type notesPropTypes = {
   trackId?: number;
 };
 
+type LocationState = {
+  notificationId: number
+};
+
 const Dashboard = () => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = React.useReducer(searchReducer, searchInitialState);
   const [search, setSearch] = React.useState("");
   const [openFilter, setOpenFilter] = React.useState(false);
   const [openNotes, setOpenNotes] = React.useState(false);
@@ -36,7 +40,8 @@ const Dashboard = () => {
   const [csvData, setcsvData] = React.useState([]);
   // const csvLink = React.createRef<any>();
   const auth = useAuth();
-  let { notiId } = useParams();
+  const location = useLocation()
+  const navigate = useNavigate();
 
   const getSearchPageData = React.useCallback(
     (isExport: any, isReport: any) => {
@@ -49,6 +54,9 @@ const Dashboard = () => {
         filter,
         tableSearch
       } = state.searchCriteria;
+      const notificationId = (location.state as LocationState)?.notificationId;
+      if (notificationId)
+        navigate("/") // clearing the params from the url
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
         .get(BASE_URL + 'TrackSearch', {
@@ -74,7 +82,7 @@ const Dashboard = () => {
             isExport: isExport ? true : false,
             report: isReport,
             tableSearch: tableSearch,
-            notificationId: notiId
+            notificationId: notificationId ? notificationId : null
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -94,7 +102,7 @@ const Dashboard = () => {
           console.log("error feching data", err);
         });
     },
-    [state.searchCriteria, notiId]
+    [state.searchCriteria]
   );
 
   React.useEffect(() => {

@@ -21,15 +21,14 @@ function Routes() {
       element: <PublicRoutes />,
       children: [
         { path: '/', element: <Dashboard /> },
-        { path: '/:notiId', element: <Dashboard /> },
-        { path: '/green_list/:notiId', element: <GreenList /> },
+        { path: '/green_list', element: <GreenList /> },
 
       ],
     },
     {
       element: <FCUserRoutes />,
       children: [
-        { path: '/first_seen/:notiId', element: <FirstSeen /> },
+        { path: '/first_seen', element: <FirstSeen /> },
       ],
     },
   ]);
