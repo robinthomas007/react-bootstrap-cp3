@@ -55,7 +55,7 @@ export default function EditBulkModal(props) {
       "userName": "",
       "callback": function (parties) {
         let artistList = track.artist.split(',')
-        artistList[artistList.length - 1] = parties[0].name
+        artistList[artistList.length - 1] = parties ? parties[0].name : ''
         handleOnchange({ ...track, artist: artistList.toLocaleString() }, index)
       }
     });
