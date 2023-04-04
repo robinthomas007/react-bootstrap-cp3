@@ -17,7 +17,7 @@ import Search from './../Search/search'
 import { GREEN_LIST_TITLES } from './../Common/staticDatas';
 import CreateModal from "./Modals/CreateModal"
 import { isSessionExpired } from "./../Common/Utils";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 type notesPropTypes = {
   greenListId?: number;
@@ -39,7 +39,8 @@ const GreenList = () => {
   const [csvData, setcsvData] = React.useState([]);
   const auth = useAuth();
   const location = useLocation()
-  const navigate = useNavigate();
+
+  const notificationId = (location.state as LocationState)?.notificationId;
 
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
@@ -52,9 +53,7 @@ const GreenList = () => {
         filter,
         tableSearch,
       } = state.searchCriteria;
-      const notificationId = (location.state as LocationState)?.notificationId;
-      if (notificationId)
-        navigate("/green_list") // clearing the params from the url
+
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
         .get(BASE_URL + "GreenListSearch", {
@@ -96,7 +95,7 @@ const GreenList = () => {
           isSessionExpired(err)
         });
     },
-    [state.searchCriteria]
+    [state.searchCriteria, notificationId]
   );
 
   React.useEffect(() => {

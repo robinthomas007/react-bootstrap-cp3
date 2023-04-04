@@ -17,7 +17,7 @@ import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
 import { FIRST_SEEN_TITLES } from './../Common/staticDatas';
 import { isSessionExpired } from "./../Common/Utils";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 type notesPropTypes = {
   trackId?: number;
@@ -37,7 +37,7 @@ const GreenList = () => {
   const [csvData, setcsvData] = React.useState([]);
   const auth = useAuth();
   const location = useLocation()
-  const navigate = useNavigate();
+  const notificationId = (location.state as LocationState)?.notificationId;
 
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
@@ -50,9 +50,7 @@ const GreenList = () => {
         filter,
         tableSearch,
       } = state.searchCriteria;
-      const notificationId = (location.state as LocationState)?.notificationId;
-      if (notificationId)
-        navigate("/first_seen") // clearing the params from the url
+
       dispatch({ type: "FETCH_REQUEST", payload: '' });
       axios
         .get(BASE_URL + 'TrackLeaksSearch', {
@@ -97,7 +95,7 @@ const GreenList = () => {
           console.log("error feching data", err);
         });
     },
-    [state.searchCriteria]
+    [state.searchCriteria, notificationId]
   );
 
   React.useEffect(() => {

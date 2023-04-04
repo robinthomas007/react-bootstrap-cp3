@@ -13,7 +13,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from '@mui/icons-material/Search';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { config } from "./../../Common/Utils";
-import { BASE_URL } from "./../../../App";
+import { BASE_URL, PARTY_API_URL, WIDGET_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import getCookie from "./../../Common/cookie";
@@ -39,21 +39,24 @@ export default function EditBulkModal(props) {
   }
 
   const launchIt = (track, index) => {
+    const splitArtist = track.artist.split(',').pop()
     window.launchWidget({
-      "width": "100%",
-      "height": "100%",
-      "widgetUrl": "https://party-qa.gr4o-nonprod.umusic.net/party-workspace/search",
+      "width": "80%",
+      "height": "80%",
+      "widgetUrl": WIDGET_URL,
       "auth": "oidc",
-      "apiUrl": "https://party-qa.gr4o-nonprod.umusic.net/party-api",
-      "tokenUrl": 'ausne49kx1HIUS6iz0h7',
-      "r2Auth": 'ausne49kx1HIUS6iz0h7',
-      "searchTerm": track.artist,
+      "apiUrl": PARTY_API_URL,
+      "tokenUrl": '',
+      "r2Auth": '',
+      "searchTerm": splitArtist,
       "mode": "widgetSearchSelect",
       "sourceSystem": "R2Party-Widget",
       "toggles": "",
       "userName": "",
       "callback": function (parties) {
-        handleOnchange({ ...track, artist: parties[0].name }, index)
+        let artistList = track.artist.split(',')
+        artistList[artistList.length - 1] = parties[0].name
+        handleOnchange({ ...track, artist: artistList.toLocaleString() }, index)
       }
     });
   }
