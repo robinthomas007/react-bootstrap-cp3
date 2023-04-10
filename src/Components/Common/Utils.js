@@ -1,6 +1,6 @@
 import getCookie from "./cookie";
 import jwt_decode from "jwt-decode";
-import { BASE_URL } from "./../../App";
+import { BASE_URL, PARTY_API_URL, WIDGET_URL } from "./../../App";
 import axios from "axios";
 
 export const getUsername = () => {
@@ -12,6 +12,33 @@ export const getUsername = () => {
     console.log("Error getting Token", err);
   }
 };
+
+export const callPartyService = (track, index, handleOnchange, isSingle) => {
+  const splitArtist = track.artist.split(',').pop()
+  window.launchWidget({
+    "width": "80%",
+    "height": "80%",
+    "widgetUrl": WIDGET_URL,
+    "auth": "oidc",
+    "apiUrl": PARTY_API_URL,
+    "tokenUrl": '',
+    "r2Auth": '',
+    "searchTerm": splitArtist,
+    "mode": "widgetSearchSelect",
+    "sourceSystem": "R2Party-Widget",
+    "toggles": "",
+    "userName": "",
+    "callback": function (parties) {
+      let artistList = track.artist.split(',')
+      artistList[artistList.length - 1] = parties ? parties[0].name : ''
+      if (isSingle) {
+        handleOnchange({ ...handleOnchange, artist: artistList.toLocaleString() })
+      } else {
+        handleOnchange({ ...track, artist: artistList.toLocaleString() }, index)
+      }
+    }
+  });
+}
 
 
 export const config = {

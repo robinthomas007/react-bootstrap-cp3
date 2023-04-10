@@ -11,12 +11,13 @@ import Datepicker from "./../../Common/DatePicker";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
-import { config } from "./../../Common/Utils";
-import { BASE_URL } from "./../../../App";
+import { config, callPartyService } from "./../../Common/Utils";
+import { BASE_URL, PARTY_API_URL, WIDGET_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import { CONFIGURATION_LIST } from "./../../Common/staticDatas";
 import moment from "moment";
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function EditBulkModal(props) {
   const [trackList, setTrackList] = useState([]);
@@ -63,6 +64,10 @@ export default function EditBulkModal(props) {
       setTrackList([...trackList, newTrack]);
     }
   }, [props]);
+
+  const launchIt = (track, index) => {
+    callPartyService(track, index, handleOnchange, false)
+  }
 
   const handleSubmit = () => {
     const form = document.querySelector("#create-resource-form");
@@ -213,7 +218,7 @@ export default function EditBulkModal(props) {
             <Col md={2}>
               <Form.Label className="form-label ">Title</Form.Label>
             </Col>
-            <Col>
+            <Col md={2}>
               <Form.Label className="form-label">Artist</Form.Label>
             </Col>
             <Col md={1}>
@@ -282,12 +287,12 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={2}>
                   <Form.Group
                     controlId="artist"
                     className="d-flex align-items-start flex-direction-column"
                   >
-                    <div className="f-width">
+                    <div className="f-width d-flex">
                       <Form.Control
                         required
                         value={track.artist}
@@ -304,6 +309,12 @@ export default function EditBulkModal(props) {
                       <Form.Control.Feedback type="invalid">
                         Artist is required
                       </Form.Control.Feedback>
+                      <span className="alt-title-icon">
+                        <SearchIcon
+                          onClick={() => { launchIt(track, index) }
+                          }
+                        />
+                      </span>
                     </div>
                   </Form.Group>
                 </Col>

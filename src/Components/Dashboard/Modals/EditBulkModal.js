@@ -12,8 +12,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from '@mui/icons-material/Search';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { config } from "./../../Common/Utils";
-import { BASE_URL, PARTY_API_URL, WIDGET_URL } from "./../../../App";
+import { config, callPartyService } from "./../../Common/Utils";
+import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import getCookie from "./../../Common/cookie";
@@ -39,28 +39,8 @@ export default function EditBulkModal(props) {
   }
 
   const launchIt = (track, index) => {
-    const splitArtist = track.artist.split(',').pop()
-    window.launchWidget({
-      "width": "80%",
-      "height": "80%",
-      "widgetUrl": WIDGET_URL,
-      "auth": "oidc",
-      "apiUrl": PARTY_API_URL,
-      "tokenUrl": '',
-      "r2Auth": '',
-      "searchTerm": splitArtist,
-      "mode": "widgetSearchSelect",
-      "sourceSystem": "R2Party-Widget",
-      "toggles": "",
-      "userName": "",
-      "callback": function (parties) {
-        let artistList = track.artist.split(',')
-        artistList[artistList.length - 1] = parties ? parties[0].name : ''
-        handleOnchange({ ...track, artist: artistList.toLocaleString() }, index)
-      }
-    });
+    callPartyService(track, index, handleOnchange, false)
   }
-
 
   useEffect(() => {
     if (props.editParams && props.editParams.length > 0) {

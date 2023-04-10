@@ -9,11 +9,12 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import SelectField from "./../../Common/select";
 import Datepicker from "./../../Common/DatePicker";
-import { getUsername, config } from "./../../Common/Utils";
+import { getUsername, config, callPartyService } from "./../../Common/Utils";
 import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import moment from "moment";
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function CreateProjectModal(props) {
   const [greenlist, setGreenlist] = useState({
@@ -43,6 +44,10 @@ export default function CreateProjectModal(props) {
       });
     }
   }, [props]);
+
+  const launchIt = (track) => {
+    callPartyService(track, '', setGreenlist, true)
+  }
 
   const handleSubmit = () => {
     const form = document.querySelector("#create-resource-form");
@@ -179,7 +184,7 @@ export default function CreateProjectModal(props) {
                       <Form.Label className="form-label-width">
                         Artist
                       </Form.Label>
-                      <div className="f-width">
+                      <div className="f-width d-flex">
                         <Form.Control
                           required
                           value={greenlist.artist}
@@ -193,6 +198,12 @@ export default function CreateProjectModal(props) {
                         <Form.Control.Feedback type="invalid">
                           Artist is required
                         </Form.Control.Feedback>
+                        <span className="alt-title-icon">
+                          <SearchIcon
+                            onClick={() => { launchIt(greenlist) }
+                            }
+                          />
+                        </span>
                       </div>
                     </Form.Group>
                   </Col>
