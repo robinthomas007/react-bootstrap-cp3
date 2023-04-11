@@ -52,7 +52,7 @@ export default function Header() {
     getAllNotifications();
     const interval = setInterval(() => {
       getAllNotifications();
-    }, 60000);
+    }, 300000);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -168,7 +168,16 @@ export default function Header() {
           <div key={i} className={`${noti.isRead ? 'read' : ''} noti-item`}>
             <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
             <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source, noti.notificationId)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
-              <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : 'Greenlist'} records.
+              {noti.notificationType.toLowerCase() === 'created' && (
+                <>
+                  <strong>{noti.userName}</strong> <span>{noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : noti.source === 'GL' ? 'GreenList' : ''} records.</span>
+                </>
+              )}
+              {noti.notificationType.toLowerCase() === 'updated' && (
+                <>
+                  <strong>{noti.userName}</strong> <span>{noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'GL' ? 'GreenList' : ''} records.</span>
+                </>
+              )}
               <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
             </div>
           </div>
@@ -179,7 +188,16 @@ export default function Header() {
           <div key={i} className={`${noti.isRead ? 'read' : ''} noti-item`}>
             <div className="alias"><span style={{ background: hexArray[Math.floor(Math.random() * hexArray.length)] }}> {getAlias(noti.userName)}</span></div>
             <div className="noti-content" onClick={() => naviagetNotificationPage(noti.source, noti.notificationId)} onMouseEnter={() => !noti.isRead && markAsRead(noti.notificationId, noti.source)}>
-              <strong>{noti.userName}</strong> {noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : 'Greenlist'} records for {noti.groupType}  <strong>"{noti.trackName}"</strong>
+              {noti.notificationType.toLowerCase() === 'created' && (
+                <>
+                  <strong>{noti.userName}</strong> <span>{noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'CP3' ? 'CP3' : noti.source === 'GL' ? 'GreenList' : ''} records for {noti.groupType} <strong>"{noti.trackName}"</strong></span>
+                </>
+              )}
+              {noti.notificationType.toLowerCase() === 'updated' && (
+                <>
+                  <strong>{noti.userName}</strong> <span>{noti.notificationType.toLowerCase()} {noti.groupValueCount > 10 ? '10+' : noti.groupValueCount} {noti.source === 'FS' ? 'First Seen' : noti.source === 'GL' ? 'GreenList' : ''} records for {noti.groupType} <strong>"{noti.trackName}"</strong></span>
+                </>
+              )}
               <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
             </div>
           </div>
