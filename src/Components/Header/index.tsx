@@ -124,40 +124,49 @@ export default function Header() {
   }
 
   const markAsRead = (id: number, source: string) => {
-    axios
-      .get(BASE_URL + "Notification/ReadNotification", {
-        params: { notificationId: id },
-        headers: {
-          cp3_auth: getCookie("cp3_auth"),
-        }
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          const updatedNotification: any = notifications.map((noti: any) => {
-            if (noti.notificationId === id) {
-              return { ...noti, isRead: true };
-            }
-            return noti
-          })
-          setNotifications(updatedNotification)
-          setLoading(false)
-        }
-      })
-      .catch((err) => {
-        setLoading(false)
-      })
-      .finally(() => {
-        setLoading(false)
-      });
+    return false;
+    // mark as read api on hold for client varification
+    // axios
+    //   .get(BASE_URL + "Notification/ReadNotification", {
+    //     params: { notificationId: id },
+    //     headers: {
+    //       cp3_auth: getCookie("cp3_auth"),
+    //     }
+    //   })
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       const updatedNotification: any = notifications.map((noti: any) => {
+    //         if (noti.notificationId === id) {
+    //           return { ...noti, isRead: true };
+    //         }
+    //         return noti
+    //       })
+    //       setNotifications(updatedNotification)
+    //       setLoading(false)
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setLoading(false)
+    //   })
+    //   .finally(() => {
+    //     setLoading(false)
+    //   });
   }
 
   const naviagetNotificationPage = (source: string, notificationId: string) => {
-    if (source === 'FS')
-      navigate('/first_seen', { state: { notificationId: notificationId }, replace: true },);
-    if (source === 'GL')
-      navigate("/green_list", { state: { notificationId: notificationId }, replace: true });
-    if (source === 'CP3')
-      navigate("/", { state: { notificationId: notificationId }, replace: true });
+    switch (source) {
+      case "FS":
+        navigate('/first_seen', { state: { notificationId: notificationId }, replace: true },);
+        break;
+      case "GL":
+        navigate("/green_list", { state: { notificationId: notificationId }, replace: true });
+        break;
+      case "CP3":
+        navigate("/", { state: { notificationId: notificationId }, replace: true });
+        break;
+      default:
+        navigate("/", { state: { notificationId: notificationId }, replace: true });
+    }
     setShowNoti(false)
   }
 
@@ -228,9 +237,9 @@ export default function Header() {
       {loading && <Loader />}
       <Row className="bg-header-theme text-white cp3-header">
         <Col xl={2} xxl={4}>
-          <a href="/">
+          <NavLink to="/">
             <img className="cp3-logo" src={logo} alt="Logo" />
-          </a>
+          </NavLink>
         </Col>
         <Col xl={10} xxl={8}>
           <Nav className="justify-content-around">

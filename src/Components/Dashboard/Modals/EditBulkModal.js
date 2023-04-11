@@ -397,14 +397,26 @@ export default function EditBulkModal(props) {
                   <Form.Group
                     controlId="blockPolicyId"
                     className="d-flex align-items-start flex-direction-column">
-                    <SelectField
-                      value={track.blockPolicyId}
-                      options={props.policyFacets}
-                      name="blockPolicyId"
-                      handleChange={(data) =>
-                        handleOnchange({ ...track, blockPolicyId: data }, index)
-                      }
-                    />
+                    <div className="f-width">
+                      <Form.Control
+                        required
+                        value={track.blockPolicyId}
+                        name="blockPolicyId"
+                        className="d-none"
+                        onChange={(e) => null}
+                      />
+                      <SelectField
+                        value={track.blockPolicyId}
+                        options={props.policyFacets}
+                        name="blockPolicyId"
+                        handleChange={(data) =>
+                          handleOnchange({ ...track, blockPolicyId: data }, index)
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Policy is required
+                      </Form.Control.Feedback>
+                    </div>
                   </Form.Group>
                 </Col>
                 <Col>
