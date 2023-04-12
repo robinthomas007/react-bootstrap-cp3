@@ -32,7 +32,7 @@ export const callPartyService = (track, index, handleOnchange, isSingle) => {
       let artistList = track.artist.split(',')
       artistList[artistList.length - 1] = parties ? parties[0].name : ''
       if (isSingle) {
-        handleOnchange({ ...handleOnchange, artist: artistList.toLocaleString() })
+        handleOnchange({ ...track, artist: artistList.toLocaleString() })
       } else {
         handleOnchange({ ...track, artist: artistList.toLocaleString() }, index)
       }
