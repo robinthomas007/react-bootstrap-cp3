@@ -24,8 +24,8 @@ export function cp3Urls(env: string) {
       return cp3_app_urls
     case "prod":
       cp3_app_urls.url = "https://api.cp3.umgapps.com/api/";
-      cp3_app_urls.widgetUrl = "https://party-qa.gr4o-nonprod.umusic.net/party-workspace/search";
-      cp3_app_urls.apiUrl = "https://party-qa.gr4o-nonprod.umusic.net/party-api"
+      cp3_app_urls.widgetUrl = "https://party-prod.gr4o.umusic.net/party-workspace/search";
+      cp3_app_urls.apiUrl = "https://party-prod.gr4o.umusic.net/party-api"
       return cp3_app_urls
   }
 }
