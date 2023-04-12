@@ -426,3 +426,20 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   outline: none !important;
   box-shadow:none;
 }
+
+.vl {
+  border-left: 2px solid #ddd;
+  height: 30px;
+  display: inline-block;
+}
+
+.hl {
+  border-bottom: 2px solid #ddd;
+  width: 20px;
+  display: inline-block;
+}
+
+.extended-0 .line-wrapper{
+  display: inline-block;
+  padding-right: 15px;
+}
