@@ -18,6 +18,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
+
 import moment from "moment";
 import {
   capitalizeFirstLetter,
@@ -68,7 +69,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [active, setActive] = React.useState<any>("");
   const [notes, setNotes] = React.useState<any>([]);
   const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
-
+  const [extendedTrackList, setExtendedTrackList] = React.useState<any>([]);
   const colorModeContext = useColor();
 
   const location = useLocation();
@@ -137,6 +138,18 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     }
   };
 
+  const setExpandTrackIds = (id: any) => {
+    if (extendedTrackList.includes(id)) {
+      const index = extendedTrackList.indexOf(id);
+      if (index > -1) {
+        const extendedTracks = extendedTrackList.filter((item: any) => item !== id)
+        setExtendedTrackList(extendedTracks)
+      }
+    } else {
+      setExtendedTrackList((extendedTrackList: any) => [...extendedTrackList, id])
+    }
+  }
+
   const getHeaderCell = (
     header: string,
     track: any,
@@ -156,8 +169,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     }
     if (header === "source") {
       return (
-        <span className={`soruce-box ${track.source}`}>
-          {track.source === "FS" ? "1st" : track.source}
+        <span className={`soruce-box ${track.source}`} onClick={() => setExpandTrackIds(track.trackId)}>
+          {track.source === "FS" ? "1st" : track.source} {track.innerHits && track.innerHits.length > 0 ? extendedTrackList.includes(track.trackId) ? < KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon /> : ''}
         </span>
       );
     }
@@ -176,8 +189,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       active === "pre-release"
                         ? "active"
                         : active === "" && options.tab === "pre-release"
-                        ? "active"
-                        : "non-active"
+                          ? "active"
+                          : "non-active"
                     }
                     onClick={() => setActive("pre-release")}
                   >
@@ -188,8 +201,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       active === "post-release"
                         ? "active"
                         : active === "" && options.tab === "post-release"
-                        ? "active"
-                        : "non-active"
+                          ? "active"
+                          : "non-active"
                     }
                     onClick={() => setActive("post-release")}
                   >
@@ -215,7 +228,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 {track.policyDetails &&
                   track.policyDetails.release &&
                   track.policyDetails.release.toLowerCase() ===
-                    (active === "" ? options.tab : active) && (
+                  (active === "" ? options.tab : active) && (
                     <div className="policy-popover-bg">
                       <div className="d-flex mb-2">
                         <div className="po-plcy-name">
@@ -254,39 +267,39 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       <div key={id}>
                         {exec.release.toLowerCase() ===
                           (active === "" ? options.tab : active) && (
-                          <div className="po-exception" key={id}>
-                            <div className="d-flex mb-2">
-                              <div className="po-plcy-name">
-                                <span>
-                                  <strong>Policy Name: </strong>{" "}
-                                  {track.blockPolicyName}
-                                </span>
+                            <div className="po-exception" key={id}>
+                              <div className="d-flex mb-2">
+                                <div className="po-plcy-name">
+                                  <span>
+                                    <strong>Policy Name: </strong>{" "}
+                                    {track.blockPolicyName}
+                                  </span>
+                                </div>
+                                <div className="po-plcy-pltfm">
+                                  <strong>Platforms:</strong>{" "}
+                                  {FormatPlatforms(exec.platform)}
+                                </div>
                               </div>
-                              <div className="po-plcy-pltfm">
-                                <strong>Platforms:</strong>{" "}
-                                {FormatPlatforms(exec.platform)}
+                              <div className="d-flex">
+                                <div className="po-plcy-action">
+                                  <strong>Action:</strong>{" "}
+                                  {capitalizeFirstLetter(exec.action)}
+                                </div>
+                                <div className="po-plcy-duration">
+                                  <strong>Duration:</strong> {exec.duration}
+                                </div>
+                                <div className="po-plcy-when">
+                                  <strong>
+                                    {exec.release === "Post-Release"
+                                      ? "After"
+                                      : "Until"}
+                                    :
+                                  </strong>{" "}
+                                  {exec.date}
+                                </div>
                               </div>
                             </div>
-                            <div className="d-flex">
-                              <div className="po-plcy-action">
-                                <strong>Action:</strong>{" "}
-                                {capitalizeFirstLetter(exec.action)}
-                              </div>
-                              <div className="po-plcy-duration">
-                                <strong>Duration:</strong> {exec.duration}
-                              </div>
-                              <div className="po-plcy-when">
-                                <strong>
-                                  {exec.release === "Post-Release"
-                                    ? "After"
-                                    : "Until"}
-                                  :
-                                </strong>{" "}
-                                {exec.date}
-                              </div>
-                            </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     );
                   })}
@@ -437,9 +450,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               e.target.value === ""
                 ? clearColumnFilter(columnFilter[0].id, false)
                 : setFilterSearch({
-                    ...filterSearch,
-                    [columnFilter[0].id]: e.target.value,
-                  })
+                  ...filterSearch,
+                  [columnFilter[0].id]: e.target.value,
+                })
             }
           />
           {filterSearch[columnFilter[0].id] && (
@@ -500,6 +513,89 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     );
   };
 
+  const getInnerHits = (innerHits: any) => {
+    return innerHits.map((track: any, index: number) => {
+      const tab = getActiveTabToolTip(track.releaseDate);
+      const exData =
+        track.exceptionDetails &&
+        track.exceptionDetails.map((item: any) =>
+          item.release.toLowerCase()
+        );
+      const emptyEx =
+        exData && exData.includes(active === "" ? tab : active);
+      const activeTabData =
+        track.policyDetails &&
+        track.policyDetails.release &&
+        track.policyDetails.release.toLowerCase() ===
+        (active === "" ? tab : active);
+      return (
+        <tr className="extended-list" key={index}>
+          <td>
+
+          </td>
+          {
+            headers.map(
+              (header, index) =>
+                !hideColumns.includes(header.id) && (
+                  <td key={header.id} className={`extended-${index}`}>
+                    {index === 0 && <div className="line-wrapper">
+                      <div className="vl"></div>
+                      <div className="hl"></div>
+                    </div>}
+                    {getHeaderCell(header.id, track, {
+                      tab,
+                      emptyEx,
+                      activeTabData,
+                      exData,
+                    })}
+                  </td>
+                )
+            )
+          }
+          <td>
+            <div className="action-icons justify-content-space-between">
+              <OverlayTrigger
+                trigger={["hover", "focus"]}
+                placement="left"
+                overlay={notePopover}
+                rootClose
+              >
+                <QuestionAnswerIcon
+                  onClick={() => NotesModal(track)}
+                  onMouseEnter={() =>
+                    getNotes(track.trackId, track.source)
+                  }
+                />
+              </OverlayTrigger>
+              {props.role === "admin" && (
+                <EditIcon
+                  className="icon editIcon"
+                  onClick={() => editModal(track)}
+                />
+              )}
+              {props.role === "admin" && (
+                <ArchiveIcon
+                  className={
+                    track.source === "CP3" || track.source === "FS"
+                      ? ""
+                      : "disabled"
+                  }
+                  onClick={() =>
+                    (track.source === "CP3" || track.source === "FS") &&
+                    deleteTrack(track)
+                  }
+                />
+              )}
+              {/*props.role === 'admin' && <DeleteIcon onClick={(() => deleteTrack(track))} />*/}
+            </div>
+          </td>
+        </tr >
+      )
+    }
+    )
+  }
+
+
   const getActiveTabToolTip = (releaseDate: string) => {
     const relDate = moment(releaseDate).format("MM-DD-YYYY");
     const currentDate = moment().format("MM-DD-YYYY");
@@ -512,11 +608,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     <Col md={11}>
       <Table
         responsive
-        className={`${
-          colorModeContext.colorMode === "light"
-            ? "srch-dg-tbl"
-            : "srch-dg-tbl text-white"
-        }`}
+        className={`${colorModeContext.colorMode === "light"
+          ? "srch-dg-tbl"
+          : "srch-dg-tbl text-white"
+          }`}
       >
         <thead>
           <DragDropContext onDragEnd={reorderColumns}>
@@ -575,14 +670,13 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               track.policyDetails &&
               track.policyDetails.release &&
               track.policyDetails.release.toLowerCase() ===
-                (active === "" ? tab : active);
+              (active === "" ? tab : active);
             return (
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`${
-                    selectedRows.includes(track.trackId) ? "selected-row" : ""
-                  }`}
+                  className={`${selectedRows.includes(track.trackId) ? "selected-row" : ""
+                    }`}
                 >
                   <td>
                     <input
@@ -643,34 +737,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                     </div>
                   </td>
                 </tr>
-                {track.extended_tracks && (
-                  <tr className="extended-list">
-                    <td></td>
-                    <td>Some Track Title 2</td>
-                    <td>Some Artist Name</td>
-                    <td>0123499999990</td>
-                    <td>Universal Music</td>
-                    <td>Block</td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <span className="soruce-box cp3">CP3</span>
-                    </td>
-                    <td className="text-center">
-                      <QuestionAnswerIcon onClick={() => NotesModal(track)} />
-                    </td>
-                    <td>
-                      <div className="action-icons">
-                        <EditIcon
-                          className="icon editIcon"
-                          onClick={() => editModal(track)}
-                        />
-                        <ArchiveIcon />
-                        <DeleteIcon onClick={() => deleteTrack(track)} />
-                      </div>
-                    </td>
-                  </tr>
-                )}
+                {track.innerHits && extendedTrackList.includes(track.trackId) && getInnerHits(track.innerHits)}
               </React.Fragment>
             );
           })}
