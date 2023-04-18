@@ -88,7 +88,12 @@ const Dashboard = () => {
         })
         .then((res) => {
           if (res.data.isExport) {
-            setcsvData(res.data.tracks);
+            let exportData = res.data.tracks
+            const innerHits = res.data.tracks.map((list: any) => list.innerHits)
+            if (innerHits && innerHits.length > 0) {
+              exportData = [...exportData, ...innerHits]
+            }
+            setcsvData(exportData);
             dispatch({ type: "EXPORT_END", payload: "" });
           } else {
             dispatch({ type: "FETCH_SUCCESS", payload: res.data });

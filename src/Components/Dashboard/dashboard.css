@@ -196,10 +196,13 @@ span.sort-icons svg:hover {
 .srch-dg-tbl .soruce-box {
   border-radius: 4px;
   padding: 2px 5px;
-  max-width: 65px;
-  display: block;
+  max-width: 68px;
+  display: flex;
   text-align: center;
   font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .srch-dg-tbl .soruce-box.GRD , .srch-dg-tbl .soruce-box.third_party {
@@ -430,7 +433,8 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 .vl {
   border-left: 2px solid #ddd;
   height: 30px;
-  display: inline-block;
+  position: absolute;
+  top: -15px;
 }
 
 .hl {
@@ -439,7 +443,19 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   display: inline-block;
 }
 
-.extended-0 .line-wrapper{
+.extended-0 .line-wrapper {
   display: inline-block;
   padding-right: 15px;
+  position: relative;
+}
+
+.extended-list td {
+  padding-top: 26px !important;
+  padding-bottom: 26px !important;
+  /* padding: 25px 0px !important; */
+}
+
+.arrow-icons{
+  position: absolute;
+  right: -1px;
 }

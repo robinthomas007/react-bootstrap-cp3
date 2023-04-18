@@ -170,7 +170,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     if (header === "source") {
       return (
         <span className={`soruce-box ${track.source}`} onClick={() => setExpandTrackIds(track.trackId)}>
-          {track.source === "FS" ? "1st" : track.source} {track.innerHits && track.innerHits.length > 0 ? extendedTrackList.includes(track.trackId) ? < KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon /> : ''}
+          {track.source === "FS" ? "1st" : track.source} {track.innerHits && track.innerHits.length > 0 ? extendedTrackList.includes(track.trackId) ? <KeyboardArrowDownIcon className="arrow-icons" /> : <KeyboardArrowUpIcon className="arrow-icons" /> : ''}
         </span>
       );
     }
