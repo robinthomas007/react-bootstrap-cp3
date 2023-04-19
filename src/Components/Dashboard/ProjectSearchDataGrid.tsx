@@ -318,7 +318,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       const albumList = track.albumList ? track.albumList.split(",,") : [];
       return track.albumList ? (
         <OverlayTrigger
-          trigger={["hover", "focus"]}
+          trigger={["click", "focus"]}
           placement="top"
           overlay={
             <Popover id="popover-basic" className="albumList-popover">
@@ -339,6 +339,33 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         </OverlayTrigger>
       ) : (
         <span>{track.album}</span>
+      );
+    }
+    if (header === "artist") {
+      const artistList = track.artistList ? track.artistList.split(",,") : [];
+      return track.artistList ? (
+        <OverlayTrigger
+          trigger={["click", "focus"]}
+          placement="top"
+          overlay={
+            <Popover id="popover-basic" className="albumList-popover">
+              <Popover.Body className="plcy-bdy-pad">
+                <div>
+                  <ul>
+                    {artistList.map((list: any, id: any) => {
+                      return <li key={id}>{list}</li>;
+                    })}
+                  </ul>
+                </div>
+              </Popover.Body>
+            </Popover>
+          }
+          rootClose
+        >
+          <span>{track.artist}</span>
+        </OverlayTrigger>
+      ) : (
+        <span>{track.artist}</span>
       );
     }
     return track[header];
