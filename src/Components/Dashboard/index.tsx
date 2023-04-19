@@ -89,7 +89,10 @@ const Dashboard = () => {
         .then((res) => {
           if (res.data.isExport) {
             let exportData = res.data.tracks
-            const innerHits = res.data.tracks.map((list: any) => list.innerHits)
+            const innerHits = res.data.tracks.filter((list: any) => {
+              if (list.innerHits)
+                return list.innerHits
+            })
             if (innerHits && innerHits.length > 0) {
               exportData = [...exportData, ...innerHits]
             }
