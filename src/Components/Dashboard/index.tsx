@@ -68,6 +68,7 @@ const Dashboard = () => {
               ? filter.searchWithins.toString()
               : "ALL",
             labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
+            RightsIds: filter.RightsIds ? getIds(filter.RightsIds) : "",
             policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
             source: filter.source ? getIds(filter.source) : "",
             releaseFrom: filter.releaseFrom,
@@ -274,6 +275,15 @@ const Dashboard = () => {
         if (selectedLabel.length > 0)
           content = (
             <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
+          );
+      }
+      if (item === "RightsIds") {
+        const selectedLabel = selectedFilters[item].map(
+          (label: any) => label.name
+        );
+        if (selectedLabel.length > 0)
+          content = (
+            <span> Rights : {selectedLabel && selectedLabel.toString()} </span>
           );
       }
       if (item === "source") {

@@ -52,10 +52,12 @@ export const CONFIGURATION_LIST = [
 
 export const SEARCH_TITLES = [
   { id: "title", name: "Track Title" },
+  { id: "versionTitle", name: "Version Title" },
   { id: "artist", name: "Artist" },
   { id: "album", name: "Album" },
   { id: "isrc", name: "ISRC" },
   { id: "label", name: "Label" },
+  { id: "hasRights", name: "Rights" },
   { id: "blockPolicyName", name: "Policy" },
   { id: "leakDate", name: "Leak Date" },
   { id: "releaseDate", name: "Release Date" },
@@ -95,3 +97,9 @@ export const GREEN_LIST_TYPES = [
   { id: "UMG", name: "UMG" },
   { id: "3rd Party", name: "3rd Party" },
 ];
+
+export const RIGHTS_LIST = [
+  { id: "1", name: "Yes/Has Rights" },
+  { id: "0", name: "No Position" },
+  { id: "2", name: "No Rights" },
+]

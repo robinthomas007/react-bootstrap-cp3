@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
-import { SOURCE_LIST } from './../../Common/staticDatas'
+import { SOURCE_LIST, RIGHTS_LIST } from './../../Common/staticDatas'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -22,7 +22,8 @@ type selectedFiltersProps = {
   updatedTo: string,
   policyIds: Array<object>,
   source: Array<object>,
-  pre_releasese: boolean
+  pre_releasese: boolean,
+  RightsIds: Array<object>,
 }
 
 type filterProps = {
@@ -37,7 +38,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo, pre_releasese } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo, pre_releasese, RightsIds } = props.selectedFilters
 
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
@@ -52,6 +53,7 @@ export default function FilterModal(props: filterProps) {
       updatedTo: updatedTo || null,
       policyIds: policyIds || null,
       source: source || null,
+      RightsIds: RightsIds || null,
       pre_releasese: pre_releasese || false
     }
   );
@@ -157,6 +159,14 @@ export default function FilterModal(props: filterProps) {
                   <SelectField value={searchFilter.source} options={SOURCE_LIST} isMulti={true} name="source" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
+              <Col md={6}>
+                <Form.Group controlId="RightsIds" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Rights</Form.Label>
+                  <SelectField value={searchFilter.RightsIds} options={RIGHTS_LIST} isMulti={true} name="RightsIds" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="pb-20">
               <Col md={6} className='margin-auto'>
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width"></Form.Label>
