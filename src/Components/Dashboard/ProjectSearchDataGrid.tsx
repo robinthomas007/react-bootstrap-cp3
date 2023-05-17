@@ -161,10 +161,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           placement="top"
           overlay={<Tooltip id="button-tooltip">{track.subTitle}</Tooltip>}
         >
-          <span>{track.title}</span>
+          <span className="cursor-pointer">{track.title}</span>
         </OverlayTrigger>
       ) : (
-        track.title
+        <span className="cursor-pointer">{track.title}</span>
       );
     }
     if (header === "source") {
@@ -308,10 +308,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span>{track.blockPolicyName}</span>
+          <span className="cursor-pointer">{track.blockPolicyName}</span>
         </OverlayTrigger>
       ) : (
-        <span>{track.blockPolicyName}</span>
+        <span className="cursor-pointer">{track.blockPolicyName}</span>
       );
     }
     if (header === "album") {
@@ -335,10 +335,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span>{track.album}</span>
+          <span className="cursor-pointer">{track.album}</span>
         </OverlayTrigger>
       ) : (
-        <span>{track.album}</span>
+        <span className="cursor-pointer">{track.album}</span>
       );
     }
     if (header === "artist") {
@@ -362,10 +362,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span>{track.artist}</span>
+          <span className="cursor-pointer">{track.artist} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
         </OverlayTrigger>
       ) : (
-        <span>{track.artist}</span>
+        <span className="cursor-pointer">{track.artist} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
       );
     }
     return track[header];

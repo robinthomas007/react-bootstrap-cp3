@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
 import { GREEN_LIST_TYPES } from './../../Common/staticDatas'
+import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -127,7 +128,15 @@ export default function FilterModal(props: filterProps) {
               <Col md={6}>
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Label</Form.Label>
-                  <SelectField value={searchFilter.labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} />
+                  <MultiSelectHierarchy
+                    handleChangeCheckbox={(data: any) => setSearchFilter({ ...searchFilter, labelIds: data.length > 0 ? data : null })}
+                    type={'requestFormInput'}
+                    isMultiSelect={true}
+                    isAdmin={true}
+                    selectedLabelIds={searchFilter.labelIds ? searchFilter.labelIds : []}
+                    releasingLabels={[]}
+                  />
+                  {/* <SelectField value={searchFilter.labelIds} options={props.labelFacets} isMulti={true} name="labelIds" handleChange={handleSelectChange} /> */}
                 </Form.Group>
               </Col>
             </Row>

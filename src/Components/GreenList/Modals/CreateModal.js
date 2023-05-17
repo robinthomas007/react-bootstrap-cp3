@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import moment from "moment";
 import SearchIcon from '@mui/icons-material/Search';
+import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
 
 export default function CreateProjectModal(props) {
   const [greenlist, setGreenlist] = useState({
@@ -225,14 +226,23 @@ export default function CreateProjectModal(props) {
                           className="d-none"
                           onChange={(e) => null}
                         />
-                        <SelectField
+                        <MultiSelectHierarchy
+                          handleChangeCheckbox={(data) =>
+                            setGreenlist({ ...greenlist, labelId: data[0] })
+                          }
+                          type={'requestFormInput'}
+                          isMultiSelect={false}
+                          isAdmin={true}
+                          selectedLabelIds={greenlist.labelId ? [{ id: greenlist.labelId, name: greenlist.labelName }] : []}
+                        />
+                        {/*<SelectField
                           value={greenlist.labelId}
                           options={props.labelFacets}
                           name="labelId"
                           handleChange={(data) =>
                             setGreenlist({ ...greenlist, labelId: data })
                           }
-                        />
+                        />*/}
                         <Form.Control.Feedback type="invalid">
                           Label is required
                         </Form.Control.Feedback>

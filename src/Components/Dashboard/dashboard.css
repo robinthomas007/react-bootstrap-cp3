@@ -460,3 +460,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   position: absolute;
   right: -1px;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

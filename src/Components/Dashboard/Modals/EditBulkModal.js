@@ -13,6 +13,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SearchIcon from '@mui/icons-material/Search';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { config, callPartyService } from "./../../Common/Utils";
+import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
 import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
@@ -206,13 +207,17 @@ export default function EditBulkModal(props) {
     }
   }
 
+  const handleChangeCheckbox = () => {
+
+  }
+
   return (
     <Modal
       show={props.show}
       onHide={props.handleClose}
       backdrop="static"
       keyboard={false}
-      dialogClassName="modal-90w"
+      dialogClassName="modal-99w"
       className="filter-modal-wrapper"
     >
       {loading && <Loader />}
@@ -378,7 +383,16 @@ export default function EditBulkModal(props) {
                         className="d-none"
                         onChange={(e) => null}
                       />
-                      <SelectField
+                      <MultiSelectHierarchy
+                        handleChangeCheckbox={(data) =>
+                          handleOnchange({ ...track, labelId: data[0] }, index)
+                        }
+                        type={'requestFormInput'}
+                        isMultiSelect={false}
+                        isAdmin={true}
+                        selectedLabelIds={track.labelId ? [{ id: track.labelId, name: track.label }] : []}
+                      />
+                      {/*<SelectField
                         value={track.labelId}
                         options={track.source !== 'REP' ? props.labelFacets : [{ id: track.labelId, name: track.label }]}
                         name="labelId"
@@ -386,7 +400,7 @@ export default function EditBulkModal(props) {
                         handleChange={(data) =>
                           handleOnchange({ ...track, labelId: data }, index)
                         }
-                      />
+                      />*/}
                       <Form.Control.Feedback type="invalid">
                         Label is required
                       </Form.Control.Feedback>

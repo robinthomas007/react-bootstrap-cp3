@@ -2,9 +2,9 @@
   flex-direction: column;
 }
 
-.modal-90w {
-  width: 90% !important;
-  max-width: 90% !important;
+.modal-99w {
+  width: 99% !important;
+  max-width: 99% !important;
 }
 .justify-content-space-evenly {
   justify-content:space-evenly;  
