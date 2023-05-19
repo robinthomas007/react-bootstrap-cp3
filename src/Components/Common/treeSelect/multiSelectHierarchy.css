@@ -148,6 +148,10 @@
   text-align: left;
 }
 
+.ms-drp-wrapper .requestFormInput #dropdown-autoclose-inside { 
+ width: 132px !important;
+}
+
 .releaseInfoInput #dropdown-autoclose-inside {
   width: 50% !important;
   height: 38px;

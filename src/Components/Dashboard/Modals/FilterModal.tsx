@@ -177,7 +177,7 @@ export default function FilterModal(props: filterProps) {
               </Col>
             </Row>
             <Row className="pb-20">
-              <Col md={6} className='margin-auto'>
+              <Col md={6}>
                 <Form.Group controlId="labelIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width"></Form.Label>
                   <Form.Check type='checkbox' checked={searchFilter.pre_releasese} label="Pre Release Only" id="pre_release" onChange={(e) => {

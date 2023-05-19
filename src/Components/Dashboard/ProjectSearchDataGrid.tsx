@@ -18,6 +18,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
+import RightsModal from './Modals/rightsModal'
 
 import moment from "moment";
 import {
@@ -70,6 +71,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [notes, setNotes] = React.useState<any>([]);
   const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
   const [extendedTrackList, setExtendedTrackList] = React.useState<any>([]);
+  const [rightsData, setRightsData] = React.useState<any>({});
+  const [showRightsModal, setShowRightsModal] = React.useState<boolean>(false);
+
+
   const colorModeContext = useColor();
 
   const location = useLocation();
@@ -88,6 +93,11 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const NotesModal = (track: object) => {
     props.openNotesModal(track);
   };
+
+  const rightsModal = (track: any) => {
+    setRightsData({ unRestricted: track.unRestricted, restricted: track.restricted })
+    setShowRightsModal(true)
+  }
 
   const getNotes = (trackId: number, source: string) => {
     setLoadingNotes(true);
@@ -368,6 +378,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         <span className="cursor-pointer">{track.artist} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
       );
     }
+    if (header === 'hasRights') {
+      return <span className="cursor-pointer" onClick={() => rightsModal(track)}>{track.hasRights}</span>
+    }
     return track[header];
   };
 
@@ -633,6 +646,11 @@ export default function ProjectSearchDataGrid(props: searchProps) {
 
   return (
     <Col md={11}>
+      <RightsModal
+        show={showRightsModal}
+        handleClose={() => setShowRightsModal(false)}
+        rightsData={rightsData}
+      />
       <Table
         responsive
         className={`${colorModeContext.colorMode === "light"

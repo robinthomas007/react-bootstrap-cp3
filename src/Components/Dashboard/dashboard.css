@@ -108,7 +108,7 @@
   font-weight: 400;
   font-size: 14px;
   max-width: 180px;
-  padding: 14px 10px !important;
+  padding: 14px 4px !important;
 }
 
 .srch-dg-tbl thead th {
@@ -463,4 +463,35 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.rights-cards {
+    background: #F5F5F5;
+    width: 100%;
+    min-height: 250px;
+    margin-top: 10px;
+    position: relative;
+}
+.strong {
+  font-weight: bold;
+}
+
+.rights-cards .copy-icon{
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  color: #F57F17;
+}
+
+.rights-cards .rights-data{
+  padding: 10px 26px;
+}
+
+.rights-cards span.copied {
+  position: absolute;
+  right: 0px;
+  top: -21px;
+  font-style: italic;
+  font-size: 13px;
+  color: #979797;
 }

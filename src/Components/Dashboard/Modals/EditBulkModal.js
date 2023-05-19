@@ -207,9 +207,6 @@ export default function EditBulkModal(props) {
     }
   }
 
-  const handleChangeCheckbox = () => {
-
-  }
 
   return (
     <Modal
@@ -375,7 +372,7 @@ export default function EditBulkModal(props) {
                   <Form.Group
                     controlId="labelId"
                     className="d-flex align-items-start flex-direction-column">
-                    <div className="f-width">
+                    <div className="f-width ms-drp-wrapper">
                       <Form.Control
                         required
                         value={track.labelId}
@@ -390,7 +387,7 @@ export default function EditBulkModal(props) {
                         type={'requestFormInput'}
                         isMultiSelect={false}
                         isAdmin={true}
-                        selectedLabelIds={track.labelId ? [{ id: track.labelId, name: track.label }] : []}
+                        selectedLabelIds={track.labelId ? [track.labelId] : []}
                       />
                       {/*<SelectField
                         value={track.labelId}
