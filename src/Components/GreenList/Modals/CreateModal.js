@@ -14,8 +14,8 @@ import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import moment from "moment";
-import SearchIcon from '@mui/icons-material/Search';
-import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
+import SearchIcon from "@mui/icons-material/Search";
+import MultiSelectHierarchy from "./../../Common/treeSelect/multiSelectHierarchy";
 
 export default function CreateProjectModal(props) {
   const [greenlist, setGreenlist] = useState({
@@ -26,18 +26,20 @@ export default function CreateProjectModal(props) {
     labelId: "",
     endDate: "",
     url: "",
-    notes: ""
+    notes: "",
   });
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
 
   useEffect(() => {
     if (props.editParams && props.editParams.length > 0) {
-      const editParams = props.editParams[0]
+      const editParams = props.editParams[0];
       const obj = {};
       setGreenlist({
         ...editParams,
-        releaseDate: editParams.endDate ? moment(editParams.endDate).format("MM-DD-YYYY") : '',
+        releaseDate: editParams.endDate
+          ? moment(editParams.endDate).format("MM-DD-YYYY")
+          : "",
         labelId: props.labelFacets.filter(
           (label) => Number(editParams.labelId) === Number(label.id)
         )[0],
@@ -47,8 +49,8 @@ export default function CreateProjectModal(props) {
   }, [props]);
 
   const launchIt = (track) => {
-    callPartyService(track, '', setGreenlist, true)
-  }
+    callPartyService(track, "", setGreenlist, true);
+  };
 
   const handleSubmit = () => {
     const form = document.querySelector("#create-resource-form");
@@ -65,7 +67,7 @@ export default function CreateProjectModal(props) {
         contact: greenlist.contact,
         url: greenlist.url,
         notes: greenlist.notes,
-        source: 'GL',
+        source: "GL",
         endDate: greenlist.endDate,
         labelId: greenlist.labelId ? Number(greenlist.labelId.id) : "",
         username: getUsername(),
@@ -102,7 +104,10 @@ export default function CreateProjectModal(props) {
               autoClose: 3000,
               closeOnClick: true,
             });
-            setGreenlist({ ...greenlist, greenListId: response.data.greenListId });
+            setGreenlist({
+              ...greenlist,
+              greenListId: response.data.greenListId,
+            });
             props.handleClose();
             props.getSearchPageData();
           })
@@ -118,7 +123,6 @@ export default function CreateProjectModal(props) {
       }
     }
   };
-
 
   return (
     <Modal
@@ -166,7 +170,10 @@ export default function CreateProjectModal(props) {
                           name="account"
                           placeholder="Enter Title"
                           onChange={(e) =>
-                            setGreenlist({ ...greenlist, account: e.target.value })
+                            setGreenlist({
+                              ...greenlist,
+                              account: e.target.value,
+                            })
                           }
                         />
                         <Form.Control.Feedback type="invalid">
@@ -193,7 +200,10 @@ export default function CreateProjectModal(props) {
                           name="artist"
                           placeholder="Enter Artist"
                           onChange={(e) =>
-                            setGreenlist({ ...greenlist, artist: e.target.value })
+                            setGreenlist({
+                              ...greenlist,
+                              artist: e.target.value,
+                            })
                           }
                         />
                         <Form.Control.Feedback type="invalid">
@@ -201,8 +211,9 @@ export default function CreateProjectModal(props) {
                         </Form.Control.Feedback>
                         <span className="alt-title-icon">
                           <SearchIcon
-                            onClick={() => { launchIt(greenlist) }
-                            }
+                            onClick={() => {
+                              launchIt(greenlist);
+                            }}
                           />
                         </span>
                       </div>
@@ -230,10 +241,12 @@ export default function CreateProjectModal(props) {
                           handleChangeCheckbox={(data) =>
                             setGreenlist({ ...greenlist, labelId: data[0] })
                           }
-                          type={'requestFormInput'}
+                          type={"requestFormInput"}
                           isMultiSelect={false}
                           isAdmin={true}
-                          selectedLabelIds={greenlist.labelId ? [{ id: greenlist.labelId, name: greenlist.labelName }] : []}
+                          selectedLabelIds={
+                            greenlist.labelId ? [greenlist.labelId] : []
+                          }
                         />
                         {/*<SelectField
                           value={greenlist.labelId}
@@ -256,14 +269,19 @@ export default function CreateProjectModal(props) {
                       controlId="accountManager"
                       className="d-flex align-items-center"
                     >
-                      <Form.Label className="form-label-width">Account Manager</Form.Label>
+                      <Form.Label className="form-label-width">
+                        Account Manager
+                      </Form.Label>
                       <Form.Control
                         value={greenlist.accountManager}
                         type="text"
                         name="accountManager"
                         placeholder="Enter Account Manager"
                         onChange={(e) =>
-                          setGreenlist({ ...greenlist, accountManager: e.target.value })
+                          setGreenlist({
+                            ...greenlist,
+                            accountManager: e.target.value,
+                          })
                         }
                       />
                     </Form.Group>
@@ -275,14 +293,19 @@ export default function CreateProjectModal(props) {
                       controlId="contact"
                       className="d-flex align-items-center"
                     >
-                      <Form.Label className="form-label-width">Contact</Form.Label>
+                      <Form.Label className="form-label-width">
+                        Contact
+                      </Form.Label>
                       <Form.Control
                         value={greenlist.contact}
                         type="text"
                         name="contact"
                         placeholder="Enter contact"
                         onChange={(e) =>
-                          setGreenlist({ ...greenlist, contact: e.target.value })
+                          setGreenlist({
+                            ...greenlist,
+                            contact: e.target.value,
+                          })
                         }
                       />
                     </Form.Group>
@@ -294,7 +317,9 @@ export default function CreateProjectModal(props) {
                       controlId="url"
                       className="d-flex align-items-center"
                     >
-                      <Form.Label className="form-label-width">Greenlisted URL</Form.Label>
+                      <Form.Label className="form-label-width">
+                        Greenlisted URL
+                      </Form.Label>
                       <Form.Control
                         value={greenlist.url}
                         type="text"
@@ -319,7 +344,10 @@ export default function CreateProjectModal(props) {
                       <Datepicker
                         selected={greenlist.endDate}
                         handleDateChange={(date) =>
-                          setGreenlist({ ...greenlist, endDate: moment(date).isValid() ? date : null })
+                          setGreenlist({
+                            ...greenlist,
+                            endDate: moment(date).isValid() ? date : null,
+                          })
                         }
                       />
                     </Form.Group>
@@ -334,7 +362,9 @@ export default function CreateProjectModal(props) {
                       controlId="url"
                       className="d-flex align-items-start"
                     >
-                      <Form.Label className="form-label-width">Notes</Form.Label>
+                      <Form.Label className="form-label-width">
+                        Notes
+                      </Form.Label>
                       <Form.Control
                         value={greenlist.notes}
                         onChange={(e) =>
