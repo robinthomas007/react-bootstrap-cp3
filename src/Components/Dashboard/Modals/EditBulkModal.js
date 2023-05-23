@@ -10,16 +10,16 @@ import SelectField from "./../../Common/select";
 import Datepicker from "./../../Common/DatePicker";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import SearchIcon from '@mui/icons-material/Search';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import { config, callPartyService } from "./../../Common/Utils";
-import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
+import MultiSelectHierarchy from "./../../Common/treeSelect/multiSelectHierarchy";
 import { BASE_URL } from "./../../../App";
 import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import getCookie from "./../../Common/cookie";
 import moment from "moment";
-import './editmodal.css'
+import "./editmodal.css";
 
 export default function EditBulkModal(props) {
   const [trackList, setTrackList] = useState([]);
@@ -37,33 +37,40 @@ export default function EditBulkModal(props) {
     leakDate: "",
     releaseDate: "",
     blockPolicyId: "",
-  }
+  };
 
   const launchIt = (track, index) => {
-    callPartyService(track, index, handleOnchange, false)
-  }
+    callPartyService(track, index, handleOnchange, false);
+  };
 
   useEffect(() => {
     if (props.editParams && props.editParams.length > 0) {
-      let trackArray = []
-      props.editParams.forEach(track => {
-        const labelFacets = track.source !== 'REP' ? props.labelFacets : [{ id: track.labelId, name: track.label }]
+      let trackArray = [];
+      props.editParams.forEach((track) => {
+        const labelFacets =
+          track.source !== "REP"
+            ? props.labelFacets
+            : [{ id: track.labelId, name: track.label }];
         const trackObj = {
           ...track,
-          leakDate: track.leakDate ? moment(track.leakDate).format("MM-DD-YYYY") : '',
-          releaseDate: track.releaseDate ? moment(track.releaseDate).format("MM-DD-YYYY") : '',
-          labelId: labelFacets.filter(
-            (label) => Number(track.labelId) === Number(label.id)
-          )[0],
+          leakDate: track.leakDate
+            ? moment(track.leakDate).format("MM-DD-YYYY")
+            : "",
+          releaseDate: track.releaseDate
+            ? moment(track.releaseDate).format("MM-DD-YYYY")
+            : "",
+          labelId: labelFacets.filter((label) => {
+            return Number(track.labelId) === Number(label.id);
+          })[0] || { id: track.labelId, name: track.label },
           blockPolicyId: props.policyFacets.filter(
             (p) => Number(track.blockPolicyId) === Number(p.id)
           )[0],
-        }
-        trackArray.push(trackObj)
+        };
+        trackArray.push(trackObj);
       });
-      setTrackList(trackArray)
+      setTrackList(trackArray);
     } else {
-      setTrackList([...trackList, newTrack])
+      setTrackList([...trackList, newTrack]);
     }
   }, [props]);
 
@@ -74,29 +81,27 @@ export default function EditBulkModal(props) {
     } else {
       setValidated(false);
       setLoading(true);
-      const reqData = []
-      trackList.forEach(track => {
+      const reqData = [];
+      trackList.forEach((track) => {
         const data = {
           trackId: track.trackId ? track.trackId : 0,
           title: track.title,
           artist: track.artist,
           isrc: track.isrc,
           album: track.album,
-          source: track.source ? track.source : '',
+          source: track.source ? track.source : "",
           leakDate: track.leakDate,
           releaseDate: track.releaseDate,
-          blockPolicyId: track.blockPolicyId ? Number(track.blockPolicyId.id) : 0,
+          blockPolicyId: track.blockPolicyId
+            ? Number(track.blockPolicyId.id)
+            : 0,
           labelId: track.labelId ? Number(track.labelId.id) : "",
           subTitle: track.subTitle,
         };
-        reqData.push(data)
+        reqData.push(data);
       });
       axios
-        .post(
-          BASE_URL + 'Track/BulkUpdateTracks',
-          reqData,
-          config
-        )
+        .post(BASE_URL + "Track/BulkUpdateTracks", reqData, config)
         .then(() => {
           toast.success("Track details updated successfully!", {
             autoClose: 3000,
@@ -120,38 +125,46 @@ export default function EditBulkModal(props) {
   };
 
   const removeAltTitle = (track, i, index) => {
-    let newSubArr = track.subTitle.split(",")
+    let newSubArr = track.subTitle.split(",");
     newSubArr.splice(i, 1);
-    handleOnchange({ ...track, subTitle: newSubArr.length > 0 ? newSubArr.toLocaleString() : '' }, index)
+    handleOnchange(
+      {
+        ...track,
+        subTitle: newSubArr.length > 0 ? newSubArr.toLocaleString() : "",
+      },
+      index
+    );
   };
 
   const handleOnchange = (track, index) => {
-    const modifiedTrackList = [...trackList]
-    modifiedTrackList[index] = track
-    setTrackList(modifiedTrackList)
-  }
+    const modifiedTrackList = [...trackList];
+    modifiedTrackList[index] = track;
+    setTrackList(modifiedTrackList);
+  };
 
   const removeTrackList = (index) => {
-    const modifiedTrackList = [...trackList]
+    const modifiedTrackList = [...trackList];
     modifiedTrackList.splice(index, 1);
-    setTrackList(modifiedTrackList)
-  }
+    setTrackList(modifiedTrackList);
+  };
   const copyTrackList = (index) => {
-    const modifiedTrackList = [...trackList]
-    modifiedTrackList[trackList.length] = { ...modifiedTrackList[index] }
-    modifiedTrackList[trackList.length].trackId = '';
-    modifiedTrackList[trackList.length].source = 'CP3';
-    setTrackList(modifiedTrackList)
-  }
+    const modifiedTrackList = [...trackList];
+    modifiedTrackList[trackList.length] = { ...modifiedTrackList[index] };
+    modifiedTrackList[trackList.length].trackId = "";
+    modifiedTrackList[trackList.length].source = "CP3";
+    setTrackList(modifiedTrackList);
+  };
 
   const getAlterNativeTitle = (track, index) => {
-    const subtitles = track.subTitle ? track.subTitle.split(",") : []
+    const subtitles = track.subTitle ? track.subTitle.split(",") : [];
     return subtitles.map((ele, i) => {
       return (
         <Col md={2} key={i}>
-          <Form.Group controlId="title" className="d-flex align-items-start flex-direction-column">
-            <Form.Label className="form-label">
-            </Form.Label>
+          <Form.Group
+            controlId="title"
+            className="d-flex align-items-start flex-direction-column"
+          >
+            <Form.Label className="form-label"></Form.Label>
             <div className="f-width d-flex">
               <Form.Control
                 value={ele}
@@ -159,14 +172,18 @@ export default function EditBulkModal(props) {
                 name="title"
                 placeholder="Enter Title"
                 onChange={(e) => {
-                  let newSubArr = track.subTitle.split(",")
-                  newSubArr[i] = e.target.value.replaceAll(',', '')
-                  handleOnchange({ ...track, subTitle: newSubArr.toLocaleString() }, index)
-                }
-                }
+                  let newSubArr = track.subTitle.split(",");
+                  newSubArr[i] = e.target.value.replaceAll(",", "");
+                  handleOnchange(
+                    { ...track, subTitle: newSubArr.toLocaleString() },
+                    index
+                  );
+                }}
               />
               <span className="alt-title-icon">
-                <RemoveCircleIcon onClick={() => removeAltTitle(track, i, index)} />
+                <RemoveCircleIcon
+                  onClick={() => removeAltTitle(track, i, index)}
+                />
               </span>
             </div>
           </Form.Group>
@@ -178,10 +195,9 @@ export default function EditBulkModal(props) {
   const checkDuplicateIsrc = (e) => {
     if (e.target.value && e.target.value.length === 12) {
       axios
-        .get(
-          BASE_URL + 'Track/CheckIsrc', {
+        .get(BASE_URL + "Track/CheckIsrc", {
           params: {
-            isrc: e.target.value
+            isrc: e.target.value,
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -189,25 +205,25 @@ export default function EditBulkModal(props) {
         })
         .then((res) => {
           if (res.data) {
-            SetDuplicateIsrc(true)
+            SetDuplicateIsrc(true);
             setDuplicateIsrcList([...duplicateIsrcList, e.target.value]);
           } else {
-            const isrcList = trackList.map((item) => item.isrc)
-            const hasDuplicate = isrcList.some(item => duplicateIsrcList.includes(item))
+            const isrcList = trackList.map((item) => item.isrc);
+            const hasDuplicate = isrcList.some((item) =>
+              duplicateIsrcList.includes(item)
+            );
             if (!hasDuplicate) {
-              SetDuplicateIsrc(false)
+              SetDuplicateIsrc(false);
               setDuplicateIsrcList([]);
             }
           }
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         })
         .finally(() => setLoading(false));
     }
-  }
-
-
+  };
   return (
     <Modal
       show={props.show}
@@ -235,14 +251,10 @@ export default function EditBulkModal(props) {
         >
           <Row className="pb-10">
             <Col md={2}>
-              <Form.Label className="form-label ">
-                Title
-              </Form.Label>
+              <Form.Label className="form-label ">Title</Form.Label>
             </Col>
             <Col md={2}>
-              <Form.Label className="form-label">
-                Artist
-              </Form.Label>
+              <Form.Label className="form-label">Artist</Form.Label>
             </Col>
             <Col>
               <Form.Label className="form-label">ISRC</Form.Label>
@@ -251,24 +263,16 @@ export default function EditBulkModal(props) {
               <Form.Label className="form-label">Album</Form.Label>
             </Col>
             <Col>
-              <Form.Label className="form-label">
-                Label
-              </Form.Label>
+              <Form.Label className="form-label">Label</Form.Label>
             </Col>
             <Col>
-              <Form.Label className="form-label">
-                Policy
-              </Form.Label>
+              <Form.Label className="form-label">Policy</Form.Label>
             </Col>
             <Col>
-              <Form.Label className="form-label">
-                Leak Date
-              </Form.Label>
+              <Form.Label className="form-label">Leak Date</Form.Label>
             </Col>
             <Col>
-              <Form.Label className="form-label">
-                Release Date
-              </Form.Label>
+              <Form.Label className="form-label">Release Date</Form.Label>
             </Col>
             <Col></Col>
           </Row>
@@ -286,10 +290,13 @@ export default function EditBulkModal(props) {
                         value={track.title}
                         type="text"
                         name="track_title"
-                        disabled={track.source === 'REP'}
+                        disabled={track.source === "REP"}
                         placeholder="Enter Title"
                         onChange={(e) =>
-                          handleOnchange({ ...track, title: e.target.value }, index)
+                          handleOnchange(
+                            { ...track, title: e.target.value },
+                            index
+                          )
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -298,9 +305,17 @@ export default function EditBulkModal(props) {
                       <span className="alt-title-icon">
                         <AddCircleIcon
                           onClick={() => {
-                            track.source !== 'REP' && handleOnchange({ ...track, subTitle: track.subTitle ? track.subTitle + ',' : ' ' }, index)
-                          }
-                          }
+                            track.source !== "REP" &&
+                              handleOnchange(
+                                {
+                                  ...track,
+                                  subTitle: track.subTitle
+                                    ? track.subTitle + ","
+                                    : " ",
+                                },
+                                index
+                              );
+                          }}
                         />
                       </span>
                     </div>
@@ -309,17 +324,21 @@ export default function EditBulkModal(props) {
                 <Col md={2}>
                   <Form.Group
                     controlId="artist"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <div className="f-width d-flex">
                       <Form.Control
                         required
                         value={track.artist}
                         type="text"
-                        disabled={track.source === 'REP'}
+                        disabled={track.source === "REP"}
                         name="artist"
                         placeholder="Enter Artist"
                         onChange={(e) =>
-                          handleOnchange({ ...track, artist: e.target.value }, index)
+                          handleOnchange(
+                            { ...track, artist: e.target.value },
+                            index
+                          )
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -327,8 +346,9 @@ export default function EditBulkModal(props) {
                       </Form.Control.Feedback>
                       <span className="alt-title-icon">
                         <SearchIcon
-                          onClick={() => { launchIt(track, index) }
-                          }
+                          onClick={() => {
+                            launchIt(track, index);
+                          }}
                         />
                       </span>
                     </div>
@@ -337,17 +357,23 @@ export default function EditBulkModal(props) {
                 <Col>
                   <Form.Group
                     controlId="isrc"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <Form.Control
-                      className={duplicateIsrcList.includes(track.isrc) ? 'dup-warn' : ''}
+                      className={
+                        duplicateIsrcList.includes(track.isrc) ? "dup-warn" : ""
+                      }
                       value={track.isrc}
                       type="text"
                       name="isrc"
                       placeholder="Enter ISRC"
-                      disabled={track.source === 'REP'}
+                      disabled={track.source === "REP"}
                       onBlur={(e) => checkDuplicateIsrc(e)}
                       onChange={(e) =>
-                        handleOnchange({ ...track, isrc: e.target.value }, index)
+                        handleOnchange(
+                          { ...track, isrc: e.target.value },
+                          index
+                        )
                       }
                     />
                   </Form.Group>
@@ -355,15 +381,19 @@ export default function EditBulkModal(props) {
                 <Col>
                   <Form.Group
                     controlId="album"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <Form.Control
                       value={track.album}
                       type="text"
                       name="album"
-                      disabled={track.source === 'REP'}
+                      disabled={track.source === "REP"}
                       placeholder="Enter Album"
                       onChange={(e) =>
-                        handleOnchange({ ...track, album: e.target.value }, index)
+                        handleOnchange(
+                          { ...track, album: e.target.value },
+                          index
+                        )
                       }
                     />
                   </Form.Group>
@@ -371,7 +401,8 @@ export default function EditBulkModal(props) {
                 <Col>
                   <Form.Group
                     controlId="labelId"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <div className="f-width ms-drp-wrapper">
                       <Form.Control
                         required
@@ -384,7 +415,7 @@ export default function EditBulkModal(props) {
                         handleChangeCheckbox={(data) =>
                           handleOnchange({ ...track, labelId: data[0] }, index)
                         }
-                        type={'requestFormInput'}
+                        type={"requestFormInput"}
                         isMultiSelect={false}
                         isAdmin={true}
                         selectedLabelIds={track.labelId ? [track.labelId] : []}
@@ -407,7 +438,8 @@ export default function EditBulkModal(props) {
                 <Col>
                   <Form.Group
                     controlId="blockPolicyId"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <div className="f-width">
                       <Form.Control
                         required
@@ -421,7 +453,10 @@ export default function EditBulkModal(props) {
                         options={props.policyFacets}
                         name="blockPolicyId"
                         handleChange={(data) =>
-                          handleOnchange({ ...track, blockPolicyId: data }, index)
+                          handleOnchange(
+                            { ...track, blockPolicyId: data },
+                            index
+                          )
                         }
                       />
                       <Form.Control.Feedback type="invalid">
@@ -433,11 +468,18 @@ export default function EditBulkModal(props) {
                 <Col>
                   <Form.Group
                     controlId="leakDate"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <Datepicker
                       selected={track.leakDate}
                       handleDateChange={(date) =>
-                        handleOnchange({ ...track, leakDate: moment(date).isValid() ? date : null }, index)
+                        handleOnchange(
+                          {
+                            ...track,
+                            leakDate: moment(date).isValid() ? date : null,
+                          },
+                          index
+                        )
                       }
                     />
                   </Form.Group>
@@ -445,18 +487,29 @@ export default function EditBulkModal(props) {
                 <Col>
                   <Form.Group
                     controlId="releaseDate"
-                    className="d-flex align-items-start flex-direction-column">
+                    className="d-flex align-items-start flex-direction-column"
+                  >
                     <Datepicker
-                      disabled={track.source === 'REP'}
+                      disabled={track.source === "REP"}
                       selected={track.releaseDate}
                       handleDateChange={(date) => {
-                        handleOnchange({ ...track, releaseDate: moment(date).isValid() ? date : null }, index)
+                        handleOnchange(
+                          {
+                            ...track,
+                            releaseDate: moment(date).isValid() ? date : null,
+                          },
+                          index
+                        );
                       }}
                     />
                   </Form.Group>
                 </Col>
                 <Col className="d-flex align-items-end justify-content-space-evenly">
-                  <AddCircleIcon onClick={() => { setTrackList([...trackList, newTrack]) }} />
+                  <AddCircleIcon
+                    onClick={() => {
+                      setTrackList([...trackList, newTrack]);
+                    }}
+                  />
                   <LibraryAddIcon onClick={() => copyTrackList(index)} />
                   <RemoveCircleIcon onClick={() => removeTrackList(index)} />
                 </Col>
@@ -466,16 +519,23 @@ export default function EditBulkModal(props) {
                   </Row>
                 </Col>
               </Row>
-            )
+            );
           })}
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        {duplicateIsrc && <div className="d-flex justify-content-center align-items-center">
-          <p className="duplicate-isrc-warn">A CP3 record with this ISRC already exists. You can proceed to create the duplicate record by hitting the ‘Create Duplicate Record’ button below or you can click cancel to return to the search screen.</p>
-        </div>}
+        {duplicateIsrc && (
+          <div className="d-flex justify-content-center align-items-center">
+            <p className="duplicate-isrc-warn">
+              A CP3 record with this ISRC already exists. You can proceed to
+              create the duplicate record by hitting the ‘Create Duplicate
+              Record’ button below or you can click cancel to return to the
+              search screen.
+            </p>
+          </div>
+        )}
         <Button
-          label={duplicateIsrc ? 'Create Duplicate' : 'Submit'}
+          label={duplicateIsrc ? "Create Duplicate" : "Submit"}
           handleClick={handleSubmit}
           className="text-white"
           variant="secondary"

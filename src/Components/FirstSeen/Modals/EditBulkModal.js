@@ -17,8 +17,8 @@ import { toast } from "react-toastify";
 import Loader from "./../../Common/loader";
 import { CONFIGURATION_LIST } from "./../../Common/staticDatas";
 import moment from "moment";
-import SearchIcon from '@mui/icons-material/Search';
-import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
+import SearchIcon from "@mui/icons-material/Search";
+import MultiSelectHierarchy from "./../../Common/treeSelect/multiSelectHierarchy";
 
 export default function EditBulkModal(props) {
   const [trackList, setTrackList] = useState([]);
@@ -48,9 +48,9 @@ export default function EditBulkModal(props) {
           releaseDate: track.releaseDate
             ? moment(track.releaseDate).format("MM-DD-YYYY")
             : "",
-          labelId: props.labelFacets.filter(
-            (label) => Number(track.labelId) === Number(label.id)
-          )[0],
+          labelId: props.labelFacets.filter((label) => {
+            return Number(track.labelId) === Number(label.id);
+          })[0] || { id: track.labelId, name: track.label },
           blockPolicyId: props.policyFacets.filter(
             (p) => Number(track.blockPolicyId) === Number(p.id)
           )[0],
@@ -67,8 +67,8 @@ export default function EditBulkModal(props) {
   }, [props]);
 
   const launchIt = (track, index) => {
-    callPartyService(track, index, handleOnchange, false)
-  }
+    callPartyService(track, index, handleOnchange, false);
+  };
 
   const handleSubmit = () => {
     const form = document.querySelector("#create-resource-form");
@@ -312,8 +312,9 @@ export default function EditBulkModal(props) {
                       </Form.Control.Feedback>
                       <span className="alt-title-icon">
                         <SearchIcon
-                          onClick={() => { launchIt(track, index) }
-                          }
+                          onClick={() => {
+                            launchIt(track, index);
+                          }}
                         />
                       </span>
                     </div>
@@ -374,7 +375,7 @@ export default function EditBulkModal(props) {
                         handleChangeCheckbox={(data) =>
                           handleOnchange({ ...track, labelId: data[0] }, index)
                         }
-                        type={'requestFormInput'}
+                        type={"requestFormInput"}
                         isMultiSelect={false}
                         isAdmin={true}
                         selectedLabelIds={track.labelId ? [track.labelId] : []}
@@ -411,7 +412,10 @@ export default function EditBulkModal(props) {
                         options={props.policyFacets}
                         name="blockPolicyId"
                         handleChange={(data) =>
-                          handleOnchange({ ...track, blockPolicyId: data }, index)
+                          handleOnchange(
+                            { ...track, blockPolicyId: data },
+                            index
+                          )
                         }
                       />
                       <Form.Control.Feedback type="invalid">
