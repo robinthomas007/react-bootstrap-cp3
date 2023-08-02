@@ -49,7 +49,6 @@ export default function MultiSelectHierarchy({
   }, [releasingLabels]);
 
   useEffect(() => {
-    console.log(selectedLabelIds, "selectedLabelIdsselectedLabelIds")
     if (selectedList.length !== selectedLabelIds.length) {
       setSelectedList(selectedLabelIds);
     }

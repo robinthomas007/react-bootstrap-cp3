@@ -109,6 +109,7 @@ const GreenList = () => {
   };
 
   const setSearchTerm = (searchTerm: string) => {
+    setSelectedFilters(state.searchCriteria.filter)
     dispatch({
       type: "SET_SEARCH",
       payload: {
@@ -138,9 +139,21 @@ const GreenList = () => {
     setOpenFilter(false);
   };
 
-  const clearFilter = (name: string) => {
+  const clearFilter = (name: string, label?: string) => {
     let filterValues = selectedFilters;
-    delete filterValues[name];
+    if (!label) {
+      delete filterValues[name];
+    } else {
+      if (name === 'searchWithins') {
+        filterValues[name] = filterValues[name].filter((val: any, key: number) => val !== label)
+
+      } else {
+        filterValues[name] = filterValues[name].filter((val: any, key: number) => val.name !== label)
+      }
+      if (filterValues[name].length === 0) {
+        delete filterValues[name];
+      }
+    }
     setSelectedFilters(filterValues);
     dispatch({ type: "SET_FILTER", payload: { filter: filterValues } });
   };
@@ -212,6 +225,20 @@ const GreenList = () => {
 
   const selectedFilterKeys = Object.keys(selectedFilters);
 
+  const renderBadge = (selectedLabel: any, item: string, labelName: string) => {
+    return <span className=""> {labelName} : &nbsp;
+      {selectedLabel.map((label: string, i: number) => {
+        return <Badge pill bg="secondary" key={i}>
+          <span> {label} </span>
+          <ClearIcon
+            className="fltr-bdg-cls-icon"
+            onClick={() => clearFilter(item, label)}
+          />
+        </Badge>
+      })}
+    </span>
+  }
+
 
   const renderSelectedFilters = () => {
     const labelObj: any = {
@@ -233,78 +260,51 @@ const GreenList = () => {
       // "configuration"
     ];
     return selectedFilterKeys.map((item, index) => {
-      let content = null;
       if (dateLabelsArr.includes(item)) {
-        content = (
-          <span>
-            {" "}
-            {labelObj[item]} : {selectedFilters[item]}{" "}
-          </span>
-        );
+        return <span className=""> {labelObj[item]} : &nbsp;
+          <Badge pill bg="secondary" key={index}>
+            <span> {selectedFilters[item]} </span>
+            <ClearIcon
+              className="fltr-bdg-cls-icon"
+              onClick={() => clearFilter(item)}
+            />
+          </Badge>
+        </span>
       }
       if (item === "labelIds") {
         const selectedLabel = selectedFilters[item].map(
           (label: any) => label.name
         );
         if (selectedLabel.length > 0)
-          content = (
-            <span> Labels : {selectedLabel && selectedLabel.toString()} </span>
-          );
+          return renderBadge(selectedLabel, item, 'Label')
       }
       if (item === "source") {
         const selectedSource = selectedFilters[item].map(
           (label: any) => label.name
         );
         if (selectedSource.length > 0)
-          content = (
-            <span>
-              {" "}
-              Source : {selectedSource && selectedSource.toString()}{" "}
-            </span>
-          );
+          return renderBadge(selectedSource, item, 'Source')
       }
       if (item === "configuration") {
         const selectedConfig = selectedFilters[item].map(
           (label: any) => label.name
         );
         if (selectedConfig.length > 0)
-          content = (
-            <span>
-              {" "}
-              Config : {selectedConfig && selectedConfig.toString()}{" "}
-            </span>
-          );
+          return renderBadge(selectedConfig, item, 'Config')
       }
       if (item === "policyIds") {
         const selectedPolicy = selectedFilters[item].map(
           (policy: any) => policy.name
         );
         if (selectedPolicy.length > 0)
-          content = (
-            <span>
-              {" "}
-              Policy : {selectedPolicy && selectedPolicy.toString()}{" "}
-            </span>
-          );
+          return renderBadge(selectedPolicy, item, 'policy')
       }
       if (item === "searchWithins") {
         if (selectedFilters[item].length > 0)
-          content = (
-            <span> Search with in : {selectedFilters[item].toString()} </span>
-          );
+          return renderBadge(selectedFilters[item], item, 'Search with in')
       }
-      if (!content) {
-        return null;
-      }
-      return (
-        <Badge pill bg="secondary" key={index}>
-          {content}
-          <ClearIcon
-            className="fltr-bdg-cls-icon"
-            onClick={() => clearFilter(item)}
-          />
-        </Badge>
-      );
+      return null;
+
     });
   };
 

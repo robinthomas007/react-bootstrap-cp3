@@ -19,7 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import moment from "moment";
-import { capitalizeFirstLetter, FormatPlatforms, getApi } from "./../Common/Utils";
+import { capitalizeFirstLetter, FormatPlatforms, getApi, truncateWithEllipsis } from "./../Common/Utils";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -118,10 +118,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           placement="top"
           overlay={<Tooltip id="button-tooltip">{track.subTitle}</Tooltip>}
         >
-          <span>{track.title}</span>
+          <span>{truncateWithEllipsis(track.title, 20)}</span>
         </OverlayTrigger>
       ) : (
-        track.title
+        truncateWithEllipsis(track.title, 20)
       );
     }
     if (header === "source") {
@@ -266,6 +266,12 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       ) : (
         <span>{track.blockPolicyName}</span>
       );
+    }
+    if (header === 'artist') {
+      <span>{truncateWithEllipsis(track.artist, 15)}</span>
+    }
+    if (header === 'album') {
+      <span>{truncateWithEllipsis(track.album, 15)}</span>
     }
     return track[header];
   };

@@ -43,7 +43,7 @@ export default function Search(props: any) {
 
   return (
     <Container fluid className="fixed-search">
-      <Row className="justify-content-md-center min-row-ht-100 mt-5">
+      <Row className="justify-content-md-center mt-5">
         <Col md={4} className="align-item-center align-items-center ">
           <InputGroup>
             <Button
@@ -75,14 +75,21 @@ export default function Search(props: any) {
               className="text-white"
             />
           </InputGroup>
-          {props.selectedFilterKeys.length > 0 && (
-            <div className="selected-filter-wrapper">
-              <label>Selected Filters: </label>
-              {props.renderSelectedFilters()}
-            </div>
-          )}
         </Col>
       </Row>
+
+      {props.selectedFilterKeys.length > 0 && (<Row className="justify-content-md-center">
+        <Col md={4} className='selected-filter-label'>
+          <label className='strong'>Selected Filters: </label>
+        </Col>
+        <Col md={8}>
+          <div className="selected-filter-wrapper">
+            <span>
+              {props.renderSelectedFilters()}
+            </span>
+          </div>
+        </Col>
+      </Row>)}
       <Row className="pt-20 pb-20 justify-content-md-center">
         <Col md={11}>
           <Row>

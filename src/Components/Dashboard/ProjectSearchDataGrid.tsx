@@ -25,6 +25,7 @@ import {
   capitalizeFirstLetter,
   FormatPlatforms,
   getApi,
+  truncateWithEllipsis
 } from "./../Common/Utils";
 import {
   DragDropContext,
@@ -171,10 +172,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           placement="top"
           overlay={<Tooltip id="button-tooltip">{track.subTitle}</Tooltip>}
         >
-          <span className="cursor-pointer">{track.title}</span>
+          <span className="cursor-pointer">{truncateWithEllipsis(track.title, 15)}</span>
         </OverlayTrigger>
       ) : (
-        <span className="cursor-pointer">{track.title}</span>
+        <span className="cursor-pointer">{truncateWithEllipsis(track.title, 15)}</span>
       );
     }
     if (header === "source") {
@@ -345,10 +346,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span className="cursor-pointer">{track.album}</span>
+          <span className="cursor-pointer">{truncateWithEllipsis(track.album, 15)}</span>
         </OverlayTrigger>
       ) : (
-        <span className="cursor-pointer">{track.album}</span>
+        <span className="cursor-pointer">{truncateWithEllipsis(track.album, 15)}</span>
       );
     }
     if (header === "artist") {
@@ -372,10 +373,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span className="cursor-pointer">{track.artist} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
+          <span className="cursor-pointer">{truncateWithEllipsis(track.artist, 15)} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
         </OverlayTrigger>
       ) : (
-        <span className="cursor-pointer">{track.artist} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
+        <span className="cursor-pointer">{truncateWithEllipsis(track.artist, 15)} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
       );
     }
     if (header === 'hasRights') {

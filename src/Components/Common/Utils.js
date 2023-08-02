@@ -93,3 +93,11 @@ export const isSessionExpired = (err) => {
     console.log("Error in isSessionExpired method")
   }
 }
+
+export const truncateWithEllipsis = (str, maxLength) => {
+  const index = str ? str.indexOf(' ') : 0
+  if (index > maxLength || (index === -1 && str.length > maxLength)) {
+    return str.slice(0, maxLength - 3) + '...';
+  }
+  return str;
+}

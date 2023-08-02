@@ -54,6 +54,11 @@
   margin: 20px auto;
 }
 
+.selected-filter-label {
+  text-align: right;
+  margin-top: 21px !important;
+}
+
 .selected-filter-wrapper .rounded-pill {
   margin: 2px 6px 10px 0px;
   font-size: 14px;
@@ -364,9 +369,14 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 .search-table .table-responsive {
   height:600px;
   overflow-y:scroll;
+  /* overflow-x: scroll; */
 } 
 
-.search-table .table-responsive::-webkit-scrollbar {
+.search-table .table-responsive::-webkit-scrollbar:horizontal{
+  width: 8px;   
+}
+
+.search-table .table-responsive::-webkit-scrollbar:vertical{
   width: 8px;   
 }
 
@@ -376,7 +386,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 }
 
 .search-table .table-responsive {
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 .search-table .table-responsive thead tr{
