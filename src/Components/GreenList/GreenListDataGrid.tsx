@@ -1,4 +1,6 @@
-import React from "react";
+/** @format */
+
+import React, { useEffect } from "react";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,7 +11,7 @@ import Table from "react-bootstrap/Table";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArchiveIcon from "@mui/icons-material/Archive";
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Popover from "react-bootstrap/Popover";
 import SelectField from "./../Common/select";
 import Button from "./../Common/button";
@@ -18,8 +20,13 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { getApi } from "./../Common/Utils";
 import moment from "moment";
-import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -37,7 +44,7 @@ type searchProps = {
   openCreateModal: any;
   deleteTrack: any;
   role: string;
-  TITLES: any
+  TITLES: any;
 };
 
 type tableHeaderObj = {
@@ -49,7 +56,9 @@ export default function GreenListDataGrid(props: searchProps) {
   const [selectedRows, setSelectedRows] = React.useState<any>([]);
   const [activeSort, setActiveSort] = React.useState("updatedDate");
   const [sortOrder, setSortOrder] = React.useState("desc");
-  const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>([{ id: '', name: '' }]);
+  const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>(
+    [{ id: "", name: "" }]
+  );
   const [filterSearch, setFilterSearch] = React.useState<any>({});
   const [hideColumns, setHideColumns] = React.useState<Array<string>>([]);
   const [notes, setNotes] = React.useState<any>([]);
@@ -60,9 +69,13 @@ export default function GreenListDataGrid(props: searchProps) {
   const [headers, setHeaders] = React.useState(props.TITLES);
 
   React.useEffect(() => {
-    setHeaders(props.TITLES)
-    setcolumnFilter([props.TITLES[0]])
+    setHeaders(props.TITLES);
+    setcolumnFilter([props.TITLES[0]]);
   }, [props.TITLES]);
+
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [props.pageNumber]);
 
   const NotesModal = (greenList: object) => {
     props.openNotesModal(greenList);
@@ -95,41 +108,48 @@ export default function GreenListDataGrid(props: searchProps) {
   };
 
   const getNotes = (greenListId: number, source: string) => {
-    setLoadingNotes(true)
+    setLoadingNotes(true);
     setNotes([]);
-    getApi({ sourceId: greenListId, source: source }, 'Track/GetTrackNotes')
+    getApi({ sourceId: greenListId, source: source }, "Track/GetTrackNotes")
       .then((res: any) => {
         setNotes(res);
-        setLoadingNotes(false)
+        setLoadingNotes(false);
       })
       .catch((error: any) => {
         console.log("error feching data", error);
-        setLoadingNotes(false)
+        setLoadingNotes(false);
       });
-  }
+  };
 
   const notePopover = (
     <Popover id="popover-basic" className="albumList-popover">
       <Popover.Body className="plcy-bdy-pad">
         <div>
           <ul>
-            {notes.length === 0 && loadingNotes && <span><CircularProgress size='25px' style={{ 'color': '#F57F17' }} /></span>}
-            {notes.length === 0 && !loadingNotes && <span>No Notes Available</span>}
+            {notes.length === 0 && loadingNotes && (
+              <span>
+                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
+              </span>
+            )}
+            {notes.length === 0 && !loadingNotes && (
+              <span>No Notes Available</span>
+            )}
             {notes.map((note: any, id: any) => {
               return (
                 <li key={id}>
                   <span className="notes-name-date">
-                    {note.userName} - {moment(note.createdOn).format("DD/MM/YYYY")}
+                    {note.userName} -{" "}
+                    {moment(note.createdOn).format("DD/MM/YYYY")}
                   </span>{" "}
                   <span> {note.noteDescription}</span>
                 </li>
-              )
+              );
             })}
           </ul>
         </div>
       </Popover.Body>
     </Popover>
-  )
+  );
 
   const reorderColumns = (options: DropResult) => {
     if (options?.destination?.index) {
@@ -140,19 +160,24 @@ export default function GreenListDataGrid(props: searchProps) {
     }
   };
 
-  const getHeaderCell = (
-    header: string,
-    greenList: any,
-  ) => {
+  const getHeaderCell = (header: string, greenList: any) => {
     if (header === "url") {
       return (
-        <a href={greenList.url} rel="noreferrer" target="_blank">{greenList.url}</a>
-      )
+        <a href={greenList.url} rel="noreferrer" target="_blank">
+          {greenList.url}
+        </a>
+      );
     }
     if (header === "type") {
       return (
-        <span className={`soruce-box ${greenList.type === '3rd Party' ? 'third_party' : greenList.type}`}>{greenList.type}</span>
-      )
+        <span
+          className={`soruce-box ${
+            greenList.type === "3rd Party" ? "third_party" : greenList.type
+          }`}
+        >
+          {greenList.type}
+        </span>
+      );
     }
     return greenList[header];
   };
@@ -182,20 +207,22 @@ export default function GreenListDataGrid(props: searchProps) {
   };
 
   const getHiddenTitles = () => {
-    return props.TITLES.filter((o: any) => hideColumns.includes(o.id)).map((data: any) => {
-      return (
-        <div className="hide-ttl-strips">
-          {data.name}{" "}
-          <CloseIcon
-            onClick={() =>
-              setHideColumns(
-                hideColumns.filter((element) => element !== data.id)
-              )
-            }
-          />
-        </div>
-      );
-    });
+    return props.TITLES.filter((o: any) => hideColumns.includes(o.id)).map(
+      (data: any) => {
+        return (
+          <div className="hide-ttl-strips">
+            {data.name}{" "}
+            <CloseIcon
+              onClick={() =>
+                setHideColumns(
+                  hideColumns.filter((element) => element !== data.id)
+                )
+              }
+            />
+          </div>
+        );
+      }
+    );
   };
 
   const popover = (
@@ -227,9 +254,16 @@ export default function GreenListDataGrid(props: searchProps) {
             handleChange={(data: any) => setcolumnFilter([data])}
           />
           <input
-            value={filterSearch[columnFilter[0].id] || ''}
+            value={filterSearch[columnFilter[0].id] || ""}
             type="text"
-            onChange={(e: any) => e.target.value === '' ? clearColumnFilter(columnFilter[0].id, false) : setFilterSearch({ ...filterSearch, [columnFilter[0].id]: e.target.value })}
+            onChange={(e: any) =>
+              e.target.value === ""
+                ? clearColumnFilter(columnFilter[0].id, false)
+                : setFilterSearch({
+                    ...filterSearch,
+                    [columnFilter[0].id]: e.target.value,
+                  })
+            }
           />
           {filterSearch[columnFilter[0].id] && (
             <CloseIcon
@@ -281,9 +315,7 @@ export default function GreenListDataGrid(props: searchProps) {
           >
             <FilterAltIcon
               className="header-filter-icon"
-              onClick={() =>
-                setcolumnFilter([{ id: active, name: title }])
-              }
+              onClick={() => setcolumnFilter([{ id: active, name: title }])}
             />
           </OverlayTrigger>
         </span>
@@ -295,10 +327,11 @@ export default function GreenListDataGrid(props: searchProps) {
     <Col md={11}>
       <Table
         responsive
-        className={`${colorModeContext.colorMode === "light"
-          ? "srch-dg-tbl"
-          : "srch-dg-tbl text-white"
-          }`}
+        className={`${
+          colorModeContext.colorMode === "light"
+            ? "srch-dg-tbl"
+            : "srch-dg-tbl text-white"
+        }`}
       >
         <thead>
           <DragDropContext onDragEnd={reorderColumns}>
@@ -349,14 +382,19 @@ export default function GreenListDataGrid(props: searchProps) {
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`${selectedRows.includes(greenList.greenListId) ? "selected-row" : ""
-                    }`}
+                  className={`${
+                    selectedRows.includes(greenList.greenListId)
+                      ? "selected-row"
+                      : ""
+                  }`}
                 >
                   <td>
                     <input
                       type="checkbox"
                       checked={selectedRows.includes(greenList.greenListId)}
-                      onChange={(e) => handleCheckboxChange(e, greenList.greenListId)}
+                      onChange={(e) =>
+                        handleCheckboxChange(e, greenList.greenListId)
+                      }
                       className="form-check-input"
                     />
                   </td>
@@ -376,7 +414,12 @@ export default function GreenListDataGrid(props: searchProps) {
                         overlay={notePopover}
                         rootClose
                       >
-                        <QuestionAnswerIcon onClick={() => NotesModal(greenList)} onMouseEnter={() => getNotes(greenList.greenListId, 'GL')} />
+                        <QuestionAnswerIcon
+                          onClick={() => NotesModal(greenList)}
+                          onMouseEnter={() =>
+                            getNotes(greenList.greenListId, "GL")
+                          }
+                        />
                       </OverlayTrigger>
                       {props.role === "admin" && (
                         <EditIcon
@@ -387,8 +430,7 @@ export default function GreenListDataGrid(props: searchProps) {
                       {props.role === "admin" && (
                         <ArchiveIcon
                           className=""
-                          onClick={() => deleteGreenList(greenList)
-                          }
+                          onClick={() => deleteGreenList(greenList)}
                         />
                       )}
                       {/*props.role === 'admin' && <DeleteIcon onClick={(() => deleteTrack(track))} />*/}

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,22 +12,22 @@ import NotesModal from "./Modals/NotesModal";
 import EditBulkModal from "./Modals/EditBulkModal";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
-import Search from './../Search/search'
+import Search from "./../Search/search";
 import "./dashboard.css";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
-import { SEARCH_TITLES } from './../Common/staticDatas';
+import { SEARCH_TITLES } from "./../Common/staticDatas";
 import { isSessionExpired } from "./../Common/Utils";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 type notesPropTypes = {
   trackId?: number;
 };
 
 type LocationState = {
-  notificationId: number
+  notificationId: number;
 };
 
 const Dashboard = () => {
@@ -40,7 +42,7 @@ const Dashboard = () => {
   const [csvData, setcsvData] = React.useState([]);
   // const csvLink = React.createRef<any>();
   const auth = useAuth();
-  const location = useLocation()
+  const location = useLocation();
   const notificationId = (location.state as LocationState)?.notificationId;
 
   const getSearchPageData = React.useCallback(
@@ -52,16 +54,16 @@ const Dashboard = () => {
         sortColumn,
         sortOrder,
         filter,
-        tableSearch
+        tableSearch,
       } = state.searchCriteria;
 
-      dispatch({ type: "FETCH_REQUEST", payload: '' });
+      dispatch({ type: "FETCH_REQUEST", payload: "" });
       axios
-        .get(BASE_URL + 'TrackSearch', {
+        .get(BASE_URL + "TrackSearch", {
           params: {
             searchTerm: searchTerm,
-            itemsPerPage: (isExport || isReport) ? "" : itemsPerPage,
-            pageNumber: (isExport || isReport) ? "" : pageNumber,
+            itemsPerPage: isExport || isReport ? "" : itemsPerPage,
+            pageNumber: isExport || isReport ? "" : pageNumber,
             sortColumn: sortColumn,
             sortOrder: sortOrder,
             searchWithins: filter.searchWithins
@@ -81,7 +83,7 @@ const Dashboard = () => {
             isExport: isExport ? true : false,
             report: isReport,
             tableSearch: tableSearch,
-            notificationId: notificationId ? notificationId : null
+            notificationId: notificationId ? notificationId : null,
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -89,13 +91,12 @@ const Dashboard = () => {
         })
         .then((res) => {
           if (res.data.isExport) {
-            let exportData = res.data.tracks
+            let exportData = res.data.tracks;
             const innerHits = res.data.tracks.filter((list: any) => {
-              if (list.innerHits)
-                return list.innerHits
-            })
+              if (list.innerHits) return list.innerHits;
+            });
             if (innerHits && innerHits.length > 0) {
-              exportData = [...exportData, ...innerHits]
+              exportData = [...exportData, ...innerHits];
             }
             setcsvData(exportData);
             dispatch({ type: "EXPORT_END", payload: "" });
@@ -105,7 +106,7 @@ const Dashboard = () => {
         })
         .catch((err) => {
           dispatch({ type: "FETCH_FAILURE", payload: err.Message });
-          isSessionExpired(err)
+          isSessionExpired(err);
           console.log("error feching data", err);
         });
     },
@@ -113,21 +114,19 @@ const Dashboard = () => {
   );
 
   React.useEffect(() => {
-    getSearchPageData(false, '');
+    getSearchPageData(false, "");
   }, [getSearchPageData]);
-
 
   const onSortModelChange = (data: any[]) => {
     dispatch({ type: "SORT_CHANGE", payload: data });
   };
-
 
   const setSearchTerm = (searchTerm: string) => {
     dispatch({
       type: "SET_SEARCH",
       payload: {
         searchTerm: searchTerm,
-        filter: state.searchCriteria.filter
+        filter: state.searchCriteria.filter,
       },
     });
   };
@@ -138,7 +137,7 @@ const Dashboard = () => {
       payload: {
         tableSearch: searchTerm,
         searchTerm: state.searchCriteria.searchTerm,
-        filter: state.searchCriteria.filter
+        filter: state.searchCriteria.filter,
       },
     });
   };
@@ -157,10 +156,14 @@ const Dashboard = () => {
     if (!label) {
       delete filterValues[name];
     } else {
-      if (name === 'searchWithins') {
-        filterValues[name] = filterValues[name].filter((val: any, key: number) => val !== label)
+      if (name === "searchWithins") {
+        filterValues[name] = filterValues[name].filter(
+          (val: any, key: number) => val !== label
+        );
       } else {
-        filterValues[name] = filterValues[name].filter((val: any, key: number) => val.name !== label)
+        filterValues[name] = filterValues[name].filter(
+          (val: any, key: number) => val.name !== label
+        );
       }
       if (filterValues[name].length === 0) {
         delete filterValues[name];
@@ -168,7 +171,13 @@ const Dashboard = () => {
     }
 
     setSelectedFilters(filterValues);
-    dispatch({ type: "SET_FILTER", payload: { filter: filterValues, searchTerm: state.searchCriteria.searchTerm, } });
+    dispatch({
+      type: "SET_FILTER",
+      payload: {
+        filter: filterValues,
+        searchTerm: state.searchCriteria.searchTerm,
+      },
+    });
   };
 
   const getIds = (data: any) => {
@@ -199,7 +208,7 @@ const Dashboard = () => {
   const deleteTrack = (ids: Array<any>) => {
     if (window.confirm("Are you sure to delete this track?"))
       axios
-        .delete(BASE_URL + 'Track/DeleteTrack', {
+        .delete(BASE_URL + "Track/DeleteTrack", {
           data: {
             trackIds: ids,
           },
@@ -232,7 +241,7 @@ const Dashboard = () => {
   };
 
   const exportData = () => {
-    getSearchPageData(true, '');
+    getSearchPageData(true, "");
     dispatch({ type: "EXPORT_START", payload: "" });
   };
 
@@ -243,18 +252,24 @@ const Dashboard = () => {
   const selectedFilterKeys = Object.keys(selectedFilters);
 
   const renderBadge = (selectedLabel: any, item: string, labelName: string) => {
-    return <span className=""> {labelName} : &nbsp;
-      {selectedLabel.map((label: string, i: number) => {
-        return <Badge pill bg="secondary" key={i}>
-          <span> {label} </span>
-          <ClearIcon
-            className="fltr-bdg-cls-icon"
-            onClick={() => clearFilter(item, label)}
-          />
-        </Badge>
-      })}
-    </span>
-  }
+    return (
+      <span className="">
+        {" "}
+        {labelName} : &nbsp;
+        {selectedLabel.map((label: string, i: number) => {
+          return (
+            <Badge pill bg="secondary" key={i}>
+              <span> {label} </span>
+              <ClearIcon
+                className="fltr-bdg-cls-icon"
+                onClick={() => clearFilter(item, label)}
+              />
+            </Badge>
+          );
+        })}
+      </span>
+    );
+  };
 
   const renderSelectedFilters = () => {
     const labelObj: any = {
@@ -264,7 +279,7 @@ const Dashboard = () => {
       leakTo: "Leak To",
       updatedFrom: "Updated From",
       updatedTo: "Updated To",
-      pre_releasese: "Release"
+      pre_releasese: "Release",
     };
     const dateLabelsArr = [
       "releaseFrom",
@@ -273,38 +288,51 @@ const Dashboard = () => {
       "leakTo",
       "updatedFrom",
       "updatedTo",
-      "pre_releasese"
+      "pre_releasese",
     ];
 
     return selectedFilterKeys.map((item, index) => {
       if (item === "pre_releasese") {
-        return <span className=""> {labelObj[item]} :  &nbsp;
-          <Badge pill bg="secondary" key={index}>
-            <span> {selectedFilters[item] ? 'Pre Release Only' : 'Post Release Only'} </span>
-            <ClearIcon
-              className="fltr-bdg-cls-icon"
-              onClick={() => clearFilter(item)}
-            />
-          </Badge>
-        </span>
+        return (
+          <span className="">
+            {" "}
+            {labelObj[item]} : &nbsp;
+            <Badge pill bg="secondary" key={index}>
+              <span>
+                {" "}
+                {selectedFilters[item]
+                  ? "Pre Release Only"
+                  : "Post Release Only"}{" "}
+              </span>
+              <ClearIcon
+                className="fltr-bdg-cls-icon"
+                onClick={() => clearFilter(item)}
+              />
+            </Badge>
+          </span>
+        );
       }
       if (dateLabelsArr.includes(item)) {
-        return <span className=""> {labelObj[item]} : &nbsp;
-          <Badge pill bg="secondary" key={index}>
-            <span> {selectedFilters[item]} </span>
-            <ClearIcon
-              className="fltr-bdg-cls-icon"
-              onClick={() => clearFilter(item)}
-            />
-          </Badge>
-        </span>
+        return (
+          <span className="">
+            {" "}
+            {labelObj[item]} : &nbsp;
+            <Badge pill bg="secondary" key={index}>
+              <span> {selectedFilters[item]} </span>
+              <ClearIcon
+                className="fltr-bdg-cls-icon"
+                onClick={() => clearFilter(item)}
+              />
+            </Badge>
+          </span>
+        );
       }
       if (item === "labelIds") {
         const selectedLabel = selectedFilters[item].map(
           (label: any) => label.name
         );
         if (selectedLabel.length > 0) {
-          return renderBadge(selectedLabel, item, 'Label')
+          return renderBadge(selectedLabel, item, "Label");
         }
       }
       if (item === "RightsIds") {
@@ -312,7 +340,7 @@ const Dashboard = () => {
           (label: any) => label.name
         );
         if (selectedLabel.length > 0) {
-          return renderBadge(selectedLabel, item, 'Rights')
+          return renderBadge(selectedLabel, item, "Rights");
         }
       }
       if (item === "source") {
@@ -320,7 +348,7 @@ const Dashboard = () => {
           (label: any) => label.name
         );
         if (selectedSource.length > 0) {
-          return renderBadge(selectedSource, item, 'Source')
+          return renderBadge(selectedSource, item, "Source");
         }
       }
       if (item === "policyIds") {
@@ -328,12 +356,12 @@ const Dashboard = () => {
           (policy: any) => policy.name
         );
         if (selectedPolicy.length > 0) {
-          return renderBadge(selectedPolicy, item, 'policy')
+          return renderBadge(selectedPolicy, item, "policy");
         }
       }
       if (item === "searchWithins") {
         if (selectedFilters[item].length > 0) {
-          return renderBadge(selectedFilters[item], item, 'Search with in')
+          return renderBadge(selectedFilters[item], item, "Search with in");
         }
       }
       return null;
