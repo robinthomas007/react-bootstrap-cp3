@@ -109,7 +109,6 @@ const GreenList = () => {
   };
 
   const setSearchTerm = (searchTerm: string) => {
-    setSelectedFilters(state.searchCriteria.filter)
     dispatch({
       type: "SET_SEARCH",
       payload: {

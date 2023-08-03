@@ -123,7 +123,6 @@ const Dashboard = () => {
 
 
   const setSearchTerm = (searchTerm: string) => {
-    setSelectedFilters(state.searchCriteria.filter)
     dispatch({
       type: "SET_SEARCH",
       payload: {
