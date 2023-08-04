@@ -296,7 +296,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={1}>
                   <Form.Group
                     controlId="versionTitle"
                     className="d-flex align-items-start flex-direction-column"
@@ -368,7 +368,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="isrc"
                     className="d-flex align-items-start flex-direction-column"
@@ -388,7 +388,7 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
 
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="labelId"
                     className="d-flex align-items-start flex-direction-column"
@@ -424,7 +424,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="blockPolicyId"
                     className="d-flex align-items-start flex-direction-column"
