@@ -149,7 +149,8 @@
 }
 
 .ms-drp-wrapper .requestFormInput #dropdown-autoclose-inside { 
- width: 132px !important;
+ width: 140px !important;
+ text-overflow: ellipsis;
 }
 
 .releaseInfoInput #dropdown-autoclose-inside {

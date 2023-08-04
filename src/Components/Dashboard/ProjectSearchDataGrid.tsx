@@ -1,4 +1,6 @@
-import React from "react";
+/** @format */
+
+import React, { useEffect } from "react";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,14 +20,14 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
-import RightsModal from './Modals/rightsModal'
+import RightsModal from "./Modals/rightsModal";
 
 import moment from "moment";
 import {
   capitalizeFirstLetter,
   FormatPlatforms,
   getApi,
-  truncateWithEllipsis
+  truncateWithEllipsis,
 } from "./../Common/Utils";
 import {
   DragDropContext,
@@ -75,7 +77,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [rightsData, setRightsData] = React.useState<any>({});
   const [showRightsModal, setShowRightsModal] = React.useState<boolean>(false);
 
-
   const colorModeContext = useColor();
 
   const location = useLocation();
@@ -91,14 +92,21 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     setHeaders(TITLES);
   }, [TITLES]);
 
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [props.pageNumber]);
+
   const NotesModal = (track: object) => {
     props.openNotesModal(track);
   };
 
   const rightsModal = (track: any) => {
-    setRightsData({ unRestricted: track.unRestricted, restricted: track.restricted })
-    setShowRightsModal(true)
-  }
+    setRightsData({
+      unRestricted: track.unRestricted,
+      restricted: track.restricted,
+    });
+    setShowRightsModal(true);
+  };
 
   const getNotes = (trackId: number, source: string) => {
     setLoadingNotes(true);
@@ -153,13 +161,18 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     if (extendedTrackList.includes(id)) {
       const index = extendedTrackList.indexOf(id);
       if (index > -1) {
-        const extendedTracks = extendedTrackList.filter((item: any) => item !== id)
-        setExtendedTrackList(extendedTracks)
+        const extendedTracks = extendedTrackList.filter(
+          (item: any) => item !== id
+        );
+        setExtendedTrackList(extendedTracks);
       }
     } else {
-      setExtendedTrackList((extendedTrackList: any) => [...extendedTrackList, id])
+      setExtendedTrackList((extendedTrackList: any) => [
+        ...extendedTrackList,
+        id,
+      ]);
     }
-  }
+  };
 
   const getHeaderCell = (
     header: string,
@@ -172,16 +185,39 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           placement="top"
           overlay={<Tooltip id="button-tooltip">{track.subTitle}</Tooltip>}
         >
-          <span className="cursor-pointer">{truncateWithEllipsis(track.title, 15)}</span>
+          <span className="cursor-pointer">
+            {truncateWithEllipsis(track.title, 15)}
+          </span>
         </OverlayTrigger>
       ) : (
-        <span className="cursor-pointer">{truncateWithEllipsis(track.title, 15)}</span>
+        <span className="cursor-pointer">
+          {truncateWithEllipsis(track.title, 15)}
+        </span>
+      );
+    }
+    if (header === "versionTitle") {
+      return (
+        <span className="cursor-pointer">
+          {truncateWithEllipsis(track.versionTitle, 15)}
+        </span>
       );
     }
     if (header === "source") {
       return (
-        <span className={`soruce-box ${track.source}`} onClick={() => setExpandTrackIds(track.trackId)}>
-          {track.source === "FS" ? "1st" : track.source} {track.innerHits && track.innerHits.length > 0 ? extendedTrackList.includes(track.trackId) ? <KeyboardArrowDownIcon className="arrow-icons" /> : <KeyboardArrowUpIcon className="arrow-icons" /> : ''}
+        <span
+          className={`soruce-box ${track.source}`}
+          onClick={() => setExpandTrackIds(track.trackId)}
+        >
+          {track.source === "FS" ? "1st" : track.source}{" "}
+          {track.innerHits && track.innerHits.length > 0 ? (
+            extendedTrackList.includes(track.trackId) ? (
+              <KeyboardArrowDownIcon className="arrow-icons" />
+            ) : (
+              <KeyboardArrowUpIcon className="arrow-icons" />
+            )
+          ) : (
+            ""
+          )}
         </span>
       );
     }
@@ -281,6 +317,12 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                           (active === "" ? options.tab : active) && (
                             <div className="po-exception" key={id}>
                               <div className="d-flex mb-2">
+                                <div className="po-plcy-name">
+                                  <span>
+                                    <strong>Policy Name: </strong>{" "}
+                                    {track.blockPolicyName}
+                                  </span>
+                                </div>
                                 <div className="po-plcy-pltfm">
                                   <strong>Platforms:</strong>{" "}
                                   {FormatPlatforms(exec.platform)}
@@ -341,10 +383,14 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span className="cursor-pointer">{truncateWithEllipsis(track.album, 15)}</span>
+          <span className="cursor-pointer">
+            {truncateWithEllipsis(track.album, 15)}
+          </span>
         </OverlayTrigger>
       ) : (
-        <span className="cursor-pointer">{truncateWithEllipsis(track.album, 15)}</span>
+        <span className="cursor-pointer">
+          {truncateWithEllipsis(track.album, 15)}
+        </span>
       );
     }
     if (header === "artist") {
@@ -368,14 +414,24 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           }
           rootClose
         >
-          <span className="cursor-pointer">{truncateWithEllipsis(track.artist, 15)} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
+          <span className="cursor-pointer">
+            {truncateWithEllipsis(track.artist, 15)}{" "}
+            {artistList.length > 1 ? `(+${artistList.length - 1})` : ""}
+          </span>
         </OverlayTrigger>
       ) : (
-        <span className="cursor-pointer">{truncateWithEllipsis(track.artist, 15)} {artistList.length > 1 ? `(+${artistList.length - 1})` : ''}</span>
+        <span className="cursor-pointer">
+          {truncateWithEllipsis(track.artist, 15)}{" "}
+          {artistList.length > 1 ? `(+${artistList.length - 1})` : ""}
+        </span>
       );
     }
-    if (header === 'hasRights') {
-      return <span className="cursor-pointer" onClick={() => rightsModal(track)}>{track.hasRights}</span>
+    if (header === "hasRights") {
+      return (
+        <span className="cursor-pointer" onClick={() => rightsModal(track)}>
+          {track.hasRights}
+        </span>
+      );
     }
     return track[header];
   };
@@ -554,11 +610,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       const tab = getActiveTabToolTip(track.releaseDate);
       const exData =
         track.exceptionDetails &&
-        track.exceptionDetails.map((item: any) =>
-          item.release.toLowerCase()
-        );
-      const emptyEx =
-        exData && exData.includes(active === "" ? tab : active);
+        track.exceptionDetails.map((item: any) => item.release.toLowerCase());
+      const emptyEx = exData && exData.includes(active === "" ? tab : active);
       const activeTabData =
         track.policyDetails &&
         track.policyDetails.release &&
@@ -566,28 +619,26 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         (active === "" ? tab : active);
       return (
         <tr className="extended-list" key={index}>
-          <td>
-
-          </td>
-          {
-            headers.map(
-              (header, index) =>
-                !hideColumns.includes(header.id) && (
-                  <td key={header.id} className={`extended-${index}`}>
-                    {index === 0 && <div className="line-wrapper">
+          <td></td>
+          {headers.map(
+            (header, index) =>
+              !hideColumns.includes(header.id) && (
+                <td key={header.id} className={`extended-${index}`}>
+                  {index === 0 && (
+                    <div className="line-wrapper">
                       <div className="vl"></div>
                       <div className="hl"></div>
-                    </div>}
-                    {getHeaderCell(header.id, track, {
-                      tab,
-                      emptyEx,
-                      activeTabData,
-                      exData,
-                    })}
-                  </td>
-                )
-            )
-          }
+                    </div>
+                  )}
+                  {getHeaderCell(header.id, track, {
+                    tab,
+                    emptyEx,
+                    activeTabData,
+                    exData,
+                  })}
+                </td>
+              )
+          )}
           <td>
             <div className="action-icons justify-content-space-between">
               <OverlayTrigger
@@ -598,9 +649,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               >
                 <QuestionAnswerIcon
                   onClick={() => NotesModal(track)}
-                  onMouseEnter={() =>
-                    getNotes(track.trackId, track.source)
-                  }
+                  onMouseEnter={() => getNotes(track.trackId, track.source)}
                 />
               </OverlayTrigger>
               {props.role === "admin" && (
@@ -625,12 +674,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               {/*props.role === 'admin' && <DeleteIcon onClick={(() => deleteTrack(track))} />*/}
             </div>
           </td>
-        </tr >
-      )
-    }
-    )
-  }
-
+        </tr>
+      );
+    });
+  };
 
   const getActiveTabToolTip = (releaseDate: string) => {
     const relDate = moment(releaseDate).format("MM-DD-YYYY");
@@ -778,7 +825,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                     </div>
                   </td>
                 </tr>
-                {track.innerHits && extendedTrackList.includes(track.trackId) && getInnerHits(track.innerHits)}
+                {track.innerHits &&
+                  extendedTrackList.includes(track.trackId) &&
+                  getInnerHits(track.innerHits)}
               </React.Fragment>
             );
           })}
