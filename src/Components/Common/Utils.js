@@ -81,13 +81,23 @@ export const getApi = (params, url) => {
     });
 };
 
+// const refreshCookie = (name, days) => {
+//   const date = new Date();
+//   date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+//   const expires = `expires=${date.toUTCString()}`;
+//   document.cookie = `${name}=; ${expires}; path=/`;
+// };
+
 
 export const isSessionExpired = (err) => {
   try {
     const ErrStatus = JSON.parse(JSON.stringify(err))
     if (ErrStatus.status === 403 || ErrStatus.status === 401) {
-      alert("Session Expired..!")
-      window.location.reload()
+      const navigationEntries = window.performance.getEntriesByType('navigation');
+      const isRefreshed = navigationEntries.length === 1 && navigationEntries[0].type === 'reload';
+      !isRefreshed && window.location.reload();
+      alert('Session Expired..!');
+      // refreshCookie('cp3_auth', 1);
     }
   } catch {
     console.log("Error in isSessionExpired method")

@@ -186,6 +186,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       );
     }
     if (header === "blockPolicyName") {
+      console.log(track, "track")
       return track.policyDetails ? (
         <OverlayTrigger
           onEnter={() => setActive("")}
@@ -194,6 +195,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           overlay={
             <Popover id="popover-basic" className="policy-popover">
               <Popover.Body className="plcy-bdy-pad">
+                <div className="d-flex justify-center">
+                  <strong>Policy Name: {" "}
+                    {track.blockPolicyName} </strong>
+                </div>
                 <div className="policy-tl-nav">
                   <span
                     className={
@@ -242,9 +247,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   (active === "" ? options.tab : active) && (
                     <div className="policy-popover-bg">
                       <div className="d-flex mb-2">
-                        <div className="po-plcy-name">
-                          <strong>Policy Name: </strong> {track.blockPolicyName}
-                        </div>
                         <div className="po-plcy-pltfm">
                           <strong>Platforms:</strong>{" "}
                           {FormatPlatforms(track.policyDetails.platform)}
@@ -271,7 +273,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       </div>
                     </div>
                   )}
-
                 {track.exceptionDetails &&
                   track.exceptionDetails.map((exec: any, id: any) => {
                     return (
@@ -280,12 +281,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                           (active === "" ? options.tab : active) && (
                             <div className="po-exception" key={id}>
                               <div className="d-flex mb-2">
-                                <div className="po-plcy-name">
-                                  <span>
-                                    <strong>Policy Name: </strong>{" "}
-                                    {track.blockPolicyName}
-                                  </span>
-                                </div>
                                 <div className="po-plcy-pltfm">
                                   <strong>Platforms:</strong>{" "}
                                   {FormatPlatforms(exec.platform)}

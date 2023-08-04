@@ -506,3 +506,12 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   font-size: 13px;
   color: #979797;
 }
+
+.plcy-bdy-pad.popover-body {
+  max-height: 310px;
+  overflow: scroll;
+}
+
+.justify-center{
+  justify-content: center;
+}
