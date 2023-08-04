@@ -6,16 +6,16 @@ ENVIRONMENT=""
 ENV=${ENV:-"dev"}
 case "$ENV" in
     "dev") 
-        export ENVIRONMENT="awsa1-hybrid-nonprod-v2/cp3-dev" 
+        export ENVIRONMENT="awsa1-hybrid-eks-dev/cp3-dev" 
         ;;
     "qa") 
-        export ENVIRONMENT="awsa1-hybrid-nonprod-v2/cp3-qa" 
+        export ENVIRONMENT="awsa1-hybrid-eks-dev/cp3-qa" 
         ;;
     "uat") 
-        export ENVIRONMENT="awsa2-hybrid-uat-v2/cp3-uat" 
+        export ENVIRONMENT="awsa2-hybrid-eks-uat/cp3-uat" 
         ;;
     "prod") 
-        export ENVIRONMENT="awsa3-hybrid-prod-v2/cp3-prod" 
+        export ENVIRONMENT="awsa3-hybrid-eks-prod/cp3-prod" 
         ;;
 esac
 
