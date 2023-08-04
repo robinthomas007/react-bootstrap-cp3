@@ -336,7 +336,6 @@ export default function EditBulkModal(props) {
                   >
                     <div className="f-width d-flex">
                       <Form.Control
-                        required
                         value={track.versionTitle}
                         type="text"
                         disabled={track.source === "REP"}
@@ -349,9 +348,6 @@ export default function EditBulkModal(props) {
                           )
                         }
                       />
-                      <Form.Control.Feedback type="invalid">
-                        Version Ttile is required
-                      </Form.Control.Feedback>
                     </div>
                   </Form.Group>
                 </Col>

@@ -303,7 +303,6 @@ export default function EditBulkModal(props) {
                   >
                     <div className="f-width d-flex">
                       <Form.Control
-                        required
                         value={track.versionTitle}
                         type="text"
                         name="versionTitle"
