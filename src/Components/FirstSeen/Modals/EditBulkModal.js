@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -27,6 +29,7 @@ export default function EditBulkModal(props) {
 
   const newTrack = {
     title: "",
+    versionTitle: "",
     artist: "",
     isrc: "",
     album: "",
@@ -48,9 +51,10 @@ export default function EditBulkModal(props) {
           releaseDate: track.releaseDate
             ? moment(track.releaseDate).format("MM-DD-YYYY")
             : "",
-          labelId: props.labelFacets.filter((label) => {
-            return Number(track.labelId) === Number(label.id);
-          })[0] || { id: track.labelId, name: track.label },
+          labelId: (props.labelFacets &&
+            props.labelFacets.filter((label) => {
+              return Number(track.labelId) === Number(label.id);
+            })[0]) || { id: track.labelId, name: track.label },
           blockPolicyId: props.policyFacets.filter(
             (p) => Number(track.blockPolicyId) === Number(p.id)
           )[0],
@@ -82,6 +86,7 @@ export default function EditBulkModal(props) {
         const data = {
           trackId: track.trackId ? track.trackId : 0,
           title: track.title,
+          versionTitle: track.versionTitle,
           artist: track.artist,
           isrc: track.isrc,
           album: track.album,
@@ -97,7 +102,6 @@ export default function EditBulkModal(props) {
         };
         reqData.push(data);
       });
-      console.log(reqData);
       axios
         .post(BASE_URL + "TrackLeaks/BulkUpdateTrackLeaks", reqData, config)
         .then(() => {
@@ -219,15 +223,19 @@ export default function EditBulkModal(props) {
             <Col md={2}>
               <Form.Label className="form-label ">Title</Form.Label>
             </Col>
+            <Col>
+              <Form.Label className="form-label ">Version Title</Form.Label>
+            </Col>
             <Col md={2}>
               <Form.Label className="form-label">Artist</Form.Label>
-            </Col>
-            <Col md={1}>
-              <Form.Label className="form-label">ISRC</Form.Label>
             </Col>
             <Col>
               <Form.Label className="form-label">Album</Form.Label>
             </Col>
+            <Col md={1}>
+              <Form.Label className="form-label">ISRC</Form.Label>
+            </Col>
+
             <Col md={1}>
               <Form.Label className="form-label">Label</Form.Label>
             </Col>
@@ -288,6 +296,28 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
+                <Col>
+                  <Form.Group
+                    controlId="versionTitle"
+                    className="d-flex align-items-start flex-direction-column"
+                  >
+                    <div className="f-width d-flex">
+                      <Form.Control
+                        required
+                        value={track.versionTitle}
+                        type="text"
+                        name="versionTitle"
+                        placeholder="Enter Version Title"
+                        onChange={(e) =>
+                          handleOnchange(
+                            { ...track, versionTitle: e.target.value },
+                            index
+                          )
+                        }
+                      />
+                    </div>
+                  </Form.Group>
+                </Col>
                 <Col md={2}>
                   <Form.Group
                     controlId="artist"
@@ -320,25 +350,6 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
-                  <Form.Group
-                    controlId="isrc"
-                    className="d-flex align-items-start flex-direction-column"
-                  >
-                    <Form.Control
-                      value={track.isrc}
-                      type="text"
-                      name="isrc"
-                      placeholder="Enter ISRC"
-                      onChange={(e) =>
-                        handleOnchange(
-                          { ...track, isrc: e.target.value },
-                          index
-                        )
-                      }
-                    />
-                  </Form.Group>
-                </Col>
                 <Col>
                   <Form.Group
                     controlId="album"
@@ -358,6 +369,26 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
+                <Col md={1}>
+                  <Form.Group
+                    controlId="isrc"
+                    className="d-flex align-items-start flex-direction-column"
+                  >
+                    <Form.Control
+                      value={track.isrc}
+                      type="text"
+                      name="isrc"
+                      placeholder="Enter ISRC"
+                      onChange={(e) =>
+                        handleOnchange(
+                          { ...track, isrc: e.target.value },
+                          index
+                        )
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+
                 <Col md={1}>
                   <Form.Group
                     controlId="labelId"
@@ -477,7 +508,10 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col className="d-flex align-items-end justify-content-space-evenly">
+                <Col
+                  className="d-flex align-items-end justify-content-space-evenly"
+                  style={{ paddingBottom: "10px" }}
+                >
                   <AddCircleIcon
                     onClick={() => {
                       setTrackList([...trackList, newTrack]);

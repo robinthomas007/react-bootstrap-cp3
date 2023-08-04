@@ -45,9 +45,6 @@ export default function EditBulkModal(props) {
   const launchIt = (track, index) => {
     callPartyService(track, index, handleOnchange, false);
   };
-  useEffect(() => {
-    console.log("edit bulk modal");
-  }, []);
 
   useEffect(() => {
     if (props.editParams && props.editParams.length > 0) {
@@ -75,7 +72,6 @@ export default function EditBulkModal(props) {
         };
         trackArray.push(trackObj);
       });
-      console.log("after updated", trackArray);
       setTrackList(trackArray);
     } else {
       setTrackList([...trackList, newTrack]);
@@ -542,7 +538,10 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col className="d-flex align-items-end justify-content-space-evenly">
+                <Col
+                  className="d-flex align-items-end justify-content-space-evenly"
+                  style={{ paddingBottom: "10px" }}
+                >
                   <AddCircleIcon
                     onClick={() => {
                       setTrackList([...trackList, newTrack]);

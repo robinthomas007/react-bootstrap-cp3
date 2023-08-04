@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -40,9 +42,11 @@ export default function CreateProjectModal(props) {
         releaseDate: editParams.endDate
           ? moment(editParams.endDate).format("MM-DD-YYYY")
           : "",
-        labelId: props.labelFacets.filter(
-          (label) => Number(editParams.labelId) === Number(label.id)
-        )[0],
+        labelId:
+          props.labelFacets &&
+          props.labelFacets.filter(
+            (label) => Number(editParams.labelId) === Number(label.id)
+          )[0],
         ...obj,
       });
     }

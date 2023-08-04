@@ -222,7 +222,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       );
     }
     if (header === "blockPolicyName") {
-      console.log(track, "track")
       return track.policyDetails ? (
         <OverlayTrigger
           onEnter={() => setActive("")}
@@ -232,8 +231,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             <Popover id="popover-basic" className="policy-popover">
               <Popover.Body className="plcy-bdy-pad">
                 <div className="d-flex justify-center">
-                  <strong>Policy Name: {" "}
-                    {track.blockPolicyName} </strong>
+                  <strong>Policy Name: {track.blockPolicyName} </strong>
                 </div>
                 <div className="policy-tl-nav">
                   <span
@@ -241,8 +239,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       active === "pre-release"
                         ? "active"
                         : active === "" && options.tab === "pre-release"
-                          ? "active"
-                          : "non-active"
+                        ? "active"
+                        : "non-active"
                     }
                     onClick={() => setActive("pre-release")}
                   >
@@ -253,8 +251,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       active === "post-release"
                         ? "active"
                         : active === "" && options.tab === "post-release"
-                          ? "active"
-                          : "non-active"
+                        ? "active"
+                        : "non-active"
                     }
                     onClick={() => setActive("post-release")}
                   >
@@ -280,7 +278,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 {track.policyDetails &&
                   track.policyDetails.release &&
                   track.policyDetails.release.toLowerCase() ===
-                  (active === "" ? options.tab : active) && (
+                    (active === "" ? options.tab : active) && (
                     <div className="policy-popover-bg">
                       <div className="d-flex mb-2">
                         <div className="po-plcy-pltfm">
@@ -315,39 +313,39 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       <div key={id}>
                         {exec.release.toLowerCase() ===
                           (active === "" ? options.tab : active) && (
-                            <div className="po-exception" key={id}>
-                              <div className="d-flex mb-2">
-                                <div className="po-plcy-name">
-                                  <span>
-                                    <strong>Policy Name: </strong>{" "}
-                                    {track.blockPolicyName}
-                                  </span>
-                                </div>
-                                <div className="po-plcy-pltfm">
-                                  <strong>Platforms:</strong>{" "}
-                                  {FormatPlatforms(exec.platform)}
-                                </div>
+                          <div className="po-exception" key={id}>
+                            <div className="d-flex mb-2">
+                              <div className="po-plcy-name">
+                                <span>
+                                  <strong>Policy Name: </strong>{" "}
+                                  {track.blockPolicyName}
+                                </span>
                               </div>
-                              <div className="d-flex">
-                                <div className="po-plcy-action">
-                                  <strong>Action:</strong>{" "}
-                                  {capitalizeFirstLetter(exec.action)}
-                                </div>
-                                <div className="po-plcy-duration">
-                                  <strong>Duration:</strong> {exec.duration}
-                                </div>
-                                <div className="po-plcy-when">
-                                  <strong>
-                                    {exec.release === "Post-Release"
-                                      ? "After"
-                                      : "Until"}
-                                    :
-                                  </strong>{" "}
-                                  {exec.date}
-                                </div>
+                              <div className="po-plcy-pltfm">
+                                <strong>Platforms:</strong>{" "}
+                                {FormatPlatforms(exec.platform)}
                               </div>
                             </div>
-                          )}
+                            <div className="d-flex">
+                              <div className="po-plcy-action">
+                                <strong>Action:</strong>{" "}
+                                {capitalizeFirstLetter(exec.action)}
+                              </div>
+                              <div className="po-plcy-duration">
+                                <strong>Duration:</strong> {exec.duration}
+                              </div>
+                              <div className="po-plcy-when">
+                                <strong>
+                                  {exec.release === "Post-Release"
+                                    ? "After"
+                                    : "Until"}
+                                  :
+                                </strong>{" "}
+                                {exec.date}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -542,9 +540,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               e.target.value === ""
                 ? clearColumnFilter(columnFilter[0].id, false)
                 : setFilterSearch({
-                  ...filterSearch,
-                  [columnFilter[0].id]: e.target.value,
-                })
+                    ...filterSearch,
+                    [columnFilter[0].id]: e.target.value,
+                  })
             }
           />
           {filterSearch[columnFilter[0].id] && (
@@ -616,7 +614,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         track.policyDetails &&
         track.policyDetails.release &&
         track.policyDetails.release.toLowerCase() ===
-        (active === "" ? tab : active);
+          (active === "" ? tab : active);
       return (
         <tr className="extended-list" key={index}>
           <td></td>
@@ -696,10 +694,11 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       />
       <Table
         responsive
-        className={`${colorModeContext.colorMode === "light"
-          ? "srch-dg-tbl"
-          : "srch-dg-tbl text-white"
-          }`}
+        className={`${
+          colorModeContext.colorMode === "light"
+            ? "srch-dg-tbl"
+            : "srch-dg-tbl text-white"
+        }`}
       >
         <thead>
           <DragDropContext onDragEnd={reorderColumns}>
@@ -758,13 +757,14 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               track.policyDetails &&
               track.policyDetails.release &&
               track.policyDetails.release.toLowerCase() ===
-              (active === "" ? tab : active);
+                (active === "" ? tab : active);
             return (
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`${selectedRows.includes(track.trackId) ? "selected-row" : ""
-                    }`}
+                  className={`${
+                    selectedRows.includes(track.trackId) ? "selected-row" : ""
+                  }`}
                 >
                   <td>
                     <input
