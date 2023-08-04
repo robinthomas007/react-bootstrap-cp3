@@ -220,26 +220,26 @@ export default function EditBulkModal(props) {
           onSubmit={handleSubmit}
         >
           <Row className="pb-10">
-            <Col md={2}>
+            <Col md={1}>
               <Form.Label className="form-label ">Title</Form.Label>
             </Col>
             <Col>
               <Form.Label className="form-label ">Version Title</Form.Label>
             </Col>
-            <Col md={2}>
+            <Col>
               <Form.Label className="form-label">Artist</Form.Label>
             </Col>
             <Col>
               <Form.Label className="form-label">Album</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">ISRC</Form.Label>
             </Col>
 
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">Label</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">Policy</Form.Label>
             </Col>
             <Col md={1}>
@@ -256,7 +256,7 @@ export default function EditBulkModal(props) {
           {trackList.map((track, index) => {
             return (
               <Row className="pb-10 pt-10 border-bottom" key={index}>
-                <Col md={2}>
+                <Col md={1}>
                   <Form.Group
                     controlId="title"
                     className="d-flex align-items-start flex-direction-column"
@@ -296,7 +296,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="versionTitle"
                     className="d-flex align-items-start flex-direction-column"
@@ -317,10 +317,10 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col>
                   <Form.Group
                     controlId="artist"
-                    className="d-flex align-items-start flex-direction-column"
+                    className="d-flex  flex-direction-column"
                   >
                     <div className="f-width d-flex">
                       <Form.Control
@@ -454,7 +454,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="configurationID"
                     className="d-flex align-items-start flex-direction-column"
