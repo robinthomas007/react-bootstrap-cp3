@@ -66,9 +66,11 @@ export default function EditBulkModal(props) {
             labelFacets.filter((label) => {
               return Number(track.labelId) === Number(label.id);
             })[0]) || { id: track.labelId, name: track.label },
-          blockPolicyId: props.policyFacets.filter(
-            (p) => Number(track.blockPolicyId) === Number(p.id)
-          )[0],
+          blockPolicyId:
+            props.policyFacets &&
+            props.policyFacets.filter(
+              (p) => Number(track.blockPolicyId) === Number(p.id)
+            )[0],
         };
         trackArray.push(trackObj);
       });
@@ -480,7 +482,12 @@ export default function EditBulkModal(props) {
                       />
                       <SelectField
                         value={track.blockPolicyId}
-                        options={props.policyFacets}
+                        options={
+                          props.policyFacets.length > 0
+                            ? props.policyFacets
+                            : []
+                        }
+                        isDisabled={track.source && track.source === "GRD"}
                         name="blockPolicyId"
                         handleChange={(data) =>
                           handleOnchange(

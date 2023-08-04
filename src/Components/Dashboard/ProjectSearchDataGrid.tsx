@@ -315,12 +315,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                           (active === "" ? options.tab : active) && (
                           <div className="po-exception" key={id}>
                             <div className="d-flex mb-2">
-                              <div className="po-plcy-name">
-                                <span>
-                                  <strong>Policy Name: </strong>{" "}
-                                  {track.blockPolicyName}
-                                </span>
-                              </div>
                               <div className="po-plcy-pltfm">
                                 <strong>Platforms:</strong>{" "}
                                 {FormatPlatforms(exec.platform)}
