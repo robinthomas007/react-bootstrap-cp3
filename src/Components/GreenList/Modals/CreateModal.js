@@ -42,11 +42,10 @@ export default function CreateProjectModal(props) {
         releaseDate: editParams.endDate
           ? moment(editParams.endDate).format("MM-DD-YYYY")
           : "",
-        labelId:
-          props.labelFacets &&
+        labelId: (props.labelFacets &&
           props.labelFacets.filter(
             (label) => Number(editParams.labelId) === Number(label.id)
-          )[0],
+          )[0]) || { id: editParams.labelId, name: editParams.labelName },
         ...obj,
       });
     }
