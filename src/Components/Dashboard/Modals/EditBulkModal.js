@@ -67,10 +67,15 @@ export default function EditBulkModal(props) {
               return Number(track.labelId) === Number(label.id);
             })[0]) || { id: track.labelId, name: track.label },
           blockPolicyId:
-            props.policyFacets &&
-            props.policyFacets.filter(
-              (p) => Number(track.blockPolicyId) === Number(p.id)
-            )[0],
+            props.policyFacets && track.blockPolicyName !== "GRD-Exception"
+              ? props.policyFacets.filter(
+                  (p) => Number(track.blockPolicyId) === Number(p.id)
+                )[0]
+              : {
+                  id: "-1",
+                  name: "GRD-Exception",
+                  count: null,
+                },
         };
         trackArray.push(trackObj);
       });
@@ -480,6 +485,7 @@ export default function EditBulkModal(props) {
                         className="d-none"
                         onChange={(e) => null}
                       />
+
                       <SelectField
                         value={track.blockPolicyId}
                         options={
@@ -487,7 +493,7 @@ export default function EditBulkModal(props) {
                             ? props.policyFacets
                             : []
                         }
-                        isDisabled={track.source && track.source === "GRD"}
+                        isDisabled={track?.source === "GRD"}
                         name="blockPolicyId"
                         handleChange={(data) =>
                           handleOnchange(
@@ -496,6 +502,7 @@ export default function EditBulkModal(props) {
                           )
                         }
                       />
+
                       <Form.Control.Feedback type="invalid">
                         Policy is required
                       </Form.Control.Feedback>
