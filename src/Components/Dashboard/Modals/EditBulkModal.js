@@ -67,10 +67,15 @@ export default function EditBulkModal(props) {
               return Number(track.labelId) === Number(label.id);
             })[0]) || { id: track.labelId, name: track.label },
           blockPolicyId:
-            props.policyFacets &&
-            props.policyFacets.filter(
-              (p) => Number(track.blockPolicyId) === Number(p.id)
-            )[0],
+            props.policyFacets && track.blockPolicyName !== "GRD-Exception"
+              ? props.policyFacets.filter(
+                  (p) => Number(track.blockPolicyId) === Number(p.id)
+                )[0]
+              : {
+                  id: "-1",
+                  name: "GRD-Exception",
+                  count: null,
+                },
         };
         trackArray.push(trackObj);
       });
@@ -480,44 +485,23 @@ export default function EditBulkModal(props) {
                         className="d-none"
                         onChange={(e) => null}
                       />
-                      {track?.blockPolicyName === "GRD-Exception" && (
-                        <SelectField
-                          value={track.blockPolicyId}
-                          options={[
-                            {
-                              id: "-1",
-                              name: "GRD-Exception",
-                              count: null,
-                            },
-                          ]}
-                          isDisabled={true}
-                          name="blockPolicyId"
-                          handleChange={(data) =>
-                            handleOnchange(
-                              { ...track, blockPolicyId: data },
-                              index
-                            )
-                          }
-                        />
-                      )}
-                      {track?.blockPolicyName !== "GRD-Exception" && (
-                        <SelectField
-                          value={track.blockPolicyId}
-                          options={
-                            props.policyFacets.length > 0
-                              ? props.policyFacets
-                              : []
-                          }
-                          isDisabled={track?.source === "GRD"}
-                          name="blockPolicyId"
-                          handleChange={(data) =>
-                            handleOnchange(
-                              { ...track, blockPolicyId: data },
-                              index
-                            )
-                          }
-                        />
-                      )}
+
+                      <SelectField
+                        value={track.blockPolicyId}
+                        options={
+                          props.policyFacets.length > 0
+                            ? props.policyFacets
+                            : []
+                        }
+                        isDisabled={track?.source === "GRD"}
+                        name="blockPolicyId"
+                        handleChange={(data) =>
+                          handleOnchange(
+                            { ...track, blockPolicyId: data },
+                            index
+                          )
+                        }
+                      />
 
                       <Form.Control.Feedback type="invalid">
                         Policy is required
