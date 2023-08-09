@@ -10,6 +10,7 @@ import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
 import { SOURCE_LIST, RIGHTS_LIST } from './../../Common/staticDatas'
 import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
+import { sortArrayByName } from './../../Common/Utils'
 
 type selectedFiltersProps = {
   searchWithins: Array<string>,
@@ -33,6 +34,7 @@ type filterProps = {
   handleClose: any;
   labelFacets: Array<any>;
   policyFacets: Array<any>;
+  guardianPolicyFacets: Array<any>;
   selectedFilters: selectedFiltersProps;
   setSelectedFilters: any;
 }
@@ -158,7 +160,7 @@ export default function FilterModal(props: filterProps) {
               <Col md={6}>
                 <Form.Group controlId="policyIds" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Policy</Form.Label>
-                  <SelectField value={searchFilter.policyIds} options={props.policyFacets} isMulti={true} name="policyIds" handleChange={handleSelectChange} />
+                  <SelectField value={searchFilter.policyIds} options={sortArrayByName(props.policyFacets.concat(props.guardianPolicyFacets))} isMulti={true} name="policyIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>

@@ -380,6 +380,7 @@ const Dashboard = () => {
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
           policyFacets={state.policyFacets}
+          guardianPolicyFacets={state.guardianPolicyFacets}
         />
       )}
       {openNotes && (
