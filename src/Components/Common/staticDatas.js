@@ -168,3 +168,12 @@ export const RIGHTS_LIST = [
   { id: "0", name: "No Position" },
   { id: "2", name: "No Rights" },
 ];
+
+export const FEEDBACK_TITLES = [
+  { id: "submission_date", name: "Submission Date" },
+  { id: "updatedDate", name: "Last Update" },
+  { id: "screenshot", name: "Screenshot" },
+  { id: "comments", name: "Comments" },
+  { id: "submittedBy", name: "Submitted By" },
+  { id: "status", name: "Status" },
+];

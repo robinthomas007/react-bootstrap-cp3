@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import logo from "./../../Static/Images/logo.png";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import { Row, Button, Collapse, Form } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import CloseIcon from '@mui/icons-material/Close';
 import { useColor } from "../../Context/ColorModeContext";
 import { useAuth } from "./../../Context/authContext";
 import Nav from "react-bootstrap/Nav";
@@ -37,6 +39,11 @@ export default function Header() {
   const [notifications, setNotifications] = useState([]);
   const [showNoti, setShowNoti] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [comments, setComments] = useState('');
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
 
   useEffect(() => {
     if (colorModeContext.colorMode === "light") {
@@ -224,6 +231,28 @@ export default function Header() {
     })
   }
 
+  const handleChange = (e: React.ChangeEvent<any>) => {
+    setComments(e.target.value);
+  };
+
+  const handleFileChange = (e: any) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    setSelectedFile(e.dataTransfer.files[0]);
+  };
+
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+  };
+
+  const handleBrowseClick = () => {
+    console.log(fileInputRef, "fileInputRef")
+    fileInputRef.current?.click();
+  };
+
   const adminNavLinks = [
     {
       name: "Policy",
@@ -236,13 +265,19 @@ export default function Header() {
     <Container fluid>
       {loading && <Loader />}
       <Row className="bg-header-theme text-white cp3-header">
-        <Col xl={2} xxl={4}>
+        <Col xl={1} xxl={3}>
           <NavLink to="/">
             <img className="cp3-logo" src={logo} alt="Logo" />
           </NavLink>
         </Col>
-        <Col xl={10} xxl={8}>
+        <Col xl={11} xxl={9}>
           <Nav className="justify-content-around">
+            <Nav.Item className="nav-item-link">
+              <NavLink to="/feedback">
+                <FeedbackIcon /> Feedback
+                <div className="line"></div>
+              </NavLink>
+            </Nav.Item>
             <Nav.Item className="nav-item-link">
               <NavLink to="/">
                 <SearchIcon /> Search
@@ -309,6 +344,85 @@ export default function Header() {
           </Nav>
         </Col>
       </Row>
+      <div className="feedback">
+        <Button
+          onClick={() => setOpen(!open)}
+          aria-controls="example-collapse-text"
+          aria-expanded={open}
+          variant="secondary"
+          className={`${open ? 'feedback-btn-inner' : ''} text-white feedback-btn`}
+        >
+          {open && <span className="send-feedback-heading">Send Feedback</span>}
+          <FeedbackIcon />
+        </Button>
+        <div style={{ minHeight: '150px' }}>
+          <Collapse in={open} dimension="width">
+            <div id="feedback-collapse" className="feedback-collapse">
+              <div className="feedback-form">
+                <Row className="pb-20">
+                  <Col md={12}>
+                    <CloseIcon className="feedback-close-icon" onClick={() => setOpen(!open)} />
+                    <Form.Group className="mb-3" controlId="comments">
+                      <Form.Label>Comments</Form.Label>
+                      <Form.Control
+                        value={comments}
+                        onChange={handleChange}
+                        name="notes"
+                        as="textarea"
+                        rows={8}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={12}>
+                    <Form.Group controlId="fileInput">
+                      <Form.Label>Image / Screenshot</Form.Label>
+                      <div
+                        className="drop-area"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onClick={handleBrowseClick}
+                      >
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleFileChange}
+                          style={{ display: 'none' }}
+                        />
+                        {selectedFile ?
+                          (<div className="selected-file">
+                            Selected File: {selectedFile.name}
+                          </div>) :
+                          <span className="click-to-browse">
+                            Click to browse or drag and drop
+                          </span>
+                        }
+                      </div>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="pb-20">
+                  <Col md={12}>
+                    <div className="feedback-footer">
+                      <Button
+                        className="text-white"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        className="text-white"
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </div>
+          </Collapse>
+        </div>
+      </div>
     </Container>
   );
 }

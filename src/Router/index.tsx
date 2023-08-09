@@ -8,13 +8,15 @@ import { PublicRoutes } from './PublicRoutes';
 import { FCUserRoutes } from './FCUserRoutes';
 import GreenList from '../Components/GreenList';
 import FirstSeen from '../Components/FirstSeen';
+import Feedback from '../Components/Feedback';
 
 function Routes() {
   let element = useRoutes([
     {
       element: <ProtectedRoutes />,
       children: [
-        { path: '/policy', element: <Policy /> }
+        { path: '/policy', element: <Policy /> },
+        { path: '/feedback', element: <Feedback /> }
       ],
     },
     {

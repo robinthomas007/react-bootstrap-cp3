@@ -88,3 +88,93 @@ span.noti-count {
   cursor: pointer;
   border-radius: 10px;
 }
+
+.feedback {
+  position: absolute;
+  top: 120px;
+  left: 0px;
+}
+
+.feedback  .feedback-collapse {
+  background: #f5f5f5;
+  z-index: 99 !important;
+  position: absolute;
+  box-shadow: 0px 4px 4px 4px #00000040;
+  transition: width 0.0s ease !important;
+  width: 300px !important;
+}
+
+button.feedback-btn {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  width: 48px;
+  box-shadow: 0px 4px 4px 0px #00000040 !important;
+  height:40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.feedback-btn .MuiSvgIcon-root{
+  margin-top: 4px;
+}
+
+button.text-white.feedback-btn.feedback-btn-inner.btn.btn-secondary {
+  width: 322px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.feedback-form {
+  padding: 20px;
+}
+
+button.feedback-btn:focus {
+  box-shadow: 0px 4px 4px 0px #00000040 !important;
+}
+
+.feedback-form textarea#comments {
+  background-color: #fff !important;
+}
+
+.feedback-footer{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.feedback-footer button:first-child {
+  margin-right: 10px;
+  background: #999999;
+  border: #999999;
+}
+
+.feedback-close-icon{
+  position: absolute;
+  right: 20px;
+  top: 16px;
+  background: #000;
+  color: #fff;
+  font-size: 16px !important;
+  border-radius: 100px;
+}
+
+.feedback-form  .drop-area {
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #fff;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-form  .drop-area .click-to-browse{
+  display: block;
+    width: 120px;
+    font-size: 14px;
+}
+
+.selected-file {
+  margin-top: 10px;
+}
