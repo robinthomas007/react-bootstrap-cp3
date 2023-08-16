@@ -178,3 +178,65 @@ button.feedback-btn:focus {
 .selected-file {
   margin-top: 10px;
 }
+
+.screenshot-preview {
+  position: relative;
+}
+
+.screenshot-close-icon {
+  position: absolute;
+  right: -9px;
+  top: -9px;
+  background: #fff;
+  border-radius: 100%;
+  font-size: 16px !important;
+  border: 1px solid #f5f5f5;
+  box-shadow: 1px 1px 3px 1px #000;
+}
+
+.overlay {
+  position: absolute; 
+  top: 50%; 
+  left: 30%;
+  color: #fff !important; 
+  width: 100px;
+  transition: .5s ease;
+  opacity:0;
+  text-align: center;
+}
+
+.screenshot-preview:hover .overlay {
+  opacity: 1;
+}
+
+.btn.btn-secondary-white {
+  background: #fff !important;
+  color: #f57f16 !important;
+  border-color: #f57f16 !important;
+  outline: none;
+}
+
+.btn.btn-secondary-white:focus {
+  box-shadow: none;
+}
+
+.capture-btn.btn {
+  width: 100%;
+  margin: 10px auto;
+  border: 1px solid;
+}
+
+.screenshot-preview-overlay-btn {
+  box-shadow: 0 1px 2px 0 rgba(48,48,48,0.302), 0 1px 3px 1px rgba(48,48,48,0.149) !important;
+  outline: none;
+}
+
+.feedback-img-preview {
+  transform:'translateY(-100%)';
+  transition: 'transform 0.5s';
+}
+
+.ReactCrop__crop-selection {
+  box-shadow:none !important;
+  border: 6px solid red;
+}

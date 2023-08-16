@@ -19,11 +19,13 @@ import PolicyIcon from '@mui/icons-material/Policy';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Loader from "./../Common/loader";
 import getCookie from "./../Common/cookie";
+import html2canvas from 'html2canvas';
 import axios from "axios";
 import { BASE_URL } from "./../../App";
 import { config, isSessionExpired } from "./../Common/Utils";
 import moment from 'moment';
 import './header.css'
+import Preview from './preview'
 
 const hexArray = [
   '#FDD981',
@@ -40,10 +42,11 @@ export default function Header() {
   const [showNoti, setShowNoti] = useState(false);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openPreview, setOpenPreview] = useState(false);
   const [comments, setComments] = useState('');
-  const [selectedFile, setSelectedFile] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const modalRef = useRef(null);
 
   useEffect(() => {
     if (colorModeContext.colorMode === "light") {
@@ -235,13 +238,26 @@ export default function Header() {
     setComments(e.target.value);
   };
 
+  const convertToBase64 = (selectedFile: any) => {
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        setScreenshot(e.target.result);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  }
+
   const handleFileChange = (e: any) => {
-    setSelectedFile(e.target.files[0]);
+    convertToBase64(e.target.files[0])
   };
 
   const handleDrop = (e: any) => {
+    console.log(e, 'asdasd')
     e.preventDefault();
-    setSelectedFile(e.dataTransfer.files[0]);
+    convertToBase64(e.dataTransfer.files[0])
   };
 
   const handleDragOver = (e: any) => {
@@ -252,6 +268,27 @@ export default function Header() {
     console.log(fileInputRef, "fileInputRef")
     fileInputRef.current?.click();
   };
+
+  const captureScreenshot = (id = 'root') => {
+    console.log(id, "id")
+    setScreenshot(null);
+    const targetElement = document.getElementById(id);
+    console.log(targetElement, "targetElementtargetElement", modalRef.current)
+    const screenshotSound = new Audio('https://www.soundjay.com/mechanical/sounds/camera-shutter-click-01.mp3');
+    screenshotSound.play();
+    if (targetElement) {
+      html2canvas(targetElement, {
+        ignoreElements: (element) => element === modalRef.current,
+      }).then((canvas) => {
+        const dataUrl = canvas.toDataURL();
+        setScreenshot(dataUrl);
+      });
+    }
+  };
+
+  const submitfeedback = () => {
+    console.log(screenshot)
+  }
 
   const adminNavLinks = [
     {
@@ -344,9 +381,9 @@ export default function Header() {
           </Nav>
         </Col>
       </Row>
-      <div className="feedback">
+      <div className="feedback" ref={modalRef}>
         <Button
-          onClick={() => setOpen(!open)}
+          onClick={() => { setOpen(!open); setScreenshot(null) }}
           aria-controls="example-collapse-text"
           aria-expanded={open}
           variant="secondary"
@@ -355,13 +392,22 @@ export default function Header() {
           {open && <span className="send-feedback-heading">Send Feedback</span>}
           <FeedbackIcon />
         </Button>
+        {openPreview && (
+          <Preview
+            show={openPreview}
+            handleClose={() => setOpenPreview(false)}
+            screenshot={screenshot}
+            setScreenshot={setScreenshot}
+            captureScreenshot={captureScreenshot}
+          />
+        )}
         <div style={{ minHeight: '150px' }}>
           <Collapse in={open} dimension="width">
             <div id="feedback-collapse" className="feedback-collapse">
               <div className="feedback-form">
                 <Row className="pb-20">
                   <Col md={12}>
-                    <CloseIcon className="feedback-close-icon" onClick={() => setOpen(!open)} />
+                    <CloseIcon className="feedback-close-icon" onClick={() => { setOpen(!open); setScreenshot(null) }} />
                     <Form.Group className="mb-3" controlId="comments">
                       <Form.Label>Comments</Form.Label>
                       <Form.Control
@@ -376,29 +422,35 @@ export default function Header() {
                   <Col md={12}>
                     <Form.Group controlId="fileInput">
                       <Form.Label>Image / Screenshot</Form.Label>
-                      <div
-                        className="drop-area"
-                        onDrop={handleDrop}
-                        onDragOver={handleDragOver}
-                        onClick={handleBrowseClick}
-                      >
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={handleFileChange}
-                          style={{ display: 'none' }}
-                        />
-                        {selectedFile ?
-                          (<div className="selected-file">
-                            Selected File: {selectedFile.name}
-                          </div>) :
+                      {screenshot ?
+                        (<div className="screenshot-preview">
+                          <CloseIcon className="screenshot-close-icon" onClick={() => setScreenshot(null)} />
+                          <img width={260} className="feedback-img-preview" src={screenshot} alt="Screenshot" />
+                          <Button variant="secondary-white" onClick={() => setOpenPreview(true)} className="overlay screenshot-preview-overlay-btn"> Crop Image </Button>
+                        </div>
+                        ) :
+                        (<div
+                          className="drop-area"
+                          onDrop={handleDrop}
+                          onDragOver={handleDragOver}
+                          onClick={handleBrowseClick}
+                        >
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept=".jpg,.png,.jpeg"
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                          />
+
                           <span className="click-to-browse">
                             Click to browse or drag and drop
                           </span>
-                        }
-                      </div>
+                        </div>)}
                     </Form.Group>
+                    <Button variant="secondary-white" className="text-white capture-btn" type="button" onClick={() => captureScreenshot('root')}>
+                      Capture Screenshot
+                    </Button>
                   </Col>
                 </Row>
                 <Row className="pb-20">
@@ -406,12 +458,14 @@ export default function Header() {
                     <div className="feedback-footer">
                       <Button
                         className="text-white"
+                        onClick={() => { setOpen(!open); setScreenshot(null) }}
                       >
                         Cancel
                       </Button>
                       <Button
                         variant="secondary"
                         className="text-white"
+                        onClick={submitfeedback}
                       >
                         Submit
                       </Button>
