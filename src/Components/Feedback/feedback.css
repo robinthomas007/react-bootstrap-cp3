@@ -5,3 +5,8 @@
 .feedback-heading {
     padding-left: 74px;;
 }
+
+.feeedback-thumbnail img{
+    border: 2px solid #ddd;
+    cursor: pointer;
+}

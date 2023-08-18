@@ -170,10 +170,16 @@ export const RIGHTS_LIST = [
 ];
 
 export const FEEDBACK_TITLES = [
-  { id: "submission_date", name: "Submission Date" },
+  { id: "submittedDate", name: "Submission Date" },
   { id: "updatedDate", name: "Last Update" },
-  { id: "screenshot", name: "Screenshot" },
+  { id: "imageUrl", name: "Screenshot" },
   { id: "comments", name: "Comments" },
   { id: "submittedBy", name: "Submitted By" },
-  { id: "status", name: "Status" },
+  { id: "feedBackStatusId", name: "Status" },
+];
+
+export const FEEDBACK_STATUS = [
+  { id: 1, name: "Submitted" },
+  { id: 0, name: "Completed" },
+  { id: 2, name: "In Progress" },
 ];

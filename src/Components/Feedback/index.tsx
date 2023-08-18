@@ -52,26 +52,6 @@ export default function Feedback() {
       dispatch({ type: "FETCH_REQUEST", payload: "" });
       axios
         .get(BASE_URL + "FeedBackSearch", {
-          // params: {
-          //   searchTerm: searchTerm,
-          //   itemsPerPage: isExport ? "" : itemsPerPage,
-          //   pageNumber: isExport ? "" : pageNumber,
-          //   sortColumn: sortColumn,
-          //   sortOrder: sortOrder,
-          //   searchWithins: filter.searchWithins
-          //     ? filter.searchWithins.toString()
-          //     : "ALL",
-          //   labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
-          //   types: filter.type ? getIds(filter.type) : "",
-          //   source: filter.source ? getIds(filter.source) : "",
-          //   EndFrom: filter.EndFrom,
-          //   EndTo: filter.EndTo,
-          //   updatedTo: filter.updatedTo,
-          //   updatedFrom: filter.updatedFrom,
-          //   isExport: isExport ? true : false,
-          //   tableSearch: tableSearch,
-          //   // notificationId: notificationId ? notificationId : null,
-          // },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
           },
@@ -105,6 +85,36 @@ export default function Feedback() {
     return res.toString();
   };
 
+  const deleteFeedback = (ids: Array<any>) => {
+    if (window.confirm("Are you sure to delete this Feedback?"))
+      axios
+        .delete(BASE_URL + "FeedBack/DeleteFeedBack", {
+          data: {
+            feedbackIds: ids,
+          },
+          headers: {
+            cp3_auth: getCookie("cp3_auth"),
+          },
+        })
+        .then((res: any) => {
+          if (res) {
+            // toast.success("Track details deleted successfully!", {
+            //   autoClose: 3000,
+            //   closeOnClick: true,
+            // });
+            dispatch({ type: "DELETE_SUCCESS", payload: ids });
+          } else {
+            // toast.error("Error deleting Track details", {
+            //   autoClose: 3000,
+            //   closeOnClick: true,
+            // });
+          }
+        })
+        .catch((err) => {
+          console.log("error feching data", err);
+        });
+  };
+
   return (
     <Container fluid className="feedback-wrapper">
       <Row className="mt-5">
@@ -125,7 +135,7 @@ export default function Feedback() {
                 as="select"
                 size="sm"
                 style={{ width: "40px" }}
-                // onChange={handleLimitChange}
+              // onChange={handleLimitChange}
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -141,7 +151,7 @@ export default function Feedback() {
                 shape="rounded"
                 color="primary"
                 page={1}
-                // onChange={handlePageChange}
+              // onChange={handlePageChange}
               />
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
@@ -165,16 +175,8 @@ export default function Feedback() {
           totalPages={state.totalPages}
           totalItems={state.totalItems}
           pageNumber={state.pageNumber}
-          onSortModelChange={() => {
-            console.log("test");
-          }}
-          openNotesModal={() => {
-            console.log("test");
-          }}
           dispatch={dispatch}
-          onFilterColumnSearch={() => {
-            console.log("test");
-          }}
+          deleteFeedback={deleteFeedback}
           role={"admin"}
           TITLES={FEEDBACK_TITLES}
         />

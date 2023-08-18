@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { BASE_URL } from "../../App";
 import axios from "axios";
 import getCookie from "../Common/cookie";
+import Loader from "../Common/loader";
 
 function FeedbackModal() {
   const modalRef = useRef(null);
@@ -17,6 +18,7 @@ function FeedbackModal() {
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     setComments(e.target.value);
@@ -43,22 +45,21 @@ function FeedbackModal() {
   };
 
   const handleDrop = (e: any) => {
-    console.log(e, "asdasd");
     e.preventDefault();
     convertToBase64(e.dataTransfer.files[0]);
   };
+
   const handleDragOver = (e: any) => {
     e.preventDefault();
   };
+
   const captureScreenshot = (id = "root") => {
-    console.log(id, "id");
-    setScreenshot(null);
+    id === 'root' && setScreenshot(null);
     const targetElement = document.getElementById(id);
-    console.log(targetElement, "targetElementtargetElement", modalRef.current);
     const screenshotSound = new Audio(
       "https://www.soundjay.com/mechanical/sounds/camera-shutter-click-01.mp3"
     );
-    screenshotSound.play();
+    id === 'root' && screenshotSound.play();
     if (targetElement) {
       html2canvas(targetElement, {
         ignoreElements: (element) => element === modalRef.current,
@@ -68,36 +69,10 @@ function FeedbackModal() {
       });
     }
   };
-  const blobToBase64 = (blob: any) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    return new Promise((resolve) => {
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-    });
-  };
 
-  // blobToBase64(blobData).then((res) => {
-  //   // do what you wanna do
-  //   console.log(res); // res is base64 now
-  // });
-  // fetch(imageAddressAsStringValue)
-  //   .then((res) => res.blob())
-  //   .then(blobToBase64)
-  //   .then((finalResult) => {
-  //     storeOnMyLocalDatabase(finalResult);
-  //   });
   const submitfeedback = async () => {
-    console.log(screenshot);
+    setLoading(true)
     const updatedBlob = screenshot?.split("data:image/png;base64,")[1];
-    console.log("updatedBlob", updatedBlob);
-    console.log("url of addfeedback" + BASE_URL + "FeedBack/AddFeedBack");
-    // const base64Image = await blobToBase64(updatedBlob);
-    // console.log("base64Image", base64Image);
-    // blobToBase64(updatedBlob).then((res) => {
-    //   console.log(res);
-    // });
     const config = {
       headers: {
         cp3_auth: getCookie("cp3_auth"),
@@ -107,7 +82,7 @@ function FeedbackModal() {
       .post(
         BASE_URL + "feedback/addfeedback",
         {
-          comments: "test",
+          comments: comments,
           statusId: 1,
           pageName: "testRoute",
           base64Image: updatedBlob,
@@ -116,12 +91,17 @@ function FeedbackModal() {
         config
       )
       .then((res) => {
-        console.log("responseof addFeddback", res);
-      });
+        setOpen(!open);
+        setLoading(false)
+        setComments('')
+      }).catch((e) => {
+        setLoading(false)
+      })
   };
 
   return (
     <div className="feedback" ref={modalRef}>
+      {loading && <Loader />}
       <Button
         onClick={() => {
           setOpen(!open);
@@ -130,9 +110,8 @@ function FeedbackModal() {
         aria-controls="example-collapse-text"
         aria-expanded={open}
         variant="secondary"
-        className={`${
-          open ? "feedback-btn-inner" : ""
-        } text-white feedback-btn`}
+        className={`${open ? "feedback-btn-inner" : ""
+          } text-white feedback-btn`}
       >
         {open && <span className="send-feedback-heading">Send Feedback</span>}
         <FeedbackIcon />
@@ -241,6 +220,7 @@ function FeedbackModal() {
                       variant="secondary"
                       className="text-white"
                       onClick={submitfeedback}
+                      disabled={!screenshot && !comments}
                     >
                       Submit
                     </Button>
