@@ -28,7 +28,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 type searchProps = {
   loading: boolean | Boolean;
-  greenList: any;
+  feedBackList: any;
   limit: number;
   height: number;
   totalPages: number;
@@ -65,6 +65,9 @@ export default function FeedbackDataGrid(props: searchProps) {
   const [headers, setHeaders] = React.useState(props.TITLES);
 
   React.useEffect(() => {
+    console.log("state", props.feedBackList);
+  });
+  React.useEffect(() => {
     setHeaders(props.TITLES);
     setcolumnFilter([props.TITLES[0]]);
   }, [props.TITLES]);
@@ -73,23 +76,22 @@ export default function FeedbackDataGrid(props: searchProps) {
     setSelectedRows([]);
   }, [props.pageNumber]);
 
-  const NotesModal = (greenList: object) => {
-    props.openNotesModal(greenList);
+  const NotesModal = (feedBackList: object) => {
+    props.openNotesModal(feedBackList);
   };
-
 
   const handleCheckboxAll = (e: any) => {
     if (e.target.checked) {
-      setSelectedRows(props.greenList.map((t: any) => t.greenListId));
+      setSelectedRows(props.feedBackList.map((t: any) => t.feedBackListId));
     } else {
       setSelectedRows([]);
     }
   };
 
-  const getNotes = (greenListId: number, source: string) => {
+  const getNotes = (feedBackListId: number, source: string) => {
     setLoadingNotes(true);
     setNotes([]);
-    getApi({ sourceId: greenListId, source: source }, "Track/GetTrackNotes")
+    getApi({ sourceId: feedBackListId, source: source }, "Track/GetTrackNotes")
       .then((res: any) => {
         setNotes(res);
         setLoadingNotes(false);
@@ -139,15 +141,15 @@ export default function FeedbackDataGrid(props: searchProps) {
     }
   };
 
-  const getHeaderCell = (header: string, greenList: any) => {
-    return greenList[header];
+  const getHeaderCell = (header: string, feedBackList: any) => {
+    return feedBackList[header];
   };
 
-  const handleCheckboxChange = (e: any, greenListId: Number) => {
+  const handleCheckboxChange = (e: any, feedBackListId: Number) => {
     if (e.target.checked) {
-      setSelectedRows([...selectedRows, greenListId]);
+      setSelectedRows([...selectedRows, feedBackListId]);
     } else {
-      setSelectedRows(selectedRows.filter((id: any) => id !== greenListId));
+      setSelectedRows(selectedRows.filter((id: any) => id !== feedBackListId));
     }
   };
 
@@ -221,9 +223,9 @@ export default function FeedbackDataGrid(props: searchProps) {
               e.target.value === ""
                 ? clearColumnFilter(columnFilter[0].id, false)
                 : setFilterSearch({
-                  ...filterSearch,
-                  [columnFilter[0].id]: e.target.value,
-                })
+                    ...filterSearch,
+                    [columnFilter[0].id]: e.target.value,
+                  })
             }
           />
           {filterSearch[columnFilter[0].id] && (
@@ -288,10 +290,11 @@ export default function FeedbackDataGrid(props: searchProps) {
     <Col md={11}>
       <Table
         responsive
-        className={`${colorModeContext.colorMode === "light"
-          ? "srch-dg-tbl"
-          : "srch-dg-tbl text-white"
-          }`}
+        className={`${
+          colorModeContext.colorMode === "light"
+            ? "srch-dg-tbl"
+            : "srch-dg-tbl text-white"
+        }`}
       >
         <thead>
           <DragDropContext onDragEnd={reorderColumns}>
@@ -301,7 +304,9 @@ export default function FeedbackDataGrid(props: searchProps) {
                   <th>
                     <input
                       type="checkbox"
-                      checked={selectedRows.length === props.greenList.length}
+                      checked={
+                        selectedRows.length === props?.feedBackList?.length
+                      }
                       className="form-check-input"
                       onChange={handleCheckboxAll}
                     />
@@ -337,55 +342,59 @@ export default function FeedbackDataGrid(props: searchProps) {
           </DragDropContext>
         </thead>
         <tbody className="tbale-bdy">
-          {props.greenList.map((greenList: any, index: number) => {
-            return (
-              <React.Fragment key={index}>
-                <tr
-                  key={index}
-                  className={`${selectedRows.includes(greenList.greenListId)
-                    ? "selected-row"
-                    : ""
+          {props.feedBackList &&
+            props.feedBackList.map((feedBackList: any, index: number) => {
+              return (
+                <React.Fragment key={index}>
+                  <tr
+                    key={index}
+                    className={`${
+                      selectedRows.includes(feedBackList.feedBackListId)
+                        ? "selected-row"
+                        : ""
                     }`}
-                >
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedRows.includes(greenList.greenListId)}
-                      onChange={(e) =>
-                        handleCheckboxChange(e, greenList.greenListId)
-                      }
-                      className="form-check-input"
-                    />
-                  </td>
-                  {headers.map(
-                    (header: any) =>
-                      !hideColumns.includes(header.id) && (
-                        <td key={header.id} id={header.id}>
-                          {getHeaderCell(header.id, greenList)}
-                        </td>
-                      )
-                  )}
-                  <td>
-                    <div className="action-icons justify-content-space-between">
-                      <OverlayTrigger
-                        trigger={["hover", "focus"]}
-                        placement="left"
-                        overlay={notePopover}
-                        rootClose
-                      >
-                        <QuestionAnswerIcon
-                          onClick={() => NotesModal(greenList)}
-                          onMouseEnter={() =>
-                            getNotes(greenList.greenListId, "GL")
-                          }
-                        />
-                      </OverlayTrigger>
-                    </div>
-                  </td>
-                </tr>
-              </React.Fragment>
-            );
-          })}
+                  >
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedRows.includes(
+                          feedBackList.feedBackListId
+                        )}
+                        onChange={(e) =>
+                          handleCheckboxChange(e, feedBackList.feedBackListId)
+                        }
+                        className="form-check-input"
+                      />
+                    </td>
+                    {headers.map(
+                      (header: any) =>
+                        !hideColumns.includes(header.id) && (
+                          <td key={header.id} id={header.id}>
+                            {getHeaderCell(header.id, feedBackList)}
+                          </td>
+                        )
+                    )}
+                    <td>
+                      <div className="action-icons justify-content-space-between">
+                        <OverlayTrigger
+                          trigger={["hover", "focus"]}
+                          placement="left"
+                          overlay={notePopover}
+                          rootClose
+                        >
+                          <QuestionAnswerIcon
+                            onClick={() => NotesModal(feedBackList)}
+                            onMouseEnter={() =>
+                              getNotes(feedBackList.feedBackListId, "GL")
+                            }
+                          />
+                        </OverlayTrigger>
+                      </div>
+                    </td>
+                  </tr>
+                </React.Fragment>
+              );
+            })}
         </tbody>
       </Table>
     </Col>

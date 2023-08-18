@@ -1,29 +1,31 @@
+/** @format */
+
 type searchState = {
-  loading: Boolean,
-  exportLoading: Boolean,
-  error: string
-  greenList: Array<object>,
-  limit: number,
-  height: number,
-  totalPages: number,
-  totalItems: number,
-  labelFacets: Array<object>,
-  policyFacets: Array<object>,
-  pageNumber: number,
-  facets: Array<string>,
-  searchCriteria: any,
-}
+  loading: Boolean;
+  exportLoading: Boolean;
+  error: string;
+  feedBackList: Array<object>;
+  limit: number;
+  height: number;
+  totalPages: number;
+  totalItems: number;
+  labelFacets: Array<object>;
+  policyFacets: Array<object>;
+  pageNumber: number;
+  facets: Array<string>;
+  searchCriteria: any;
+};
 
 type searchActions = {
-  type: string,
-  payload: any
-}
+  type: string;
+  payload: any;
+};
 
 export const feedbackInitialState = {
   loading: true,
   exportLoading: false,
-  error: '',
-  greenList: [],
+  error: "",
+  feedBackList: [],
   limit: 10,
   height: 578,
   totalPages: 0,
@@ -39,96 +41,126 @@ export const feedbackInitialState = {
     sortColumn: "updatedDate",
     sortOrder: "",
     filter: {
-      searchWithins: ['ALL']
+      searchWithins: ["ALL"],
     },
     tableSearch: {},
-  }
-}
+  },
+};
 
 export const feedbackReducer = (state: searchState, action: searchActions) => {
   switch (action.type) {
-    case 'FETCH_SUCCESS':
+    case "FETCH_SUCCESS":
+      console.log("suuced");
       return {
         ...state,
         loading: false,
-        greenList: action.payload.greenList,
+        feedBackList: action.payload.feedBackList,
         totalPages: Number(action.payload.totalPages),
         totalItems: Number(action.payload.totalItems),
         labelFacets: action.payload.labelFacets,
         policyFacets: action.payload.policyFacets,
-      }
-    case 'FETCH_FAILURE':
+      };
+    case "FETCH_FAILURE":
       return {
         ...state,
         loading: false,
-        greenList: [],
+        feedBackList: [],
         totalPages: 0,
-        totalItems: 0
-      }
-    case 'FETCH_REQUEST':
+        totalItems: 0,
+      };
+    case "FETCH_REQUEST":
       return {
         ...state,
         loading: true,
-      }
-    case 'CHANGE_LIMIT':
+      };
+    case "CHANGE_LIMIT":
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, itemsPerPage: action.payload },
-        limit: Number(action.payload)
-      }
-    case 'SORT_CHANGE':
+        searchCriteria: {
+          ...state.searchCriteria,
+          itemsPerPage: action.payload,
+        },
+        limit: Number(action.payload),
+      };
+    case "SORT_CHANGE":
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, sortColumn: action.payload.sortColumn, sortOrder: action.payload.sortOrder }
-      }
-    case 'PAGE_CHANGE':
+        searchCriteria: {
+          ...state.searchCriteria,
+          sortColumn: action.payload.sortColumn,
+          sortOrder: action.payload.sortOrder,
+        },
+      };
+    case "PAGE_CHANGE":
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, pageNumber: action.payload.pageNumber.toString() },
-        pageNumber: action.payload.pageNumber
-      }
-    case 'SET_SEARCH':
+        searchCriteria: {
+          ...state.searchCriteria,
+          pageNumber: action.payload.pageNumber.toString(),
+        },
+        pageNumber: action.payload.pageNumber,
+      };
+    case "SET_SEARCH":
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm, filter: action.payload.filter, pageNumber: "1" },
-        pageNumber: 1
-      }
-    case 'SET_SEARCH_TABLE':
+        searchCriteria: {
+          ...state.searchCriteria,
+          searchTerm: action.payload.searchTerm,
+          filter: action.payload.filter,
+          pageNumber: "1",
+        },
+        pageNumber: 1,
+      };
+    case "SET_SEARCH_TABLE":
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, tableSearch: action.payload.tableSearch, searchTerm: action.payload.searchTerm, filter: action.payload.filter, pageNumber: "1" },
-        pageNumber: 1
-      }
-    case 'SET_FILTER':
+        searchCriteria: {
+          ...state.searchCriteria,
+          tableSearch: action.payload.tableSearch,
+          searchTerm: action.payload.searchTerm,
+          filter: action.payload.filter,
+          pageNumber: "1",
+        },
+        pageNumber: 1,
+      };
+    case "SET_FILTER":
       return {
         ...state,
         loading: true,
-        searchCriteria: { ...state.searchCriteria, searchTerm: action.payload.searchTerm, filter: action.payload.filter, pageNumber: "1" },
-        pageNumber: 1
-      }
-    case 'DELETE_SUCCESS':
+        searchCriteria: {
+          ...state.searchCriteria,
+          searchTerm: action.payload.searchTerm,
+          filter: action.payload.filter,
+          pageNumber: "1",
+        },
+        pageNumber: 1,
+      };
+    case "DELETE_SUCCESS":
       return {
         ...state,
-        greenList: state.greenList.filter((greenList: any) => !action.payload.includes(greenList.greenListId))
-      }
-    case 'EXPORT_START':
+        feedBackList: state.feedBackList.filter(
+          (feedBackList: any) =>
+            !action.payload.includes(feedBackList.feedBackListId)
+        ),
+      };
+    case "EXPORT_START":
       return {
         ...state,
         exportLoading: true,
         loading: true,
-      }
-    case 'EXPORT_END':
+      };
+    case "EXPORT_END":
       return {
         ...state,
         exportLoading: false,
         loading: false,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
