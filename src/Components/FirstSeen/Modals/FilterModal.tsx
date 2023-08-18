@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import SelectField from './../../Common/select'
 import Datepicker from './../../Common/DatePicker'
-import { SOURCE_LIST, CONFIGURATION_LIST } from './../../Common/staticDatas'
+import { CONFIGURATION_LIST } from './../../Common/staticDatas'
 import MultiSelectHierarchy from './../../Common/treeSelect/multiSelectHierarchy'
 
 type selectedFiltersProps = {
@@ -23,6 +23,7 @@ type selectedFiltersProps = {
   updatedTo: string,
   policyIds: Array<object>,
   source: Array<object>,
+  teamIds: Array<object>
 }
 
 type filterProps = {
@@ -37,7 +38,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo, teamIds } = props.selectedFilters
 
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
@@ -51,7 +52,8 @@ export default function FilterModal(props: filterProps) {
       updatedFrom: updatedFrom || null,
       updatedTo: updatedTo || null,
       policyIds: policyIds || null,
-      source: source || null
+      source: source || null,
+      teamIds: teamIds || null
     }
   );
 
@@ -159,6 +161,12 @@ export default function FilterModal(props: filterProps) {
                 <Form.Group controlId="configuration" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Config</Form.Label>
                   <SelectField value={searchFilter.configuration} options={CONFIGURATION_LIST} isMulti={true} name="configuration" handleChange={handleSelectChange} />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="teamIds" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width">Team</Form.Label>
+                  <SelectField value={searchFilter.teamIds} options={props.policyFacets || CONFIGURATION_LIST} isMulti={true} name="teamIds" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>
