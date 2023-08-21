@@ -10,6 +10,7 @@ import { BASE_URL } from "../../App";
 import axios from "axios";
 import getCookie from "../Common/cookie";
 import Loader from "../Common/loader";
+import { useLocation } from "react-router-dom";
 
 function FeedbackModal() {
   const modalRef = useRef(null);
@@ -19,6 +20,7 @@ function FeedbackModal() {
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [loading, setLoading] = useState(false)
+  const location = useLocation();
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     setComments(e.target.value);
@@ -93,6 +95,9 @@ function FeedbackModal() {
       .then((res) => {
         setOpen(!open);
         setLoading(false)
+        if (location.pathname === "/feedback") {
+          window.location.reload()
+        }
         setComments('')
       }).catch((e) => {
         setLoading(false)

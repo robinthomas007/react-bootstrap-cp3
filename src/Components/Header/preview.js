@@ -31,8 +31,12 @@ export default function NotesrModal(props) {
 
     return new Promise((resolve) => {
       canvas.toBlob((blob) => {
-        resolve(URL.createObjectURL(blob));
-      }, 'image/jpeg', 1.0);
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          resolve(event.target.result);
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/png', 1.0);
     });
   };
 

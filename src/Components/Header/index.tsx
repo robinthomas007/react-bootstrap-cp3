@@ -90,7 +90,7 @@ export default function Header() {
       .catch((err) => {
         isSessionExpired(err);
       })
-      .finally(() => {});
+      .finally(() => { });
   };
 
   const openNotification = () => {
@@ -221,10 +221,10 @@ export default function Header() {
                     {noti.source === "FS"
                       ? "First Seen"
                       : noti.source === "CP3"
-                      ? "CP3"
-                      : noti.source === "GL"
-                      ? "GreenList"
-                      : ""}{" "}
+                        ? "CP3"
+                        : noti.source === "GL"
+                          ? "GreenList"
+                          : ""}{" "}
                     records.
                   </span>
                 </>
@@ -238,8 +238,8 @@ export default function Header() {
                     {noti.source === "FS"
                       ? "First Seen"
                       : noti.source === "GL"
-                      ? "GreenList"
-                      : ""}{" "}
+                        ? "GreenList"
+                        : ""}{" "}
                     records.
                   </span>
                 </>
@@ -281,10 +281,10 @@ export default function Header() {
                     {noti.source === "FS"
                       ? "First Seen"
                       : noti.source === "CP3"
-                      ? "CP3"
-                      : noti.source === "GL"
-                      ? "GreenList"
-                      : ""}{" "}
+                        ? "CP3"
+                        : noti.source === "GL"
+                          ? "GreenList"
+                          : ""}{" "}
                     records for {noti.groupType}{" "}
                     <strong>"{noti.trackName}"</strong>
                   </span>
@@ -299,8 +299,8 @@ export default function Header() {
                     {noti.source === "FS"
                       ? "First Seen"
                       : noti.source === "GL"
-                      ? "GreenList"
-                      : ""}{" "}
+                        ? "GreenList"
+                        : ""}{" "}
                     records for {noti.groupType}{" "}
                     <strong>"{noti.trackName}"</strong>
                   </span>
@@ -338,8 +338,8 @@ export default function Header() {
             {noti.source === "FS"
               ? "First Seen"
               : noti.source === "CP3"
-              ? "CP3"
-              : "Greenlist"}{" "}
+                ? "CP3"
+                : "Greenlist"}{" "}
             record for <strong>"{noti.trackName}"</strong>
             <span> ({moment.utc(noti.createdDateTime).fromNow()})</span>
           </div>
@@ -367,12 +367,12 @@ export default function Header() {
         </Col>
         <Col xl={11} xxl={9}>
           <Nav className="justify-content-around">
-            <Nav.Item className="nav-item-link">
+            {auth.user.role === "admin" && <Nav.Item className="nav-item-link">
               <NavLink to="/feedback">
                 <FeedbackIcon /> Feedback
                 <div className="line"></div>
               </NavLink>
-            </Nav.Item>
+            </Nav.Item>}
             <Nav.Item className="nav-item-link">
               <NavLink to="/">
                 <SearchIcon /> Search

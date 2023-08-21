@@ -178,6 +178,15 @@ export const FEEDBACK_TITLES = [
   { id: "feedBackStatusId", name: "Status" },
 ];
 
+export const FEEDBACK_CSV = [
+  { id: "submittedDate", name: "Submission Date" },
+  { id: "updatedDate", name: "Last Update" },
+  { id: "imageUrl", name: "Screenshot" },
+  { id: "comments", name: "Comments" },
+  { id: "submittedBy", name: "Submitted By" },
+  { id: "feedBackStatusName", name: "Status" },
+]
+
 export const FEEDBACK_STATUS = [
   { id: 1, name: "Submitted" },
   { id: 3, name: "Resolved" },

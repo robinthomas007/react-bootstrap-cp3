@@ -8,13 +8,14 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 // @ts-ignore
 import { CSVLink } from "react-csv";
 import Pagination from "@mui/material/Pagination";
+import Loader from "./../Common/loader";
 import FeedbackDataGrid from "./FeedbackDataGrid";
 import { BASE_URL } from "../../App";
 import getCookie from "../Common/cookie";
 import axios from "axios";
 import "./feedback.css";
-import { FEEDBACK_TITLES } from "../Common/staticDatas";
-import { isSessionExpired } from "../Common/Utils";
+import { FEEDBACK_TITLES, FEEDBACK_CSV } from "../Common/staticDatas";
+import { isSessionExpired, config } from "../Common/Utils";
 import { toast } from "react-toastify";
 import {
   feedbackReducer,
@@ -56,7 +57,7 @@ export default function Feedback() {
           },
         })
         .then((res) => {
-          if (res.data.isExport) {
+          if (isExport) {
             setcsvData(res.data.feedBackList);
             dispatch({ type: "EXPORT_END", payload: "" });
           } else {
@@ -93,17 +94,9 @@ export default function Feedback() {
   }, [csvData]);
 
   const deleteFeedback = (ids: Array<any>) => {
-    console.log(ids, "idsids")
     if (window.confirm("Are you sure to delete this Feedback?"))
       axios
-        .delete(BASE_URL + `FeedBack/DeleteFeedBack`, {
-          data: {
-            feedbackId: ids,
-          },
-          headers: {
-            cp3_auth: getCookie("cp3_auth"),
-          },
-        })
+        .post(BASE_URL + `FeedBack/DeleteFeedBack`, { feedbackId: ids }, config)
         .then((res: any) => {
           if (res) {
             toast.success("Feedback deleted successfully!", {
@@ -141,6 +134,7 @@ export default function Feedback() {
 
   return (
     <Container fluid className="feedback-wrapper">
+      {state.loading && <Loader />}
       <Row className="mt-5">
         <Col md={4}>
           <h3 className="feedback-heading">Feedback Dashboard</h3>
@@ -191,7 +185,7 @@ export default function Feedback() {
         </Col>
         <CSVLink
           data={csvData}
-          headers={FEEDBACK_TITLES.map((elm: any) => ({
+          headers={FEEDBACK_CSV.map((elm: any) => ({
             key: elm.id,
             label: elm.name,
           }))}
