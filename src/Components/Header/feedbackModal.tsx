@@ -57,7 +57,7 @@ function FeedbackModal() {
 
   const captureScreenshot = (id = "root") => {
     id === 'root' && setScreenshot(null);
-    const targetElement = document.getElementById(id);
+    const targetElement = (id === 'root') ? document.getElementById(id) : document.getElementsByClassName(id)[0] as HTMLElement;
     const screenshotSound = new Audio(
       "https://www.soundjay.com/mechanical/sounds/camera-shutter-click-01.mp3"
     );
@@ -225,7 +225,7 @@ function FeedbackModal() {
                       variant="secondary"
                       className="text-white"
                       onClick={submitfeedback}
-                      disabled={!screenshot && !comments}
+                      disabled={comments === "" || !screenshot}
                     >
                       Submit
                     </Button>

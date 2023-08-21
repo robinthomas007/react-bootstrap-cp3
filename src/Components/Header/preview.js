@@ -4,7 +4,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button } from "react-bootstrap";
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
-import RectangleSelection from './test'
 
 export default function NotesrModal(props) {
   const [crop, setCrop] = useState()
@@ -43,7 +42,6 @@ export default function NotesrModal(props) {
   const handleCrop = async () => {
     if (props.screenshot) {
       const croppedImage = await getCroppedImg(document.querySelector('#preview-img'), crop);
-      console.log(croppedImage, "croppedImagecroppedImage")
       props.setScreenshot(croppedImage)
       props.handleClose()
     }
@@ -83,13 +81,13 @@ export default function NotesrModal(props) {
           variant="secondary">
           Crop
         </Button>
-        {<Button
+        <Button
           label="Submit"
           onClick={() => props.captureScreenshot('ReactCrop')}
           className="text-white"
           variant="secondary">
           highlight
-        </Button>}
+        </Button>
         <Button onClick={props.handleClose} variant="light">Cancel</Button>
       </Modal.Footer>
     </Modal>

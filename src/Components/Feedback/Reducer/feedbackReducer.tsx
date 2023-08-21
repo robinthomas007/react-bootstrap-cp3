@@ -150,7 +150,7 @@ export const feedbackReducer = (state: searchState, action: searchActions) => {
         ...state,
         feedBackList: state.feedBackList.filter(
           (feedBackList: any) =>
-            !action.payload.includes(feedBackList.feedBackListId)
+            !action.payload.includes(feedBackList.feedBackId)
         ),
       };
     case "EXPORT_START":

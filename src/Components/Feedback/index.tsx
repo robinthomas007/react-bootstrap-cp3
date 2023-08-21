@@ -161,7 +161,7 @@ export default function Feedback() {
                 <option value={100}>100</option>
               </Form.Control>
               &nbsp;
-              <span> of {10} Results</span>
+              <span> of {state.totalItems} Results</span>
             </Col>
             <Col md={4} className="d-flex justify-content-center">
               <Pagination
