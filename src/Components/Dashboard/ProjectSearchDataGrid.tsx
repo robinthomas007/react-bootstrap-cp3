@@ -63,7 +63,7 @@ type tableHeaderObj = {
 
 export default function ProjectSearchDataGrid(props: searchProps) {
   const [selectedRows, setSelectedRows] = React.useState<any>([]);
-  const [activeSort, setActiveSort] = React.useState("updatedDate");
+  const [activeSort, setActiveSort] = React.useState("submittedDate");
   const [sortOrder, setSortOrder] = React.useState("desc");
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>(
     [{ id: "title", name: "Track Title" }]

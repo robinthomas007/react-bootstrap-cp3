@@ -29,6 +29,10 @@ code {
   padding-bottom: 20px;
 }
 
+.pl-20 {
+  padding-left: 20px;
+}
+
 .MuiSvgIcon-root {
   cursor: pointer;
 }

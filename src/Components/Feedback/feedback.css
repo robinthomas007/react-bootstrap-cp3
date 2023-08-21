@@ -1,0 +1,26 @@
+.feedback-wrapper {
+    /* margin-top: 125px; */
+  padding-top: 100px !important;
+}
+
+.feedback-heading {
+    padding-left: 74px;;
+}
+
+.feeedback-thumbnail img{
+    border: 2px solid #ddd;
+    cursor: pointer;
+}
+
+.feedback-wrapper table th#comments {
+    min-width: 500px !important;
+}
+
+.feedback-wrapper table td#comments{
+    text-align: justify;
+}
+
+.preview-comments {
+    padding: 10px 65px;
+    text-align: justify;
+}
