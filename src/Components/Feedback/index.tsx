@@ -15,28 +15,21 @@ import axios from "axios";
 import "./feedback.css";
 import { FEEDBACK_TITLES } from "../Common/staticDatas";
 import { isSessionExpired } from "../Common/Utils";
-import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   feedbackReducer,
   feedbackInitialState,
 } from "./Reducer/feedbackReducer";
 
 export default function Feedback() {
+
   const [state, dispatch] = React.useReducer(
     feedbackReducer,
     feedbackInitialState
   );
-  const [search, setSearch] = React.useState("");
-  const [openFilter, setOpenFilter] = React.useState(false);
-  const [openNotes, setOpenNotes] = React.useState(false);
-  const [selectedFilters, setSelectedFilters] = React.useState({});
-  // const [selectedNotes, setSelectedNotes] =
-  //   React.useState < notesPropTypes > {};
-  const [showCreate, setShowCreate] = React.useState(false);
-  const [editParams, setEditParams] = React.useState([]);
   const [csvData, setcsvData] = React.useState([]);
-  // const auth = useAuth();
-  // const location = useLocation();
+  const csvLink = React.createRef<any>();
+
   const getSearchPageData = React.useCallback(
     (isExport: any) => {
       const {
@@ -45,21 +38,26 @@ export default function Feedback() {
         pageNumber,
         sortColumn,
         sortOrder,
-        filter,
-        tableSearch,
       } = state.searchCriteria;
 
       dispatch({ type: "FETCH_REQUEST", payload: "" });
       axios
         .get(BASE_URL + "FeedBackSearch", {
+          params: {
+            searchTerm: searchTerm,
+            itemsPerPage: isExport ? "" : itemsPerPage,
+            pageNumber: isExport ? "" : pageNumber,
+            sortColumn: sortColumn,
+            sortOrder: sortOrder,
+            isExport: isExport ? true : false,
+          },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
           },
         })
         .then((res) => {
-          console.log("responsefnffk", res);
           if (res.data.isExport) {
-            setcsvData(res.data.greenList);
+            setcsvData(res.data.feedBackList);
             dispatch({ type: "EXPORT_END", payload: "" });
           } else {
             console.log("test", res.data);
@@ -75,22 +73,32 @@ export default function Feedback() {
     [state.searchCriteria]
   );
 
+  const onSortModelChange = (data: any[]) => {
+    dispatch({ type: "SORT_CHANGE", payload: data });
+  };
+
+  const updateFeedBackStatus = (statusId: number, feedbackId: number) => {
+    dispatch({ type: "STATUS_CHANGE", payload: { statusId: statusId, feedbackId: feedbackId } });
+  }
+
   React.useEffect(() => {
     const isExport = false;
     getSearchPageData(isExport);
   }, [getSearchPageData]);
 
-  const getIds = (data: any) => {
-    let res = data.map((item: any) => item.id);
-    return res.toString();
-  };
+  React.useEffect(() => {
+    if (csvData.length > 0 && csvLink) {
+      csvLink.current.link.click();
+    }
+  }, [csvData]);
 
   const deleteFeedback = (ids: Array<any>) => {
+    console.log(ids, "idsids")
     if (window.confirm("Are you sure to delete this Feedback?"))
       axios
-        .delete(BASE_URL + "FeedBack/DeleteFeedBack", {
+        .delete(BASE_URL + `FeedBack/DeleteFeedBack`, {
           data: {
-            feedbackIds: ids,
+            feedbackId: ids,
           },
           headers: {
             cp3_auth: getCookie("cp3_auth"),
@@ -98,21 +106,37 @@ export default function Feedback() {
         })
         .then((res: any) => {
           if (res) {
-            // toast.success("Track details deleted successfully!", {
-            //   autoClose: 3000,
-            //   closeOnClick: true,
-            // });
+            toast.success("Feedback deleted successfully!", {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
             dispatch({ type: "DELETE_SUCCESS", payload: ids });
           } else {
-            // toast.error("Error deleting Track details", {
-            //   autoClose: 3000,
-            //   closeOnClick: true,
-            // });
+            toast.error("Error deleting Feedback", {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
           }
         })
         .catch((err) => {
           console.log("error feching data", err);
         });
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    pageNumber: number
+  ) => {
+    dispatch({ type: "PAGE_CHANGE", payload: { pageNumber: pageNumber } });
+  };
+
+  const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "CHANGE_LIMIT", payload: event.target.value });
+  };
+
+  const exportData = () => {
+    getSearchPageData(true);
+    dispatch({ type: "EXPORT_START", payload: "" });
   };
 
   return (
@@ -135,7 +159,7 @@ export default function Feedback() {
                 as="select"
                 size="sm"
                 style={{ width: "40px" }}
-              // onChange={handleLimitChange}
+                onChange={handleLimitChange}
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -147,16 +171,16 @@ export default function Feedback() {
             </Col>
             <Col md={4} className="d-flex justify-content-center">
               <Pagination
-                count={10}
+                count={state.totalPages ? Number(state.totalPages) : 0}
                 shape="rounded"
                 color="primary"
-                page={1}
-              // onChange={handlePageChange}
+                page={state.pageNumber}
+                onChange={handlePageChange}
               />
             </Col>
             <Col md={4} className=" d-flex footer-actions justify-content-end">
               <Button
-                // handleClick={props.exportData}
+                handleClick={exportData}
                 variant="light"
                 startIcon={<FileDownloadIcon />}
                 label={"Export"}
@@ -165,12 +189,25 @@ export default function Feedback() {
             </Col>
           </Row>
         </Col>
+        <CSVLink
+          data={csvData}
+          headers={FEEDBACK_TITLES.map((elm: any) => ({
+            key: elm.id,
+            label: elm.name,
+          }))}
+          filename="projects.csv"
+          className="hidden"
+          ref={csvLink}
+          target="_blank"
+        />
       </Row>
       <Row className="justify-content-md-center">
         <FeedbackDataGrid
           loading={state.loading}
           feedBackList={state.feedBackList}
+          updateFeedBackStatus={updateFeedBackStatus}
           limit={state.limit}
+          onSortModelChange={onSortModelChange}
           height={100}
           totalPages={state.totalPages}
           totalItems={state.totalItems}

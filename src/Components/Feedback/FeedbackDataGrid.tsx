@@ -8,6 +8,8 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import SelectField from "./../Common/select";
 import Preview from "./preview";
 import { FEEDBACK_STATUS } from './../Common/staticDatas'
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import getCookie from "../Common/cookie";
 import axios from "axios";
 import { BASE_URL } from "../../App";
@@ -28,6 +30,8 @@ type searchProps = {
   totalItems: number;
   pageNumber: number;
   deleteFeedback: any;
+  onSortModelChange: any;
+  updateFeedBackStatus: any,
   dispatch: any;
   role: string;
   TITLES: any;
@@ -40,6 +44,9 @@ export default function FeedbackDataGrid(props: searchProps) {
   const [screenshot, setScreenshot] = React.useState<string | null>(null);
   const [headers, setHeaders] = React.useState(props.TITLES);
   const [comments, setComments] = React.useState();
+  const [sortOrder, setSortOrder] = React.useState("desc");
+  const [activeSort, setActiveSort] = React.useState("updatedDate");
+
   const colorModeContext = useColor();
 
   React.useEffect(() => {
@@ -92,9 +99,35 @@ export default function FeedbackDataGrid(props: searchProps) {
       )
       .then((res) => {
         console.log(res, "Ssss")
+        props.updateFeedBackStatus(data.id, feedBackList.feedBackId)
       }).catch((e) => {
       })
   }
+
+  const handleSortOrderChange = (order: string, column: string) => {
+    setActiveSort(column);
+    setSortOrder(order);
+    props.onSortModelChange({ sortColumn: column, sortOrder: order });
+  };
+
+  const getTableIcons = (active: string, title: string) => {
+    return (
+      <span>
+        <span>{title}</span>
+        <span className="sort-icons">
+          {sortOrder === "desc" && activeSort === active ? (
+            <KeyboardArrowUpIcon
+              onClick={() => handleSortOrderChange("asc", active)}
+            />
+          ) : (
+            <KeyboardArrowDownIcon
+              onClick={() => handleSortOrderChange("desc", active)}
+            />
+          )}
+        </span>
+      </span>
+    );
+  };
 
   const getHeaderCell = (header: string, feedBackList: any) => {
     if (header === 'feedBackStatusId') {
@@ -127,11 +160,12 @@ export default function FeedbackDataGrid(props: searchProps) {
     }
   };
 
-  const deleteFeedback = (track: any) => {
+  const deleteFeedback = (feedback: any) => {
+    console.log(feedback, "feedback")
     if (selectedRows.length > 0) {
       props.deleteFeedback(selectedRows);
     } else {
-      props.deleteFeedback([track.trackId]);
+      props.deleteFeedback([feedback.feedBackId]);
     }
   };
 
@@ -182,7 +216,7 @@ export default function FeedbackDataGrid(props: searchProps) {
                             {...provided.dragHandleProps}
                             id={ele.id}
                           >
-                            {ele.name}
+                            {getTableIcons(ele.id, ele.name)}
                           </th>
                         )}
                       </Draggable>

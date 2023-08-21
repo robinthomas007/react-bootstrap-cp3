@@ -17,13 +17,15 @@ export default function NotesrModal(props) {
         fontSize="inherit"
         className="modal-cls-btn"
         onClick={props.handleClose}
-        style={{ right: 1, position: 'absolute', top: 1, zIndex: 99, fontSize: 16 }}
+        style={{ right: 5, position: 'absolute', top: 5, zIndex: 99, fontSize: 16 }}
       />
       <Modal.Body>
         <div id="ReactCrop">
           <img id="preview-img" width={'100%'} src={props.screenshot} alt="Screenshot" />
         </div>
-        {props.comments}
+        <div className="preview-comments">
+          {props.comments}
+        </div>
       </Modal.Body>
     </Modal>
   );

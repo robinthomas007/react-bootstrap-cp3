@@ -180,6 +180,6 @@ export const FEEDBACK_TITLES = [
 
 export const FEEDBACK_STATUS = [
   { id: 1, name: "Submitted" },
-  { id: 0, name: "Completed" },
-  { id: 2, name: "In Progress" },
+  { id: 3, name: "Resolved" },
+  { id: 2, name: "Pending" },
 ];

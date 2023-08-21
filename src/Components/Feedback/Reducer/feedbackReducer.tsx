@@ -93,6 +93,11 @@ export const feedbackReducer = (state: searchState, action: searchActions) => {
           sortOrder: action.payload.sortOrder,
         },
       };
+    case "STATUS_CHANGE":
+      return {
+        ...state,
+        feedBackList: state.feedBackList.map((feedback: any) => feedback.feedBackId === action.payload.feedbackId ? { ...feedback, feedBackStatusId: action.payload.statusId } : feedback)
+      };
     case "PAGE_CHANGE":
       return {
         ...state,
