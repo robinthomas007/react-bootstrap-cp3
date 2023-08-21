@@ -240,3 +240,7 @@ button.feedback-btn:focus {
   box-shadow:none !important;
   border: 6px solid red;
 }
+
+.ReactCrop {
+  width: 100% !important;
+}
