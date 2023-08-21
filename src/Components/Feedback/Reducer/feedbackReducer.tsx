@@ -152,6 +152,7 @@ export const feedbackReducer = (state: searchState, action: searchActions) => {
           (feedBackList: any) =>
             !action.payload.includes(feedBackList.feedBackId)
         ),
+        totalItems: Number(state.totalItems) - Number(action.payload.length)
       };
     case "EXPORT_START":
       return {

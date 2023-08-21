@@ -74,7 +74,11 @@ function FeedbackModal() {
 
   const submitfeedback = async () => {
     setLoading(true)
-    const updatedBlob = screenshot?.split("data:image/png;base64,")[1];
+    const updatedBlob = screenshot ? (
+      screenshot.split("data:image/png;base64,")[1] ||
+      screenshot.split("data:image/jpeg;base64,")[1] ||
+      screenshot.split("data:image/jpg;base64,")[1]
+    ) : undefined;
     const config = {
       headers: {
         cp3_auth: getCookie("cp3_auth"),
@@ -188,7 +192,7 @@ function FeedbackModal() {
                         <input
                           ref={fileInputRef}
                           type="file"
-                          accept=".jpg,.png,.jpeg"
+                          accept="image/*"
                           onChange={handleFileChange}
                           style={{ display: "none" }}
                         />

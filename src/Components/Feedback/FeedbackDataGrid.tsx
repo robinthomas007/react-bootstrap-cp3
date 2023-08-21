@@ -60,7 +60,7 @@ export default function FeedbackDataGrid(props: searchProps) {
 
   const handleCheckboxAll = (e: any) => {
     if (e.target.checked) {
-      setSelectedRows(props.feedBackList.map((t: any) => t.feedBackListId));
+      setSelectedRows(props.feedBackList.map((t: any) => t.feedBackId));
     } else {
       setSelectedRows([]);
     }
@@ -152,11 +152,11 @@ export default function FeedbackDataGrid(props: searchProps) {
     return feedBackList[header];
   };
 
-  const handleCheckboxChange = (e: any, feedBackListId: Number) => {
+  const handleCheckboxChange = (e: any, feedBackId: Number) => {
     if (e.target.checked) {
-      setSelectedRows([...selectedRows, feedBackListId]);
+      setSelectedRows([...selectedRows, feedBackId]);
     } else {
-      setSelectedRows(selectedRows.filter((id: any) => id !== feedBackListId));
+      setSelectedRows(selectedRows.filter((id: any) => id !== feedBackId));
     }
   };
 
@@ -236,7 +236,7 @@ export default function FeedbackDataGrid(props: searchProps) {
                 <React.Fragment key={index}>
                   <tr
                     key={index}
-                    className={`${selectedRows.includes(feedBackList.feedBackListId)
+                    className={`${selectedRows.includes(feedBackList.feedBackId)
                       ? "selected-row"
                       : ""
                       }`}
@@ -245,10 +245,10 @@ export default function FeedbackDataGrid(props: searchProps) {
                       <input
                         type="checkbox"
                         checked={selectedRows.includes(
-                          feedBackList.feedBackListId
+                          feedBackList.feedBackId
                         )}
                         onChange={(e) =>
-                          handleCheckboxChange(e, feedBackList.feedBackListId)
+                          handleCheckboxChange(e, feedBackList.feedBackId)
                         }
                         className="form-check-input"
                       />
