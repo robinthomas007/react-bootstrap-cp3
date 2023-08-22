@@ -9,6 +9,7 @@ type searchState = {
   totalItems: number,
   labelFacets: Array<object>,
   policyFacets: Array<object>,
+  teamFacets: Array<object>,
   guardianPolicyFacets: Array<object>,
   pageNumber: number,
   facets: Array<string>,
@@ -32,6 +33,7 @@ export const searchInitialState = {
   labelFacets: [],
   policyFacets: [],
   guardianPolicyFacets: [],
+  teamFacets: [],
   pageNumber: 1,
   facets: [],
   searchCriteria: {
@@ -58,6 +60,7 @@ export const searchReducer = (state: searchState, action: searchActions) => {
         totalItems: Number(action.payload.totalItems),
         labelFacets: action.payload.labelFacets,
         policyFacets: action.payload.policyFacets,
+        teamFacets: action.payload.teamFacets,
         guardianPolicyFacets: action.payload.guardianPolicyFacets
       }
     case 'FETCH_FAILURE':

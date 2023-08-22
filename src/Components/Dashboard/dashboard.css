@@ -515,3 +515,10 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
 .justify-center{
   justify-content: center;
 }
+
+.past-date {
+  background-color: #ff0000b5;
+  padding: 5px;
+  border-radius: 6px;
+  color: #fff;
+}

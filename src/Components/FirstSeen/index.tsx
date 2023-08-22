@@ -65,7 +65,7 @@ const GreenList = () => {
               : "ALL",
             labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
             policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
-            team: filter.teamIds ? getIds(filter.teamIds) : "",
+            teamId: filter.teamId ? getIds(filter.teamId) : null,
             configuration: filter.configuration ? getIds(filter.configuration) : "",
             source: filter.source ? getIds(filter.source) : "",
             releaseFrom: filter.releaseFrom,
@@ -301,6 +301,7 @@ const GreenList = () => {
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
           policyFacets={state.policyFacets}
+          teamFacets={state.teamFacets}
         />
       )}
       {openNotes && (

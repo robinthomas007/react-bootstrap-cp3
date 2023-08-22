@@ -23,7 +23,7 @@ type selectedFiltersProps = {
   updatedTo: string,
   policyIds: Array<object>,
   source: Array<object>,
-  teamIds: Array<object>
+  teamId: Array<object>
 }
 
 type filterProps = {
@@ -31,6 +31,7 @@ type filterProps = {
   handleSubmit: any;
   handleClose: any;
   labelFacets: Array<any>;
+  teamFacets: Array<any>;
   policyFacets: Array<any>;
   selectedFilters: selectedFiltersProps;
   setSelectedFilters: any;
@@ -38,7 +39,7 @@ type filterProps = {
 
 
 export default function FilterModal(props: filterProps) {
-  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo, teamIds } = props.selectedFilters
+  const { searchWithins, labelIds, policy, leakFrom, leakTo, releaseFrom, releaseTo, policyIds, source, updatedFrom, updatedTo, teamId } = props.selectedFilters
 
   const [searchFilter, setSearchFilter] = React.useState<any>(
     {
@@ -53,7 +54,7 @@ export default function FilterModal(props: filterProps) {
       updatedTo: updatedTo || null,
       policyIds: policyIds || null,
       source: source || null,
-      teamIds: teamIds || null
+      teamId: teamId || null
     }
   );
 
@@ -164,9 +165,9 @@ export default function FilterModal(props: filterProps) {
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group controlId="teamIds" className="d-flex align-items-center">
+                <Form.Group controlId="teamId" className="d-flex align-items-center">
                   <Form.Label className="form-label-width">Team</Form.Label>
-                  <SelectField value={searchFilter.teamIds} options={props.policyFacets || CONFIGURATION_LIST} isMulti={true} name="teamIds" handleChange={handleSelectChange} />
+                  <SelectField value={searchFilter.teamId} options={props.teamFacets || CONFIGURATION_LIST} isMulti={true} name="teamId" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
             </Row>

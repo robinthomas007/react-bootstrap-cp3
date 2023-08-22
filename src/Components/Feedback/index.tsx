@@ -17,10 +17,15 @@ import "./feedback.css";
 import { FEEDBACK_TITLES, FEEDBACK_CSV } from "../Common/staticDatas";
 import { isSessionExpired, config } from "../Common/Utils";
 import { toast } from "react-toastify";
+import NotesModal from "./Modals/NotesModal";
 import {
   feedbackReducer,
   feedbackInitialState,
 } from "./Reducer/feedbackReducer";
+
+type notesPropTypes = {
+  feedBackId?: number;
+};
 
 export default function Feedback() {
 
@@ -29,6 +34,9 @@ export default function Feedback() {
     feedbackInitialState
   );
   const [csvData, setcsvData] = React.useState([]);
+  const [openNotes, setOpenNotes] = React.useState(false);
+  const [selectedNotes, setSelectedNotes] = React.useState<notesPropTypes>({});
+
   const csvLink = React.createRef<any>();
 
   const getSearchPageData = React.useCallback(
@@ -73,6 +81,11 @@ export default function Feedback() {
     },
     [state.searchCriteria]
   );
+
+  const openNotesModal = (row: object) => {
+    setOpenNotes(true);
+    setSelectedNotes(row);
+  };
 
   const onSortModelChange = (data: any[]) => {
     dispatch({ type: "SORT_CHANGE", payload: data });
@@ -163,6 +176,14 @@ export default function Feedback() {
               &nbsp;
               <span> of {state.totalItems} Results</span>
             </Col>
+            {openNotes && (
+              <NotesModal
+                labelFacets={state.labelFacets}
+                show={openNotes}
+                handleClose={() => setOpenNotes(false)}
+                selectedNotes={selectedNotes}
+              />
+            )}
             <Col md={4} className="d-flex justify-content-center">
               <Pagination
                 count={state.totalPages ? Number(state.totalPages) : 0}
@@ -198,6 +219,7 @@ export default function Feedback() {
       <Row className="justify-content-md-center">
         <FeedbackDataGrid
           loading={state.loading}
+          openNotesModal={openNotesModal}
           feedBackList={state.feedBackList}
           updateFeedBackStatus={updateFeedBackStatus}
           limit={state.limit}
