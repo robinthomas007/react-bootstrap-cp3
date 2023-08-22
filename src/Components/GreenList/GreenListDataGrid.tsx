@@ -168,12 +168,21 @@ export default function GreenListDataGrid(props: searchProps) {
         </a>
       );
     }
+    if (header === "endDate") {
+      let isPastDate = moment(greenList.endDate).isBefore(moment(), 'day')
+      if (greenList.endDate) {
+        let aboutToExpire = moment(greenList.endDate).diff(moment(), 'days');
+        isPastDate = isPastDate || (aboutToExpire <= 0 && aboutToExpire >= -14)
+      }
+      return (
+        <span className={isPastDate ? 'past-date' : ''}>{greenList.endDate}</span>
+      );
+    }
     if (header === "type") {
       return (
         <span
-          className={`soruce-box ${
-            greenList.type === "3rd Party" ? "third_party" : greenList.type
-          }`}
+          className={`soruce-box ${greenList.type === "3rd Party" ? "third_party" : greenList.type
+            }`}
         >
           {greenList.type}
         </span>
@@ -260,9 +269,9 @@ export default function GreenListDataGrid(props: searchProps) {
               e.target.value === ""
                 ? clearColumnFilter(columnFilter[0].id, false)
                 : setFilterSearch({
-                    ...filterSearch,
-                    [columnFilter[0].id]: e.target.value,
-                  })
+                  ...filterSearch,
+                  [columnFilter[0].id]: e.target.value,
+                })
             }
           />
           {filterSearch[columnFilter[0].id] && (
@@ -327,11 +336,10 @@ export default function GreenListDataGrid(props: searchProps) {
     <Col md={11}>
       <Table
         responsive
-        className={`${
-          colorModeContext.colorMode === "light"
-            ? "srch-dg-tbl"
-            : "srch-dg-tbl text-white"
-        }`}
+        className={`${colorModeContext.colorMode === "light"
+          ? "srch-dg-tbl"
+          : "srch-dg-tbl text-white"
+          }`}
       >
         <thead>
           <DragDropContext onDragEnd={reorderColumns}>
@@ -382,11 +390,10 @@ export default function GreenListDataGrid(props: searchProps) {
               <React.Fragment key={index}>
                 <tr
                   key={index}
-                  className={`${
-                    selectedRows.includes(greenList.greenListId)
-                      ? "selected-row"
-                      : ""
-                  }`}
+                  className={`${selectedRows.includes(greenList.greenListId)
+                    ? "selected-row"
+                    : ""
+                    }`}
                 >
                   <td>
                     <input

@@ -16,6 +16,8 @@ import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
 import { GREEN_LIST_TITLES } from './../Common/staticDatas';
 import CreateModal from "./Modals/CreateModal"
+import EditBulkModal from "./Modals/EditBulkModal"
+
 import { isSessionExpired } from "./../Common/Utils";
 import { useLocation } from 'react-router-dom';
 
@@ -70,6 +72,7 @@ const GreenList = () => {
             types: filter.type ? getIds(filter.type) : "",
             source: filter.source ? getIds(filter.source) : "",
             EndFrom: filter.EndFrom,
+            is_expired: filter.is_expired,
             EndTo: filter.EndTo,
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
@@ -252,6 +255,24 @@ const GreenList = () => {
       "updatedTo",
     ];
     return selectedFilterKeys.map((item, index) => {
+      if (item === "is_expired") {
+        return (
+          <span className="">
+            {" "}
+            {labelObj[item]} : &nbsp;
+            <Badge pill bg="secondary" key={index}>
+              <span>
+                {" "}
+                {selectedFilters[item] && "Expired"}{" "}
+              </span>
+              <ClearIcon
+                className="fltr-bdg-cls-icon"
+                onClick={() => clearFilter(item)}
+              />
+            </Badge>
+          </span>
+        );
+      }
       if (dateLabelsArr.includes(item)) {
         return <span className=""> {labelObj[item]} : &nbsp;
           <Badge pill bg="secondary" key={index}>
@@ -310,7 +331,7 @@ const GreenList = () => {
         />
       )}
       {showCreate && (
-        <CreateModal
+        <EditBulkModal
           labelFacets={state.labelFacets}
           show={showCreate}
           handleClose={() => {

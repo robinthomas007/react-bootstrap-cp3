@@ -147,6 +147,14 @@ export default function FilterModal(props: filterProps) {
                   <SelectField value={searchFilter.type} options={GREEN_LIST_TYPES} isMulti={true} name="type" handleChange={handleSelectChange} />
                 </Form.Group>
               </Col>
+              <Col md={6}>
+                <Form.Group controlId="is_expired" className="d-flex align-items-center">
+                  <Form.Label className="form-label-width"></Form.Label>
+                  <Form.Check type='checkbox' checked={searchFilter.is_expired} label="Expired Records" id="is_expired" onChange={(e) => {
+                    setSearchFilter({ ...searchFilter, is_expired: e.target.checked })
+                  }} />
+                </Form.Group>
+              </Col>
             </Row>
             <Row className="pb-20">
               <Col md={10} className="d-flex">

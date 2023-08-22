@@ -65,6 +65,7 @@ const GreenList = () => {
               : "ALL",
             labelIds: filter.labelIds ? getIds(filter.labelIds) : "",
             policyIds: filter.policyIds ? getIds(filter.policyIds) : "",
+            teamId: filter.teamId ? getIds(filter.teamId) : null,
             configuration: filter.configuration ? getIds(filter.configuration) : "",
             source: filter.source ? getIds(filter.source) : "",
             releaseFrom: filter.releaseFrom,
@@ -247,7 +248,11 @@ const GreenList = () => {
       leakTo: "Leak To",
       updatedFrom: "Updated From",
       updatedTo: "Updated To",
-      // configuration: "Config"
+      configuration: "Config",
+      labelIds: 'Label',
+      source: 'Source',
+      teamIds: 'Team',
+      policyIds: 'Policy'
     };
     const dateLabelsArr = [
       "releaseFrom",
@@ -256,7 +261,6 @@ const GreenList = () => {
       "leakTo",
       "updatedFrom",
       "updatedTo",
-      // "configuration"
     ];
     return selectedFilterKeys.map((item, index) => {
       if (dateLabelsArr.includes(item)) {
@@ -270,37 +274,15 @@ const GreenList = () => {
           </Badge>
         </span>
       }
-      if (item === "labelIds") {
-        const selectedLabel = selectedFilters[item].map(
-          (label: any) => label.name
-        );
-        if (selectedLabel.length > 0)
-          return renderBadge(selectedLabel, item, 'Label')
-      }
-      if (item === "source") {
-        const selectedSource = selectedFilters[item].map(
-          (label: any) => label.name
-        );
-        if (selectedSource.length > 0)
-          return renderBadge(selectedSource, item, 'Source')
-      }
-      if (item === "configuration") {
-        const selectedConfig = selectedFilters[item].map(
-          (label: any) => label.name
-        );
-        if (selectedConfig.length > 0)
-          return renderBadge(selectedConfig, item, 'Config')
-      }
-      if (item === "policyIds") {
-        const selectedPolicy = selectedFilters[item].map(
-          (policy: any) => policy.name
-        );
-        if (selectedPolicy.length > 0)
-          return renderBadge(selectedPolicy, item, 'policy')
-      }
       if (item === "searchWithins") {
         if (selectedFilters[item].length > 0)
           return renderBadge(selectedFilters[item], item, 'Search with in')
+      } else {
+        const selected = selectedFilters[item].map(
+          (label: any) => label.name
+        );
+        if (selected.length > 0)
+          return renderBadge(selected, item, labelObj[item])
       }
       return null;
 
@@ -319,6 +301,7 @@ const GreenList = () => {
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
           policyFacets={state.policyFacets}
+          teamFacets={state.teamFacets}
         />
       )}
       {openNotes && (

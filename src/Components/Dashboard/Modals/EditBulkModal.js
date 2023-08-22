@@ -69,13 +69,13 @@ export default function EditBulkModal(props) {
           blockPolicyId:
             props.policyFacets && track.blockPolicyName !== "GRD-Exception"
               ? props.policyFacets.filter(
-                  (p) => Number(track.blockPolicyId) === Number(p.id)
-                )[0]
+                (p) => Number(track.blockPolicyId) === Number(p.id)
+              )[0]
               : {
-                  id: "-1",
-                  name: "GRD-Exception",
-                  count: null,
-                },
+                id: "-1",
+                name: "GRD-Exception",
+                count: null,
+              },
         };
         trackArray.push(trackObj);
       });

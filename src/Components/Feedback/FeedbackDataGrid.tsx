@@ -11,8 +11,14 @@ import { FEEDBACK_STATUS } from './../Common/staticDatas'
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import getCookie from "../Common/cookie";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
+import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { BASE_URL } from "../../App";
+import moment from "moment";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import { getApi } from "./../Common/Utils";
 
 import {
   DragDropContext,
@@ -33,6 +39,7 @@ type searchProps = {
   onSortModelChange: any;
   updateFeedBackStatus: any,
   dispatch: any;
+  openNotesModal: any;
   role: string;
   TITLES: any;
 };
@@ -46,6 +53,9 @@ export default function FeedbackDataGrid(props: searchProps) {
   const [comments, setComments] = React.useState();
   const [sortOrder, setSortOrder] = React.useState("desc");
   const [activeSort, setActiveSort] = React.useState("updatedDate");
+  const [notes, setNotes] = React.useState<any>([]);
+  const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
+
 
   const colorModeContext = useColor();
 
@@ -66,6 +76,9 @@ export default function FeedbackDataGrid(props: searchProps) {
     }
   };
 
+  const NotesModal = (greenList: object) => {
+    props.openNotesModal(greenList);
+  };
 
   const reorderColumns = (options: DropResult) => {
     if (options?.destination?.index) {
@@ -75,6 +88,36 @@ export default function FeedbackDataGrid(props: searchProps) {
       setHeaders(headersCopy);
     }
   };
+
+  const notePopover = (
+    <Popover id="popover-basic" className="albumList-popover">
+      <Popover.Body className="plcy-bdy-pad">
+        <div>
+          <ul>
+            {notes.length === 0 && loadingNotes && (
+              <span>
+                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
+              </span>
+            )}
+            {notes.length === 0 && !loadingNotes && (
+              <span>No Notes Available</span>
+            )}
+            {notes.map((note: any, id: any) => {
+              return (
+                <li key={id}>
+                  <span className="notes-name-date">
+                    {note.userName} -{" "}
+                    {moment(note.createdOn).format("DD/MM/YYYY")}
+                  </span>{" "}
+                  <span> {note.noteDescription}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
 
   const openThumbnail = (thumbnail: any, comments: any) => {
     setScreenshot(thumbnail)
@@ -158,6 +201,20 @@ export default function FeedbackDataGrid(props: searchProps) {
     } else {
       setSelectedRows(selectedRows.filter((id: any) => id !== feedBackId));
     }
+  };
+
+  const getNotes = (greenListId: number, source: string) => {
+    setLoadingNotes(true);
+    setNotes([]);
+    getApi({ sourceId: greenListId, source: source }, "Track/GetTrackNotes")
+      .then((res: any) => {
+        setNotes(res);
+        setLoadingNotes(false);
+      })
+      .catch((error: any) => {
+        console.log("error feching data", error);
+        setLoadingNotes(false);
+      });
   };
 
   const deleteFeedback = (feedback: any) => {
@@ -263,6 +320,19 @@ export default function FeedbackDataGrid(props: searchProps) {
                     )}
                     <td>
                       <div className="action-icons justify-content-space-between">
+                        <OverlayTrigger
+                          trigger={["hover", "focus"]}
+                          placement="left"
+                          overlay={notePopover}
+                          rootClose
+                        >
+                          <QuestionAnswerIcon
+                            onClick={() => NotesModal(feedBackList)}
+                            onMouseEnter={() =>
+                              getNotes(feedBackList.feedBackId, "Feedback")
+                            }
+                          />
+                        </OverlayTrigger>
                         <ArchiveIcon onClick={(() => deleteFeedback(feedBackList))} />
                       </div>
                     </td>
