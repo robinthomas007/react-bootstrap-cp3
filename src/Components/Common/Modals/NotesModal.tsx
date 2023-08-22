@@ -19,6 +19,9 @@ type filterProps = {
   handleClose: any;
   labelFacets: Array<any>;
   selectedNotes: any;
+  source: string,
+  sourceId: any,
+  heading: string
 };
 
 export default function NotesrModal(props: filterProps) {
@@ -34,8 +37,8 @@ export default function NotesrModal(props: filterProps) {
     axios
       .get(BASE_URL + "Track/GetTrackNotes", {
         params: {
-          sourceId: props.selectedNotes.feedBackId,
-          source: 'Feedback'
+          sourceId: props.sourceId,
+          source: props.source
         },
         headers: {
           cp3_auth: getCookie("cp3_auth"),
@@ -47,15 +50,15 @@ export default function NotesrModal(props: filterProps) {
       .catch((err) => {
         console.log("error feching data", err);
       });
-  }, [props.selectedNotes.feedBackId, props.selectedNotes.source]);
+  }, [props.sourceId, props.source]);
 
   const handleSubmit = () => {
     axios
       .put(BASE_URL + "Track/UpdateNotes", {
-        sourceId: props.selectedNotes.feedBackId,
+        sourceId: props.sourceId,
         comments: notes,
-        source: 'Feedback',
-        userName: auth.user.name || "Guest",
+        source: props.source,
+        userName: auth.user.name,
       }, config)
       .then((res: any) => {
         setNotesData([...notesData, res.data]);
@@ -88,7 +91,7 @@ export default function NotesrModal(props: filterProps) {
       className="notes-modal"
     >
       <Modal.Header>
-        <Modal.Title>Notes for Feedback</Modal.Title>
+        <Modal.Title>Notes for {props.heading}</Modal.Title>
         <CloseIcon
           fontSize="inherit"
           className="modal-cls-btn"

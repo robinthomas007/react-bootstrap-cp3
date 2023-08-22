@@ -6,7 +6,7 @@ import { greenListReducer, greenListInitialState } from "./Reducer/greenListRedu
 import GreenListDataGrid from "./GreenListDataGrid";
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterModal from "./Modals/FilterModal";
-import NotesModal from "./Modals/NotesModal";
+import NotesModal from "./../Common/Modals/NotesModal";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
 import { BASE_URL } from "../../App";
@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import { useAuth } from "./../../Context/authContext";
 import Search from './../Search/search'
 import { GREEN_LIST_TITLES } from './../Common/staticDatas';
-import CreateModal from "./Modals/CreateModal"
 import EditBulkModal from "./Modals/EditBulkModal"
 
 import { isSessionExpired } from "./../Common/Utils";
@@ -23,6 +22,7 @@ import { useLocation } from 'react-router-dom';
 
 type notesPropTypes = {
   greenListId?: number;
+  account?: any
 };
 
 type LocationState = {
@@ -72,7 +72,7 @@ const GreenList = () => {
             types: filter.type ? getIds(filter.type) : "",
             source: filter.source ? getIds(filter.source) : "",
             EndFrom: filter.EndFrom,
-            is_expired: filter.is_expired,
+            IsExpired: filter.is_expired,
             EndTo: filter.EndTo,
             updatedTo: filter.updatedTo,
             updatedFrom: filter.updatedFrom,
@@ -328,6 +328,9 @@ const GreenList = () => {
           show={openNotes}
           handleClose={() => setOpenNotes(false)}
           selectedNotes={selectedNotes}
+          source="Feedback"
+          sourceId={selectedNotes.greenListId}
+          heading={selectedNotes.account}
         />
       )}
       {showCreate && (

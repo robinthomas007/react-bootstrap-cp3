@@ -6,7 +6,7 @@ import { searchReducer, searchInitialState } from "./../Search/searchReducer";
 import FirstSeenDataGrid from "./FirstSeenDataGrid";
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterModal from "./Modals/FilterModal";
-import NotesModal from "./Modals/NotesModal";
+import NotesModal from "./../Common/Modals/NotesModal";
 import EditBulkModal from "./Modals/EditBulkModal";
 import Loader from "./../Common/loader";
 import Badge from "react-bootstrap/Badge";
@@ -21,6 +21,8 @@ import { useLocation } from 'react-router-dom';
 
 type notesPropTypes = {
   trackId?: number;
+  source?: any;
+  title?: any
 };
 type LocationState = {
   notificationId: number
@@ -310,6 +312,10 @@ const GreenList = () => {
           show={openNotes}
           handleClose={() => setOpenNotes(false)}
           selectedNotes={selectedNotes}
+          source={selectedNotes.source}
+          sourceId={selectedNotes.trackId}
+          heading={selectedNotes.title}
+
         />
       )}
       {showCreate && (

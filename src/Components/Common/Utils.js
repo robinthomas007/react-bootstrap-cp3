@@ -95,8 +95,8 @@ export const isSessionExpired = (err) => {
     if (ErrStatus.status === 403 || ErrStatus.status === 401) {
       const navigationEntries = window.performance.getEntriesByType('navigation');
       const isRefreshed = navigationEntries.length === 1 && navigationEntries[0].type === 'reload';
-      // !isRefreshed && window.location.reload();
-      // alert('Session Expired..!');
+      !isRefreshed && window.location.reload();
+      alert('Session Expired..!');
       // refreshCookie('cp3_auth', 1);
     }
   } catch {

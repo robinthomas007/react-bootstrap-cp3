@@ -12,13 +12,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import getCookie from "../Common/cookie";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
-import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { BASE_URL } from "../../App";
-import moment from "moment";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import { getApi } from "./../Common/Utils";
+import { notePopover } from './../Common/notePopover'
 
 import {
   DragDropContext,
@@ -88,36 +86,6 @@ export default function FeedbackDataGrid(props: searchProps) {
       setHeaders(headersCopy);
     }
   };
-
-  const notePopover = (
-    <Popover id="popover-basic" className="albumList-popover">
-      <Popover.Body className="plcy-bdy-pad">
-        <div>
-          <ul>
-            {notes.length === 0 && loadingNotes && (
-              <span>
-                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
-              </span>
-            )}
-            {notes.length === 0 && !loadingNotes && (
-              <span>No Notes Available</span>
-            )}
-            {notes.map((note: any, id: any) => {
-              return (
-                <li key={id}>
-                  <span className="notes-name-date">
-                    {note.userName} -{" "}
-                    {moment(note.createdOn).format("DD/MM/YYYY")}
-                  </span>{" "}
-                  <span> {note.noteDescription}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </Popover.Body>
-    </Popover>
-  );
 
   const openThumbnail = (thumbnail: any, comments: any) => {
     setScreenshot(thumbnail)
@@ -323,7 +291,7 @@ export default function FeedbackDataGrid(props: searchProps) {
                         <OverlayTrigger
                           trigger={["hover", "focus"]}
                           placement="left"
-                          overlay={notePopover}
+                          overlay={notePopover(notes, loadingNotes)}
                           rootClose
                         >
                           <QuestionAnswerIcon

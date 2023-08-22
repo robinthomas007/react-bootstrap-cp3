@@ -33,7 +33,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import CircularProgress from "@mui/material/CircularProgress";
+import { notePopover } from './../Common/notePopover'
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -444,36 +444,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     );
   };
 
-  const notePopover = (
-    <Popover id="popover-basic" className="albumList-popover">
-      <Popover.Body className="plcy-bdy-pad">
-        <div>
-          <ul>
-            {notes.length === 0 && loadingNotes && (
-              <span>
-                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
-              </span>
-            )}
-            {notes.length === 0 && !loadingNotes && (
-              <span>No Notes Available</span>
-            )}
-            {notes.map((note: any, id: any) => {
-              return (
-                <li key={id}>
-                  <span className="notes-name-date">
-                    {note.userName} -{" "}
-                    {moment(note.createdOn).format("DD/MM/YYYY")}
-                  </span>{" "}
-                  <span> {note.noteDescription}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </Popover.Body>
-    </Popover>
-  );
-
   const getActiveTabToolTip = (releaseDate: string) => {
     if (!releaseDate) {
       return "pre-release"
@@ -584,7 +554,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       <OverlayTrigger
                         trigger={["hover", "focus"]}
                         placement="left"
-                        overlay={notePopover}
+                        overlay={notePopover(notes, loadingNotes)}
                         rootClose
                       >
                         <QuestionAnswerIcon

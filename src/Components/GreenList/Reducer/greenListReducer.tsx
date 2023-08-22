@@ -36,7 +36,7 @@ export const greenListInitialState = {
     searchTerm: "",
     itemsPerPage: "10",
     pageNumber: "1",
-    sortColumn: "updatedDate",
+    sortColumn: "",
     sortOrder: "",
     filter: {
       searchWithins: ['ALL']

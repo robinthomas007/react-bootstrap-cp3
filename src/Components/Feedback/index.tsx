@@ -17,7 +17,7 @@ import "./feedback.css";
 import { FEEDBACK_TITLES, FEEDBACK_CSV } from "../Common/staticDatas";
 import { isSessionExpired, config } from "../Common/Utils";
 import { toast } from "react-toastify";
-import NotesModal from "./Modals/NotesModal";
+import NotesModal from "./../Common/Modals/NotesModal";
 import {
   feedbackReducer,
   feedbackInitialState,
@@ -182,6 +182,9 @@ export default function Feedback() {
                 show={openNotes}
                 handleClose={() => setOpenNotes(false)}
                 selectedNotes={selectedNotes}
+                source="Feedback"
+                sourceId={selectedNotes.feedBackId}
+                heading={'Feedback'}
               />
             )}
             <Col md={4} className="d-flex justify-content-center">

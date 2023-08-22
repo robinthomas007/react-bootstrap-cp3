@@ -21,6 +21,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
 import RightsModal from "./Modals/rightsModal";
+import { notePopover } from './../Common/notePopover'
 
 import moment from "moment";
 import {
@@ -469,36 +470,6 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     });
   };
 
-  const notePopover = (
-    <Popover id="popover-basic" className="albumList-popover">
-      <Popover.Body className="plcy-bdy-pad">
-        <div>
-          <ul>
-            {notes.length === 0 && loadingNotes && (
-              <span>
-                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
-              </span>
-            )}
-            {notes.length === 0 && !loadingNotes && (
-              <span>No Notes Available</span>
-            )}
-            {notes.map((note: any, id: any) => {
-              return (
-                <li key={id}>
-                  <span className="notes-name-date">
-                    {note.userName} -{" "}
-                    {moment(note.createdOn).format("DD/MM/YYYY")}
-                  </span>{" "}
-                  <span> {note.noteDescription}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </Popover.Body>
-    </Popover>
-  );
-
   const popover = (
     <Popover id="popover-basic" className="filter-popover">
       <Popover.Body>
@@ -788,7 +759,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                       <OverlayTrigger
                         trigger={["hover", "focus"]}
                         placement="left"
-                        overlay={notePopover}
+                        overlay={notePopover(notes, loadingNotes)}
                         rootClose
                       >
                         <QuestionAnswerIcon

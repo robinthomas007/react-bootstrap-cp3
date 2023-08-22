@@ -26,7 +26,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import CircularProgress from "@mui/material/CircularProgress";
+import { notePopover } from './../Common/notePopover'
 
 type searchProps = {
   loading: boolean | Boolean;
@@ -54,7 +54,7 @@ type tableHeaderObj = {
 
 export default function GreenListDataGrid(props: searchProps) {
   const [selectedRows, setSelectedRows] = React.useState<any>([]);
-  const [activeSort, setActiveSort] = React.useState("updatedDate");
+  const [activeSort, setActiveSort] = React.useState("");
   const [sortOrder, setSortOrder] = React.useState("desc");
   const [columnFilter, setcolumnFilter] = React.useState<Array<tableHeaderObj>>(
     [{ id: "", name: "" }]
@@ -120,36 +120,6 @@ export default function GreenListDataGrid(props: searchProps) {
         setLoadingNotes(false);
       });
   };
-
-  const notePopover = (
-    <Popover id="popover-basic" className="albumList-popover">
-      <Popover.Body className="plcy-bdy-pad">
-        <div>
-          <ul>
-            {notes.length === 0 && loadingNotes && (
-              <span>
-                <CircularProgress size="25px" style={{ color: "#F57F17" }} />
-              </span>
-            )}
-            {notes.length === 0 && !loadingNotes && (
-              <span>No Notes Available</span>
-            )}
-            {notes.map((note: any, id: any) => {
-              return (
-                <li key={id}>
-                  <span className="notes-name-date">
-                    {note.userName} -{" "}
-                    {moment(note.createdOn).format("DD/MM/YYYY")}
-                  </span>{" "}
-                  <span> {note.noteDescription}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </Popover.Body>
-    </Popover>
-  );
 
   const reorderColumns = (options: DropResult) => {
     if (options?.destination?.index) {
@@ -418,7 +388,7 @@ export default function GreenListDataGrid(props: searchProps) {
                       <OverlayTrigger
                         trigger={["hover", "focus"]}
                         placement="left"
-                        overlay={notePopover}
+                        overlay={notePopover(notes, loadingNotes)}
                         rootClose
                       >
                         <QuestionAnswerIcon
