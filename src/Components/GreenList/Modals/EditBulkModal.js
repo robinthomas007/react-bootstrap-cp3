@@ -48,9 +48,7 @@ export default function EditBulkModal(props) {
       props.editParams.forEach((gl) => {
         const trackObj = {
           ...gl,
-          endDate: gl.endDate
-            ? moment(gl.endDate).format("MM-DD-YYYY")
-            : "",
+          endDate: gl.endDate ? moment(gl.endDate).format("MM-DD-YYYY") : "",
           labelId: { id: gl.labelId, name: gl.labelName },
         };
         greenListArray.push(trackObj);
@@ -62,7 +60,6 @@ export default function EditBulkModal(props) {
   }, [props]);
 
   const handleSubmit = () => {
-    console.log(greenList, "greenListgreenList")
     const form = document.querySelector("#create-greenList-form");
     if (form.checkValidity() === false) {
       setValidated(true);
@@ -87,7 +84,7 @@ export default function EditBulkModal(props) {
         reqData.push(data);
       });
       axios
-        .post(BASE_URL + "GreenList/UpdateGreenList", reqData, config)
+        .post(BASE_URL + "GreenList/BulkUpdateGreenList", reqData, config)
         .then(() => {
           toast.success("GreenList details updated successfully!", {
             autoClose: 3000,
@@ -111,8 +108,6 @@ export default function EditBulkModal(props) {
   };
 
   const handleOnchange = (track, index) => {
-    console.log(greenList)
-    console.log(track, "track")
     const modifiedTrackList = [...greenList];
     modifiedTrackList[index] = track;
     setGreenList(modifiedTrackList);
@@ -208,7 +203,6 @@ export default function EditBulkModal(props) {
                       <Form.Control.Feedback type="invalid">
                         Account is required
                       </Form.Control.Feedback>
-
                     </div>
                   </Form.Group>
                 </Col>
@@ -320,16 +314,12 @@ export default function EditBulkModal(props) {
                     className="d-flex align-items-start flex-direction-column"
                   >
                     <Form.Control
-
                       value={row.url}
                       type="text"
                       name="url"
                       placeholder="Enter url"
                       onChange={(e) =>
-                        handleOnchange(
-                          { ...row, url: e.target.value },
-                          index
-                        )
+                        handleOnchange({ ...row, url: e.target.value }, index)
                       }
                     />
                   </Form.Group>
@@ -366,10 +356,7 @@ export default function EditBulkModal(props) {
                       rows={2}
                       placeholder="Create a New Note..."
                       onChange={(e) =>
-                        handleOnchange(
-                          { ...row, notes: e.target.value },
-                          index
-                        )
+                        handleOnchange({ ...row, notes: e.target.value }, index)
                       }
                     />
                   </Form.Group>
