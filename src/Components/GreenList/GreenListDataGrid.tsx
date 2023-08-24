@@ -142,7 +142,8 @@ export default function GreenListDataGrid(props: searchProps) {
       let isPastDate = moment(greenList.endDate).isBefore(moment(), 'day')
       if (greenList.endDate) {
         let aboutToExpire = moment(greenList.endDate).diff(moment(), 'days');
-        isPastDate = isPastDate || (aboutToExpire <= 0 && aboutToExpire >= -14)
+        console.log(aboutToExpire, "aboutToExpireaboutToExpireaboutToExpire")
+        isPastDate = isPastDate || (aboutToExpire >= 0 && aboutToExpire <= 14)
       }
       return (
         <span className={isPastDate ? 'past-date' : ''}>{greenList.endDate}</span>

@@ -93,6 +93,7 @@ span.noti-count {
   position: absolute;
   top: 120px;
   left: 0px;
+  z-index: 999;
 }
 
 .feedback  .feedback-collapse {

@@ -153,35 +153,36 @@ export default function EditBulkModal(props) {
           onSubmit={handleSubmit}
         >
           <Row className="pb-10">
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label ">Account</Form.Label>
             </Col>
-            <Col md={2}>
+            <Col>
               <Form.Label className="form-label ">Artist</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">Label</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">Account Manager</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">Contact</Form.Label>
             </Col>
-            <Col md={2}>
+            <Col>
               <Form.Label className="form-label">Greenlisted URL</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">End Date</Form.Label>
             </Col>
-            <Col md={1}>
+            <Col>
               <Form.Label className="form-label">Notes</Form.Label>
             </Col>
+            <Col></Col>
           </Row>
           {greenList.map((row, index) => {
             return (
               <Row className="pb-10 pt-10 border-bottom" key={index}>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="account"
                     className="d-flex align-items-start flex-direction-column"
@@ -207,7 +208,7 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
 
-                <Col md={2}>
+                <Col>
                   <Form.Group
                     controlId="artist"
                     className="d-flex align-items-start flex-direction-column"
@@ -240,7 +241,7 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
 
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="labelId"
                     className="d-flex align-items-start flex-direction-column"
@@ -268,7 +269,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="accountManager"
                     className="d-flex align-items-start flex-direction-column"
@@ -289,7 +290,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="contact"
                     className="d-flex align-items-start flex-direction-column"
@@ -308,7 +309,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col>
                   <Form.Group
                     controlId="url"
                     className="d-flex align-items-start flex-direction-column"
@@ -324,7 +325,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col>
                   <Form.Group
                     controlId="endDate"
                     className="d-flex align-items-start flex-direction-column"
@@ -343,7 +344,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col>
                   <Form.Group
                     controlId="notes"
                     className="d-flex align-items-start flex-direction-column"
@@ -353,7 +354,7 @@ export default function EditBulkModal(props) {
                       type="text"
                       name="notes"
                       as="textarea"
-                      rows={2}
+                      rows={1}
                       placeholder="Create a New Note..."
                       onChange={(e) =>
                         handleOnchange({ ...row, notes: e.target.value }, index)
