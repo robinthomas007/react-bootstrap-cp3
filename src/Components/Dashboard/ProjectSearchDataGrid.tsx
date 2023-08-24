@@ -607,7 +607,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
               <OverlayTrigger
                 trigger={["hover", "focus"]}
                 placement="left"
-                overlay={notePopover}
+                overlay={notePopover(notes, loadingNotes)}
                 rootClose
               >
                 <QuestionAnswerIcon
