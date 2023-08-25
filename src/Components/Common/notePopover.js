@@ -8,15 +8,15 @@ export const notePopover = (notes, loadingNotes) => (
     <Popover.Body className="plcy-bdy-pad">
       <div>
         <ul>
-          {notes.length === 0 && loadingNotes && (
+          {(!notes || notes.length === 0) && loadingNotes && (
             <span>
               <CircularProgress size="25px" style={{ color: "#F57F17" }} />
             </span>
           )}
-          {notes.length === 0 && !loadingNotes && (
+          {(!notes || notes.length === 0) && !loadingNotes && (
             <span>No Notes Available</span>
           )}
-          {notes.map((note, id) => {
+          {notes && notes.map((note, id) => {
             return (
               <li key={id}>
                 <span className="notes-name-date">
