@@ -25,7 +25,7 @@ import { useLocation } from "react-router-dom";
 type notesPropTypes = {
   trackId?: number;
   source?: any;
-  title?: any
+  title?: any;
 };
 
 type LocationState = {
@@ -133,7 +133,11 @@ const Dashboard = () => {
     });
   };
 
-  const onFilterColumnSearch = (searchTerm: string) => {
+  const onFilterColumnSearch = (searchTerm: any) => {
+    // append new field for artist_list search as per Backend request
+    if (searchTerm.artist) {
+      searchTerm.artist_list = searchTerm.artist;
+    }
     dispatch({
       type: "SET_SEARCH_TABLE",
       payload: {
