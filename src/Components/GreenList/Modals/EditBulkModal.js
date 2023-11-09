@@ -153,36 +153,36 @@ export default function EditBulkModal(props) {
           onSubmit={handleSubmit}
         >
           <Row className="pb-10">
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label ">Account</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label ">Artist</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '150px' }}>
               <Form.Label className="form-label">Label</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label">Account Manager</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label">Contact</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label">Greenlisted URL</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
               <Form.Label className="form-label">End Date</Form.Label>
             </Col>
-            <Col>
+            <Col md={2} className="custom-col-padding">
               <Form.Label className="form-label">Notes</Form.Label>
             </Col>
-            <Col></Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '100px' }}></Col>
           </Row>
           {greenList.map((row, index) => {
             return (
               <Row className="pb-10 pt-10 border-bottom" key={index}>
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="account"
                     className="d-flex align-items-start flex-direction-column"
@@ -208,12 +208,12 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
 
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="artist"
                     className="d-flex align-items-start flex-direction-column"
                   >
-                    <div className="f-width d-flex">
+                    <div className="f-width d-flex position-relative">
                       <Form.Control
                         required
                         value={row.artist}
@@ -230,7 +230,7 @@ export default function EditBulkModal(props) {
                       <Form.Control.Feedback type="invalid">
                         Artist is required
                       </Form.Control.Feedback>
-                      <span className="alt-title-icon">
+                      <span className="float-icon-right">
                         <SearchIcon
                           onClick={() => {
                             launchIt(row, index);
@@ -241,7 +241,7 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
 
-                <Col>
+                <Col className="custom-col-padding" style={{ maxWidth: '150px' }}>
                   <Form.Group
                     controlId="labelId"
                     className="d-flex align-items-start flex-direction-column"
@@ -269,7 +269,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="accountManager"
                     className="d-flex align-items-start flex-direction-column"
@@ -290,7 +290,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="contact"
                     className="d-flex align-items-start flex-direction-column"
@@ -309,7 +309,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="url"
                     className="d-flex align-items-start flex-direction-column"
@@ -325,10 +325,11 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
                   <Form.Group
                     controlId="endDate"
                     className="d-flex align-items-start flex-direction-column"
+                    style={{ width: '120px' }}
                   >
                     <Datepicker
                       selected={row.endDate}
@@ -344,10 +345,11 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col md={2} className="custom-col-padding">
                   <Form.Group
                     controlId="notes"
                     className="d-flex align-items-start flex-direction-column"
+                    style={{ marginLeft: 5 }}
                   >
                     <Form.Control
                       value={row.notes}
@@ -364,8 +366,8 @@ export default function EditBulkModal(props) {
                 </Col>
 
                 <Col
-                  className="d-flex align-items-end justify-content-space-evenly"
-                  style={{ paddingBottom: "10px" }}
+                  className="d-flex align-items-end justify-content-space-evenly custom-col-padding action-icons"
+                  style={{ paddingBottom: "10px", maxWidth: '100px' }}
                 >
                   <AddCircleIcon
                     onClick={() => {

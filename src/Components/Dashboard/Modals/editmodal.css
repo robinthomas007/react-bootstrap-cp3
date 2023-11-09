@@ -3,8 +3,8 @@
 }
 
 .modal-99w {
-  width: 99% !important;
-  max-width: 99% !important;
+  width: 99.9% !important;
+  max-width: 99.9% !important;
 }
 
 .modal-90w {
@@ -16,6 +16,32 @@
 }
 
 
-form#create-resource-form .border-bottom:last-child{
+form#create-resource-form .border-bottom:last-child, form#create-greenList-form .border-bottom:last-child{
   border-bottom: none !important;
+}
+
+.custom-col-padding{
+  padding: 0px 2px !important;
+}
+
+.custom-col-padding .react-datepicker-wrapper {
+  width: 120px !important;
+}
+
+.action-icons svg.MuiSvgIcon-root, .float-icon-right svg.MuiSvgIcon-root{
+  font-size: 20px;
+}
+
+.float-icon-right{
+  position: absolute;
+  right: 2px;
+  top: 5px;
+  opacity: 0.8;
+}
+
+.position-relative{
+  position: relative;
+}
+.pb-10 {
+  padding-bottom: 10px;
 }

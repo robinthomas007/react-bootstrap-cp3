@@ -171,13 +171,13 @@ export default function EditBulkModal(props) {
     const subtitles = track.subTitle ? track.subTitle.split(",") : [];
     return subtitles.map((ele, i) => {
       return (
-        <Col md={2} key={i}>
+        <Col md={2} key={i} className="custom-col-padding">
           <Form.Group
             controlId="title"
             className="d-flex align-items-start flex-direction-column"
           >
             <Form.Label className="form-label"></Form.Label>
-            <div className="f-width d-flex">
+            <div className="f-width d-flex position-relative">
               <Form.Control
                 value={ele}
                 type="text"
@@ -192,7 +192,7 @@ export default function EditBulkModal(props) {
                   );
                 }}
               />
-              <span className="alt-title-icon">
+              <span className="float-icon-right">
                 <RemoveCircleIcon
                   onClick={() => removeAltTitle(track, i, index)}
                 />
@@ -262,44 +262,44 @@ export default function EditBulkModal(props) {
           onSubmit={handleSubmit}
         >
           <Row className="pb-10">
-            <Col md={2}>
+            <Col md={2} className="custom-col-padding">
               <Form.Label className="form-label ">Title</Form.Label>
             </Col>
-            <Col>
+            <Col md={1} className="custom-col-padding">
               <Form.Label className="form-label ">Version Title</Form.Label>
             </Col>
-            <Col md={2}>
+            <Col md={2} className="custom-col-padding">
               <Form.Label className="form-label">Artist</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label">Album</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
               <Form.Label className="form-label">ISRC</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding" style={{ maxWidth: 150 }}>
               <Form.Label className="form-label">Label</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding">
               <Form.Label className="form-label">Policy</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
               <Form.Label className="form-label">Leak Date</Form.Label>
             </Col>
-            <Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
               <Form.Label className="form-label">Release Date</Form.Label>
             </Col>
-            <Col></Col>
+            <Col className="custom-col-padding" style={{ maxWidth: '100px' }}></Col>
           </Row>
           {trackList.map((track, index) => {
             return (
               <Row className="pb-10 pt-10 border-bottom" key={index}>
-                <Col md={2}>
+                <Col md={2} className="custom-col-padding">
                   <Form.Group
                     controlId="title"
                     className="d-flex align-items-start flex-direction-column"
                   >
-                    <div className="f-width d-flex">
+                    <div className="f-width d-flex position-relative">
                       <Form.Control
                         required
                         value={track.title}
@@ -317,7 +317,7 @@ export default function EditBulkModal(props) {
                       <Form.Control.Feedback type="invalid">
                         Title is required
                       </Form.Control.Feedback>
-                      <span className="alt-title-icon">
+                      <span className="float-icon-right">
                         <AddCircleIcon
                           onClick={() => {
                             track.source !== "REP" &&
@@ -336,7 +336,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={1}>
+                <Col md={1} className="custom-col-padding">
                   <Form.Group
                     controlId="versionTitle"
                     className="d-flex align-items-start flex-direction-column"
@@ -358,12 +358,12 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col md={2} className="custom-col-padding">
                   <Form.Group
                     controlId="artist"
                     className="d-flex align-items-start flex-direction-column"
                   >
-                    <div className="f-width d-flex">
+                    <div className="f-width d-flex position-relative">
                       <Form.Control
                         required
                         value={track.artist}
@@ -381,7 +381,7 @@ export default function EditBulkModal(props) {
                       <Form.Control.Feedback type="invalid">
                         Artist is required
                       </Form.Control.Feedback>
-                      <span className="alt-title-icon">
+                      <span className="float-icon-right">
                         <SearchIcon
                           onClick={() => {
                             launchIt(track, index);
@@ -391,7 +391,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="album"
                     className="d-flex align-items-start flex-direction-column"
@@ -411,7 +411,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
                   <Form.Group
                     controlId="isrc"
                     className="d-flex align-items-start flex-direction-column"
@@ -435,7 +435,7 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding" style={{ maxWidth: 150 }}>
                   <Form.Group
                     controlId="labelId"
                     className="d-flex align-items-start flex-direction-column"
@@ -472,7 +472,7 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding">
                   <Form.Group
                     controlId="blockPolicyId"
                     className="d-flex align-items-start flex-direction-column"
@@ -509,10 +509,11 @@ export default function EditBulkModal(props) {
                     </div>
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
                   <Form.Group
                     controlId="leakDate"
                     className="d-flex align-items-start flex-direction-column"
+                    style={{ width: '120px' }}
                   >
                     <Datepicker
                       selected={track.leakDate}
@@ -528,10 +529,11 @@ export default function EditBulkModal(props) {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
+                <Col className="custom-col-padding" style={{ maxWidth: '120px' }}>
                   <Form.Group
                     controlId="releaseDate"
                     className="d-flex align-items-start flex-direction-column"
+                    style={{ width: '120px', marginLeft: 4 }}
                   >
                     <Datepicker
                       disabled={track.source === "REP"}
@@ -549,8 +551,8 @@ export default function EditBulkModal(props) {
                   </Form.Group>
                 </Col>
                 <Col
-                  className="d-flex align-items-end justify-content-space-evenly"
-                  style={{ paddingBottom: "10px" }}
+                  className="d-flex align-items-end justify-content-space-evenly action-icons"
+                  style={{ paddingBottom: "10px", maxWidth: '100px' }}
                 >
                   <AddCircleIcon
                     onClick={() => {
@@ -561,7 +563,7 @@ export default function EditBulkModal(props) {
                   <RemoveCircleIcon onClick={() => removeTrackList(index)} />
                 </Col>
                 <Col md={12}>
-                  <Row className="pb-20">
+                  <Row>
                     {getAlterNativeTitle(track, index)}
                   </Row>
                 </Col>
