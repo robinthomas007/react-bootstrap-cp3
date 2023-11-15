@@ -444,6 +444,7 @@ const Dashboard = () => {
             onSortModelChange={onSortModelChange}
             openNotesModal={openNotesModal}
             dispatch={dispatch}
+            getSearchPageData={getSearchPageData}
             // clearSearch={clearSearch}
             openCreateModal={openCreateModal}
             deleteTrack={deleteTrack}

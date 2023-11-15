@@ -12,6 +12,7 @@ import Table from "react-bootstrap/Table";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArchiveIcon from "@mui/icons-material/Archive";
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Popover from "react-bootstrap/Popover";
 import SelectField from "./../Common/select";
@@ -22,6 +23,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
 import RightsModal from "./Modals/rightsModal";
 import { notePopover } from './../Common/notePopover'
+import axios from "axios";
+import { BASE_URL } from "./../../App";
+import { toast } from "react-toastify";
 
 import moment from "moment";
 import {
@@ -29,6 +33,7 @@ import {
   FormatPlatforms,
   getApi,
   truncateWithEllipsis,
+  config
 } from "./../Common/Utils";
 import {
   DragDropContext,
@@ -55,6 +60,7 @@ type searchProps = {
   openCreateModal: any;
   deleteTrack: any;
   role: string;
+  getSearchPageData: any
 };
 
 type tableHeaderObj = {
@@ -75,6 +81,8 @@ export default function ProjectSearchDataGrid(props: searchProps) {
   const [notes, setNotes] = React.useState<any>([]);
   const [loadingNotes, setLoadingNotes] = React.useState<any>(false);
   const [extendedTrackList, setExtendedTrackList] = React.useState<any>([]);
+  const [rollUpHits, setRollUpHits] = React.useState<any>([]);
+
   const [rightsData, setRightsData] = React.useState<any>({});
   const [showRightsModal, setShowRightsModal] = React.useState<boolean>(false);
 
@@ -175,6 +183,24 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     }
   };
 
+  const setRollUpTrackIds = (id: any) => {
+    if (rollUpHits.includes(id)) {
+      const index = rollUpHits.indexOf(id);
+      if (index > -1) {
+        const extendedTracks = rollUpHits.filter(
+          (item: any) => item !== id
+        );
+        setRollUpHits(extendedTracks);
+      }
+    } else {
+      setRollUpHits((rollUpHits: any) => [
+        ...rollUpHits,
+        id,
+      ]);
+    }
+  };
+
+
   const getHeaderCell = (
     header: string,
     track: any,
@@ -202,6 +228,21 @@ export default function ProjectSearchDataGrid(props: searchProps) {
           {truncateWithEllipsis(track.versionTitle, 15)}
         </span>
       );
+    }
+    if (header === 'isrc') {
+      return (
+        <span>
+          {track.isrc}
+          {track.rollUpHits && track.rollUpHits.length > 0 && <span onClick={() => setRollUpTrackIds(track.trackId)} className="rollup-btn">
+            {track.rollUpCount}
+            {rollUpHits.includes(track.trackId) ? (
+              <KeyboardArrowDownIcon className="arrow-icons" />
+            ) : (
+              <KeyboardArrowUpIcon className="arrow-icons" />
+            )}
+          </span>}
+        </span>
+      )
     }
     if (header === "source") {
       return (
@@ -568,7 +609,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     );
   };
 
-  const getInnerHits = (innerHits: any) => {
+  const getInnerHits = (innerHits: any, type: string) => {
     return innerHits.map((track: any, index: number) => {
       const tab = getActiveTabToolTip(track.releaseDate);
       const exData =
@@ -587,7 +628,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
             (header, index) =>
               !hideColumns.includes(header.id) && (
                 <td key={header.id} className={`extended-${index}`}>
-                  {index === 0 && (
+                  {index === 0 && type !== 'rollup' && (
                     <div className="line-wrapper">
                       <div className="vl"></div>
                       <div className="hl"></div>
@@ -653,6 +694,39 @@ export default function ProjectSearchDataGrid(props: searchProps) {
       ? "pre-release"
       : "post-release";
   };
+
+  const updatePolicy = (track: any) => {
+    if (window.confirm("Are you sure you want to apply the current policy to all associated resources?")) {
+      const reqData: any = track.rollUpHits.map((rollup: any) => {
+        return {
+          ...rollup,
+          blockPolicyId: track.blockPolicyId,
+        };
+      })
+      axios
+        .post(BASE_URL + "Track/BulkUpdateTracks", reqData, config)
+        .then(() => {
+          toast.success("Track details updated successfully!", {
+            autoClose: 3000,
+            closeOnClick: true,
+          });
+          setTimeout(() => {
+            props.getSearchPageData();
+          }, 1000);
+        })
+        .catch((err) => {
+          if (err.response && err.response.data) {
+            toast.error(err.response.data.Message, {
+              autoClose: 3000,
+              closeOnClick: true,
+            });
+          }
+        })
+        .finally(() => {
+
+        });
+    }
+  }
 
   return (
     <Col md={11}>
@@ -769,6 +843,9 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                           }
                         />
                       </OverlayTrigger>
+                      {rollUpHits.includes(track.trackId) && <SystemUpdateAltIcon onClick={() => updatePolicy(track)}>
+
+                      </SystemUpdateAltIcon>}
                       {props.role === "admin" && (
                         <EditIcon
                           className="icon editIcon"
@@ -794,7 +871,10 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                 </tr>
                 {track.innerHits &&
                   extendedTrackList.includes(track.trackId) &&
-                  getInnerHits(track.innerHits)}
+                  getInnerHits(track.innerHits, "inner")}
+                {track.rollUpHits &&
+                  rollUpHits.includes(track.trackId) &&
+                  getInnerHits(track.rollUpHits, "rollup")}
               </React.Fragment>
             );
           })}

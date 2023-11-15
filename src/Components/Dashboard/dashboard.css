@@ -169,8 +169,18 @@ span.sort-icons svg:hover {
   max-width: 40px !important;
 }
 
+.srch-dg-tbl thead th#isrc {
+  min-width: 130px !important;
+  text-align: center;
+}
+
+.srch-dg-tbl thead th#hasRights {
+  min-width: 100px !important;
+  text-align: left;
+}
+
 .srch-dg-tbl thead th#source {
-  min-width: 90px !important;
+  min-width: 100px !important;
   text-align: center;
 }
 
@@ -521,4 +531,20 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   padding: 5px;
   border-radius: 6px;
   color: #fff;
+}
+.rollup-btn {
+  position: relative;
+  background: #F57F17;
+  padding: 0px 5px;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 28px;
+  display: inline-block;
+  margin-left: 3px;
+  color: #fff;
+}
+
+.rollup-btn .MuiSvgIcon-root {
+    right: -4px;
+    top: -1px;
 }
