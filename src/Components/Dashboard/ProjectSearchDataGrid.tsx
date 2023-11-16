@@ -231,7 +231,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
     }
     if (header === 'isrc') {
       return (
-        <span>
+        <span style={{ position: 'relative' }}>
           {track.isrc}
           {track.rollUpHits && track.rollUpHits.length > 0 && <span onClick={() => setRollUpTrackIds(track.trackId)} className="rollup-btn">
             {track.rollUpCount}

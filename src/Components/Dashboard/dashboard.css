@@ -533,18 +533,18 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.disabled {
   color: #fff;
 }
 .rollup-btn {
-  position: relative;
+  position: absolute;
   background: #F57F17;
   padding: 0px 5px;
   font-weight: bold;
   border-radius: 4px;
-  width: 28px;
+  width: 35px;
   display: inline-block;
   margin-left: 3px;
   color: #fff;
 }
 
 .rollup-btn .MuiSvgIcon-root {
-    right: -4px;
+    right: -3px;
     top: -1px;
 }
