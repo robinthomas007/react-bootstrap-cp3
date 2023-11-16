@@ -701,6 +701,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
         return {
           ...rollup,
           blockPolicyId: track.blockPolicyId,
+          resourceRollUpId: track.resourceRollUpId
         };
       })
       axios

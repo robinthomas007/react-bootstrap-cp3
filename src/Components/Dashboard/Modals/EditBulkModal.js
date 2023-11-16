@@ -104,6 +104,7 @@ export default function EditBulkModal(props) {
           source: track.source ? track.source : "",
           leakDate: track.leakDate,
           releaseDate: track.releaseDate,
+          resourceRollUpId: track.resourceRollUpId,
           blockPolicyId: track.blockPolicyId
             ? Number(track.blockPolicyId.id)
             : 0,
