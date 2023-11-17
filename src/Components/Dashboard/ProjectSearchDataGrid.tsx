@@ -656,7 +656,7 @@ export default function ProjectSearchDataGrid(props: searchProps) {
                   onMouseEnter={() => getNotes(track.trackId, track.source)}
                 />
               </OverlayTrigger>
-              {props.role === "admin" && (
+              {props.role === "admin" && type !== 'rollup' && (
                 <EditIcon
                   className="icon editIcon"
                   onClick={() => editModal(track)}
